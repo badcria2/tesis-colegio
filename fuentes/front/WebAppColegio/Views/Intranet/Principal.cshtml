@@ -1,0 +1,13 @@
+﻿@using  WebAppColegio.Models.Response
+@using Newtonsoft.Json;
+
+@{
+    ViewData["Title"] = "Principal";
+}
+
+<h1>Principal</h1>
+
+@{
+    var autenticacionResponse = JsonConvert.DeserializeObject<AutenticacionResponse>(Convert.ToString(TempData["Profile"]));
+}
+<h2>@autenticacionResponse.Perfil</h2>

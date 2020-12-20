@@ -28,3 +28,5 @@ packages/
 .vs/
 /fuentes/service/Seguridad_Entidades/obj
 /fuentes/service/Seguridad_Negocio/obj
+/fuentes/front/WebAppColegio/bin/Debug/netcoreapp3.1
+/fuentes/front/WebAppColegio/obj

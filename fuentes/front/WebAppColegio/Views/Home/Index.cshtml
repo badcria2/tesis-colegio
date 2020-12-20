@@ -1,8 +1,33 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+ 
+    <div id="loginModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <img src="~/Imagenes/workers.jpg" style="margin-left:95px" />
+                    <!--<h1 class="text-center">Login</h1>-->
+                </div>
+                <div class="modal-body">
+                    <form class="form col-md-12 center-block" method="post" action="login">
+                        <div class="form-group">
+                            <input type="text" name="txtUsuario" class="form-control input-lg" placeholder="Nombre de Usuario">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="txtPassword" class="form-control input-lg" placeholder="Contraseña">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-lg btn-block" style="background-color:#009999" type="submit">Ingresar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-12">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
