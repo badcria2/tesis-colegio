@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Comunes_Datos\Comunes_Datos.csproj" />
+    <ProjectReference Include="..\Persona_Entidades\Persona_Entidades.csproj" />
+    <ProjectReference Include="..\Seguridad_Entidades\Seguridad_Entidades.csproj" />
+  </ItemGroup>
+
+</Project>

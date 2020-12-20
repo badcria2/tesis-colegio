@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Comunes_Entidades\Comunes_Entidades.csproj" />
+    <ProjectReference Include="..\Persona_Entidades\Persona_Entidades.csproj" />
+  </ItemGroup>
+
+</Project>
