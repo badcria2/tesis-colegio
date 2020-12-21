@@ -1,58 +1,73 @@
-﻿@model AutenticacionRequest
+﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title>Worker´s Health Center</title>
-    <meta name="generator" content="Bootply" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="~/LoginStyle/css/bootstrap.min.css" rel="stylesheet">
-    <!--[if lt IE 9]>
-        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link href="~/LoginStyle/css/styles.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Creative - Bootstrap 3 Responsive Admin Template">
+    <meta name="author" content="GeeksLabs">
+    <meta name="keyword" content="Creative, Dashboard, Admin, Template, Theme, Bootstrap, Responsive, Retina, Minimal">
+    <link rel="shortcut icon" href="~/bootstrap/img/favicon.png">
+
+    <title>Login Page 2 | Creative - Bootstrap 3 Responsive Admin Template</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- bootstrap theme -->
+    <link href="~/bootstrap/css/bootstrap-theme.css" rel="stylesheet">
+    <!--external css-->
+    <!-- font icon -->
+    <link href="~/bootstrap/css/elegant-icons-style.css" rel="stylesheet" />
+    <link href="~/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <!-- Custom styles -->
+    <link href="~/bootstrap/css/style.css" rel="stylesheet">
+    <link href="~/bootstrap/css/style-responsive.css" rel="stylesheet" />
+ 
 </head>
-<body>
-    <!--login modal-->
-    <div id="loginModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <img src="~/Imagenes/workers.jpg" style="margin-left:95px" />
-                    <!--<h1 class="text-center">Login</h1>-->
+
+<body class="login-img3-body">
+
+    <div class="container">
+
+        <form class="login-form"   asp-action="login">
+            <div class="login-wrap">
+                <p class="login-img"><i class="icon_lock_alt"></i></p>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="icon_profile"></i></span>
+                    <input type="text" name="usuario" class="form-control" placeholder="Username" autofocus>
                 </div>
-                <div class="modal-body">
-                    <form class="form col-md-12 center-block" method="post" asp-action="login">
-                        <div class="form-group">
-                            <input type="text" name="usuario" class="form-control input-lg" placeholder="Nombre de Usuario">
-                        </div>
-                        <div class="form-group">
-                            <input type="password" name="password" class="form-control input-lg" placeholder="Contraseña">
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-primary btn-lg btn-block" style="background-color:#009999" type="submit">Ingresar</button>
-                        </div>
-                    </form>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="icon_key_alt"></i></span>
+                    <input type="password" name="password" class="form-control" placeholder="Password">
                 </div>
-                <div class="modal-footer">
-                    <div class="col-md-12">
-                        @foreach (var item in ViewContext.ViewData.ModelState)
-                        {
-                            if (item.Value.Errors.Any())
-                            {
-                                <tr>
-                              
-                                    <td>@(string.Join("", item.Value.Errors.Select(x => x.ErrorMessage)))</td>
-                                </tr>
-                            }
-                        }
-                    </div>
-                </div>
+                <label class="checkbox">
+                    <input type="checkbox" value="remember-me"> Recordar
+                    <span class="pull-right"> <a href="#"> Recuperar cuenta?</a></span>
+                </label>
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+                @*<button class="btn btn-info btn-lg btn-block" type="submit">Signup</button>*@
+
+                @foreach (var item in ViewContext.ViewData.ModelState)
+                {
+                    if (item.Value.Errors.Any())
+                    {
+                        <div class="form-group has-error">
+                            <label class="control-label" style="text-align:center;" for="inputError">@(string.Join("", item.Value.Errors.Select(x => x.ErrorMessage)))</label> 
+                        </div> 
+                    }
+                }
+
+            </div>
+        </form>
+        <div class="text-right">
+            <div class="credits">
+                
             </div>
         </div>
     </div>
-    <!-- script references -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-    <script src="~/LoginStyle/js/bootstrap.min.js"></script>
+
+
 </body>
+
 </html>
+ 
