@@ -83,6 +83,7 @@ namespace WebAppColegio.Controllers
             {
                 if (autenticacionResponse != null) //si el usuario se enuentra
                 {
+                    TempData["Profile"] = JsonConvert.SerializeObject(autenticacionResponse);
                     return View();
                 }
                 else
