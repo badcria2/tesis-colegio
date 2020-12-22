@@ -36,12 +36,12 @@ namespace Seguridad_Datos
                     usuarioEL.codigoTipoAcceso = dr["codigoTipoAcceso"].ToString();
                     usuarioEL.Perfil = dr["acceso"].ToString();
                     usuarioEL.Estado = Boolean.Parse(dr["estado"].ToString());
-                    usuarioEL.Persona = new Persona_Entidades.PER_PersonalEL() 
-                    { 
+                    usuarioEL.Persona = new Persona_Entidades.PER_PersonalEL()
+                    {
                         apellidos = dr["apellidos"].ToString(),
                         nombres = dr["nombres"].ToString(),
                         dni = dr["dni"].ToString(),
-                    }; 
+                    };
                 }
             }
             catch (Exception e)

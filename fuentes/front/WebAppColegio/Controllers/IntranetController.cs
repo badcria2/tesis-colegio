@@ -1,7 +1,8 @@
-﻿using System; 
+﻿using System;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks; 
+using System.Text; 
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -15,13 +16,11 @@ namespace WebAppColegio.Controllers
     {
         private ILogger<IntranetController> _logger;
         private IConfiguration _Configure;
-        private string apiBaseUrl;
-
+        private string apiBaseUrl; 
         public IntranetController(ILogger<IntranetController> logger, IConfiguration configuration)
         {
             _logger = logger;
-            _Configure = configuration;
-
+            _Configure = configuration; 
             apiBaseUrl = _Configure.GetValue<string>("WebAPIBaseUrl");
         }
         // GET: IntranetController
@@ -46,9 +45,12 @@ namespace WebAppColegio.Controllers
                     {
                         if (Response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
-                            
+                             
+
                             var data = await Response.Content.ReadAsStringAsync();
                             AutenticacionResponse autenticacionResponse = JsonConvert.DeserializeObject<AutenticacionResponse>(data); 
+                            //HttpContext.Session.Set("Profile", System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(autenticacionResponse)); 
+
                             TempData["Profile"] = JsonConvert.SerializeObject(autenticacionResponse);
                             return RedirectToAction("Principal", "Intranet", autenticacionResponse);
                         }
@@ -83,7 +85,9 @@ namespace WebAppColegio.Controllers
             {
                 if (autenticacionResponse != null) //si el usuario se enuentra
                 {
+               
                     TempData["Profile"] = JsonConvert.SerializeObject(autenticacionResponse);
+                    //Session
                     return View();
                 }
                 else

@@ -1,8 +1,9 @@
 ﻿@using  WebAppColegio.Models.Response
 @using Newtonsoft.Json;
 
+
 @{
-    ViewData["Title"] = "Principal"; 
+    ViewData["Title"] = "Principal";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,5 +11,6 @@
 
 @{
     var autenticacionResponse = JsonConvert.DeserializeObject<AutenticacionResponse>(Convert.ToString(TempData["Profile"]));
+    // var autenticacionResponse = System.Text.Json.JsonSerializer.Deserialize<WebAppColegio.Models.Response.AutenticacionResponse>(HttpContext.Session.Get("Profile"));
 }
 <h2>@autenticacionResponse.Perfil</h2>
