@@ -1,0 +1,38 @@
+[
+  {
+    "outputFileName": "wwwroot/masterpage/css/ruang-admin.min.css",
+    "inputFiles": [
+      "wwwroot/masterpage/css/ruang-admin.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/masterpage/js/ruang-admin.min.js",
+    "inputFiles": [
+      "wwwroot/masterpage/js/ruang-admin.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/masterpage/js/demo/chart-area-demo.min.js",
+    "inputFiles": [
+      "wwwroot/masterpage/js/demo/chart-area-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/masterpage/js/demo/chart-bar-demo.min.js",
+    "inputFiles": [
+      "wwwroot/masterpage/js/demo/chart-bar-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/masterpage/js/demo/chart-pie-demo.min.js",
+    "inputFiles": [
+      "wwwroot/masterpage/js/demo/chart-pie-demo.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/masterpage/vendor/bootstrap/css/bootstrap.min.css",
+    "inputFiles": [
+      "wwwroot/masterpage/vendor/bootstrap/css/bootstrap.css"
+    ]
+  }
+]
