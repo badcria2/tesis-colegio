@@ -20,7 +20,7 @@ namespace Seguridad_Negocio
             {
                 var usuarioResponse =  SEG_UsuarioDAL.Instancia.DevolverUsuario(usuario, password);
                 if(usuarioResponse != null)
-                    usuarioResponse.Permisos = CMM_TipoAccesoBL.Instancia.ObtenerPermisos(usuarioResponse.Perfil);
+                    usuarioResponse.permisos = CMM_TipoAccesoBL.Instancia.ObtenerPermisos(usuarioResponse.perfil);
                 return usuarioResponse;
                 
             }

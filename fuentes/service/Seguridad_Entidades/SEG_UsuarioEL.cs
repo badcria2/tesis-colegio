@@ -8,12 +8,12 @@ namespace Seguridad_Entidades
     public class SEG_UsuarioEL
     {
         public String codigoUsuario { get; set; } 
-        public String Perfil { get; set; }
+        public String perfil { get; set; }
         public String codigoTipoAcceso { get; set; }
-        public PER_PersonalEL Persona { get; set; }
-        public List<CMM_TipoAccesoEL> Permisos { get; set; }
+        public PER_PersonalEL persona { get; set; }
+        public List<CMM_TipoAccesoEL> permisos { get; set; }
 
-        public Boolean Estado { get; set; }
+        public Boolean estado { get; set; }
     }
 }
  

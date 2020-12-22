@@ -10,5 +10,6 @@ namespace WebAppColegio.Models.Response
         public String nombres { get; set; }
         public String apellidos { get; set; }
         public String dni { get; set; }
+        public Char sexo { get; set; }
     }
 }

@@ -34,13 +34,14 @@ namespace Seguridad_Datos
                     usuarioEL = new SEG_UsuarioEL();
                     usuarioEL.codigoUsuario = dr["codigoUsuario"].ToString();
                     usuarioEL.codigoTipoAcceso = dr["codigoTipoAcceso"].ToString();
-                    usuarioEL.Perfil = dr["acceso"].ToString();
-                    usuarioEL.Estado = Boolean.Parse(dr["estado"].ToString());
-                    usuarioEL.Persona = new Persona_Entidades.PER_PersonalEL()
+                    usuarioEL.perfil = dr["acceso"].ToString();
+                    usuarioEL.estado = Boolean.Parse(dr["estado"].ToString());
+                    usuarioEL.persona = new Persona_Entidades.PER_PersonalEL()
                     {
                         apellidos = dr["apellidos"].ToString(),
                         nombres = dr["nombres"].ToString(),
                         dni = dr["dni"].ToString(),
+                        sexo = Char.Parse(dr["sexo"].ToString())
                     };
                 }
             }

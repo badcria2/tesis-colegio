@@ -17,11 +17,13 @@ namespace WebAppColegio.Controllers
         private ILogger<IntranetController> _logger;
         private IConfiguration _Configure;
         private string apiBaseUrl; 
-        public IntranetController(ILogger<IntranetController> logger, IConfiguration configuration)
+        private readonly ISession session;
+        public IntranetController(ILogger<IntranetController> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _Configure = configuration; 
             apiBaseUrl = _Configure.GetValue<string>("WebAPIBaseUrl");
+            this.session = httpContextAccessor.HttpContext.Session;
         }
         // GET: IntranetController
         [HttpGet]
@@ -44,14 +46,10 @@ namespace WebAppColegio.Controllers
                     using (var Response = await client.PostAsync(endpoint, content))
                     {
                         if (Response.StatusCode == System.Net.HttpStatusCode.OK)
-                        {
-                             
-
+                        {                           
                             var data = await Response.Content.ReadAsStringAsync();
-                            AutenticacionResponse autenticacionResponse = JsonConvert.DeserializeObject<AutenticacionResponse>(data); 
-                            //HttpContext.Session.Set("Profile", System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(autenticacionResponse)); 
-
-                            TempData["Profile"] = JsonConvert.SerializeObject(autenticacionResponse);
+                            AutenticacionResponse autenticacionResponse = JsonConvert.DeserializeObject<AutenticacionResponse>(data);
+                            HttpContext.Session.SetString("UsuarioSession", JsonConvert.SerializeObject(autenticacionResponse)); 
                             return RedirectToAction("Principal", "Intranet", autenticacionResponse);
                         }
                         else if (Response.StatusCode == System.Net.HttpStatusCode.NoContent)
@@ -83,16 +81,15 @@ namespace WebAppColegio.Controllers
         {
             try
             {
-                if (autenticacionResponse != null) //si el usuario se enuentra
-                {
-               
-                    TempData["Profile"] = JsonConvert.SerializeObject(autenticacionResponse);
-                    //Session
+                if (autenticacionResponse != null || HttpContext.Session.GetString("UsuarioSession") != null) //si el usuario se enuentra
+                { 
                     return View();
                 }
                 else
                 {
-                    return View();
+                    ModelState.Clear();
+                    ModelState.AddModelError("ErrorLogeo", "Usuario/Password incorrectos");
+                    return RedirectToAction("Login", "Intranet");
                 }
             }
             catch (Exception e)
