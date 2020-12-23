@@ -23,8 +23,7 @@ namespace AppServiceColegio.Controllers
             if (null == autenticacionRequest|| autenticacionRequest.Password ==null || autenticacionRequest.Usuario == null)
             {
                 return BadRequest();
-            }
-                
+            }                
             return Ok(Seguridad_Negocio.SEG_UsuarioBL.Instancia.DevolverUsuario(autenticacionRequest.Usuario, autenticacionRequest.Password));
         }
     }

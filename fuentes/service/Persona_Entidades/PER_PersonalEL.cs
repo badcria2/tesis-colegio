@@ -7,7 +7,6 @@ namespace Persona_Entidades
         public String nombres { get; set; }
         public String apellidos { get; set; }
         public String dni { get; set; } 
-
         public char sexo { set; get; }
     }
 }

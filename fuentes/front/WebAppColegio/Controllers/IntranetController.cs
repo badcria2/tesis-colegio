@@ -50,7 +50,7 @@ namespace WebAppColegio.Controllers
                             var data = await Response.Content.ReadAsStringAsync();
                             AutenticacionResponse autenticacionResponse = JsonConvert.DeserializeObject<AutenticacionResponse>(data);
                             HttpContext.Session.SetString("UsuarioSession", JsonConvert.SerializeObject(autenticacionResponse)); 
-                            return RedirectToAction("Principal", "Intranet", autenticacionResponse);
+                            return RedirectToAction("Index", "Curso", new { _codigoUsuario = autenticacionResponse.codigoUsuario });
                         }
                         else if (Response.StatusCode == System.Net.HttpStatusCode.NoContent)
                         {
@@ -77,26 +77,6 @@ namespace WebAppColegio.Controllers
                 throw e;
             }
         }
-        public ActionResult Principal(AutenticacionResponse autenticacionResponse)
-        {
-            try
-            {
-                if (autenticacionResponse != null || HttpContext.Session.GetString("UsuarioSession") != null) //si el usuario se enuentra
-                { 
-                    return View();
-                }
-                else
-                {
-                    ModelState.Clear();
-                    ModelState.AddModelError("ErrorLogeo", "Usuario/Password incorrectos");
-                    return RedirectToAction("Login", "Intranet");
-                }
-            }
-            catch (Exception e)
-            { 
-                return View();
-            }
-
-        }
+       
     }
 }

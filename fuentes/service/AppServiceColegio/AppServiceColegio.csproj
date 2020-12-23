@@ -7,6 +7,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Seguridad_Entidades\Seguridad_Entidades.csproj" />
     <ProjectReference Include="..\Seguridad_Negocio\Seguridad_Negocio.csproj" />
+    <ProjectReference Include="..\Servicio_Entidades\Servicio_Entidades.csproj" />
+    <ProjectReference Include="..\Servicio_Negocio\Servicio_Negocio.csproj" />
   </ItemGroup>
 
 

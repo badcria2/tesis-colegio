@@ -34,5 +34,11 @@
     "inputFiles": [
       "wwwroot/masterpage/vendor/bootstrap/css/bootstrap.css"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/masterpage/css/footer.min.css",
+    "inputFiles": [
+      "wwwroot/masterpage/css/footer.css"
+    ]
   }
 ]
