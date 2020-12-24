@@ -37,7 +37,7 @@ namespace WebAppColegio.Controllers
                 if (HttpContext.Session.GetString("UsuarioSession") == null) //si el usuario se enuentra
                 {
                     ModelState.Clear();
-                    ModelState.AddModelError("ErrorLogeo", "Usuario/Password incorrectos");
+                    ModelState.AddModelError("ErrorLogeo", "Tiempo sesión expirado");
                     return RedirectToAction("Login", "Intranet");
                 }
                 using (HttpClient client = new HttpClient())
@@ -66,18 +66,77 @@ namespace WebAppColegio.Controllers
                         else if (Response.StatusCode == System.Net.HttpStatusCode.NoContent)
                         {
                             ModelState.Clear();
-                            ModelState.AddModelError("ErrorLogeo", "Usuario/Password incorrectos");
+                            ModelState.AddModelError("Info", "Sin Cursos asociados");
                             return View(_cursoResponseLst);
                         }
                         else
                         {
                             ModelState.Clear();
-                            ModelState.AddModelError("ErrorLogeo", "A ocurrido un error favor contactar con el administrador");
+                            ModelState.AddModelError("ErorData", "A ocurrido un error favor contactar con el administrador");
                             return RedirectToAction("Login", "Intranet");
                         }
                     }
 
                 }
+
+
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("Login", "Intranet");
+            }
+
+        }
+
+        public async Task<IActionResult> Detalle(String _codigoCurso)
+        {
+            try
+            {
+                if (HttpContext.Session.GetString("UsuarioSession") == null) //si el usuario se enuentra
+                {
+                    ModelState.Clear();
+                    ModelState.AddModelError("ErrorLogeo", "Tiempo sesión expirado");
+                    return RedirectToAction("Login", "Intranet");
+                }
+                return View();
+                //using (HttpClient client = new HttpClient())
+                //{
+                // var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
+                //var cursoRequest = new CursoRequest()
+                //{
+                //    periodo = DateTime.Now.Year.ToString(),
+                //    usuario = _codigoCurso
+                //};
+                //var request = new HttpRequestMessage
+                //{
+                //    Method = HttpMethod.Get,
+                //    RequestUri = new Uri(apiBaseUrl + "/servicio/detalle-cursos"),
+                //    Content = new StringContent(JsonConvert.SerializeObject(cursoRequest), Encoding.UTF8, "application/json")
+                //};
+                //using (var Response = await client.SendAsync(request).ConfigureAwait(false))
+                //{
+                //    List<CursoResponse> _cursoResponseLst = new List<CursoResponse>();
+                //    if (Response.StatusCode == System.Net.HttpStatusCode.OK)
+                //    {
+                //        var data = await Response.Content.ReadAsStringAsync();
+                //        _cursoResponseLst = JsonConvert.DeserializeObject<List<CursoResponse>>(data);
+                //        return View(_cursoResponseLst);
+                //    }
+                //    else if (Response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                //    {
+                //        ModelState.Clear();
+                //        ModelState.AddModelError("Info", "Sin Cursos asociados");
+                //        return View(_cursoResponseLst);
+                //    }
+                //    else
+                //    {
+                //        ModelState.Clear();
+                //        ModelState.AddModelError("ErorData", "A ocurrido un error favor contactar con el administrador");
+                //        return RedirectToAction("Login", "Intranet");
+                //    }
+                //}
+
+                //}
 
 
             }

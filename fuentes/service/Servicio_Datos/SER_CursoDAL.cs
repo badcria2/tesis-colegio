@@ -39,7 +39,8 @@ namespace Servicio_Datos
                             periodo = dr["periodo"].ToString(),
                             grado = Char.Parse(dr["grado"].ToString()),
                             seccion = Char.Parse(dr["seccion"].ToString()),
-                            estado = dr["estado_curso_alumno"].ToString()
+                            estado = dr["estado_curso_alumno"].ToString(),
+                            estilo = dr["estilo"].ToString()
                         }
                     );
                 }

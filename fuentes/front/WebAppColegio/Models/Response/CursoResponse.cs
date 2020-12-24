@@ -13,5 +13,6 @@ namespace WebAppColegio.Models.Response
         public Char seccion { get; set; }
         public String periodo { get; set; }
         public String estado { get; set; }
+        public String estilo { get; set; }
     }
 }
