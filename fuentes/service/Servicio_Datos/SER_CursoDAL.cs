@@ -16,7 +16,7 @@ namespace Servicio_Datos
         }
         #endregion Singleton
 
-        public List<SER_CursoEL> DevolverCursos(String usuario, String periodo)
+        public List<SER_CursoEL> GetCurso(String usuario, String periodo)
         {
             SqlCommand cmd = null;
             List<SER_CursoEL> _CursoELs = new List<SER_CursoEL>();
@@ -40,7 +40,8 @@ namespace Servicio_Datos
                             grado = Char.Parse(dr["grado"].ToString()),
                             seccion = Char.Parse(dr["seccion"].ToString()),
                             estado = dr["estado_curso_alumno"].ToString(),
-                            estilo = dr["estilo"].ToString()
+                            estilo = dr["estilo"].ToString(),
+                            clase = dr["codigo_clase"].ToString()
                         }
                     );
                 }
@@ -52,6 +53,44 @@ namespace Servicio_Datos
             finally { cmd.Connection.Close(); }
             return _CursoELs;
         }
+        public SER_DetCursoEL GetDetCurso(String codigoClase, String periodo)
+        {
+            SqlCommand cmd = null;
+            SER_DetCursoEL _CursoELs = new SER_DetCursoEL();
+            List<SER_MaterialEL> _MaterialELs = new List<SER_MaterialEL>();
+            try
+            {
+                SqlConnection cn = Conexion.Instancia.Conectar();
+                cmd = new SqlCommand("PRD_ObtenerDetalleCurso", cn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@codigo_clase", codigoClase);
+                cmd.Parameters.AddWithValue("@periodo", periodo);
+                cn.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    _CursoELs.codigo = dr["codigo_clase"].ToString();
+                    _CursoELs.enlace = dr["enlace"].ToString();
+                    _CursoELs.numeroSemanas = Int32.Parse(dr["numero_semanas"].ToString());
+                    _MaterialELs.Add(
 
+                        new SER_MaterialEL()
+                        {
+                            codigo = dr["codigo_material"].ToString(),
+                            nombre = dr["nombreMaterial"].ToString(),
+                            nroSemana = Int32.Parse(dr["semana"].ToString()),
+                            extension = dr["extension"].ToString()
+                        }
+                 );
+                    _CursoELs.material = _MaterialELs;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally { cmd.Connection.Close(); }
+            return _CursoELs;
+        }
     }
 }

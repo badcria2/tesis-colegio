@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -8,8 +9,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
 using WebAppColegio.Models;
+using WebAppColegio.Models.Request;
 using WebAppColegio.Models.Response;
 
 namespace WebAppColegio.Controllers
@@ -88,7 +92,7 @@ namespace WebAppColegio.Controllers
 
         }
 
-        public async Task<IActionResult> Detalle(String _codigoCurso)
+        public async Task<IActionResult> Detalle(String curso, String clase, String cursoNombre)
         {
             try
             {
@@ -97,46 +101,46 @@ namespace WebAppColegio.Controllers
                     ModelState.Clear();
                     ModelState.AddModelError("ErrorLogeo", "Tiempo sesión expirado");
                     return RedirectToAction("Login", "Intranet");
-                }
-                return View();
-                //using (HttpClient client = new HttpClient())
-                //{
-                // var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
-                //var cursoRequest = new CursoRequest()
-                //{
-                //    periodo = DateTime.Now.Year.ToString(),
-                //    usuario = _codigoCurso
-                //};
-                //var request = new HttpRequestMessage
-                //{
-                //    Method = HttpMethod.Get,
-                //    RequestUri = new Uri(apiBaseUrl + "/servicio/detalle-cursos"),
-                //    Content = new StringContent(JsonConvert.SerializeObject(cursoRequest), Encoding.UTF8, "application/json")
-                //};
-                //using (var Response = await client.SendAsync(request).ConfigureAwait(false))
-                //{
-                //    List<CursoResponse> _cursoResponseLst = new List<CursoResponse>();
-                //    if (Response.StatusCode == System.Net.HttpStatusCode.OK)
-                //    {
-                //        var data = await Response.Content.ReadAsStringAsync();
-                //        _cursoResponseLst = JsonConvert.DeserializeObject<List<CursoResponse>>(data);
-                //        return View(_cursoResponseLst);
-                //    }
-                //    else if (Response.StatusCode == System.Net.HttpStatusCode.NoContent)
-                //    {
-                //        ModelState.Clear();
-                //        ModelState.AddModelError("Info", "Sin Cursos asociados");
-                //        return View(_cursoResponseLst);
-                //    }
-                //    else
-                //    {
-                //        ModelState.Clear();
-                //        ModelState.AddModelError("ErorData", "A ocurrido un error favor contactar con el administrador");
-                //        return RedirectToAction("Login", "Intranet");
-                //    }
-                //}
+                } 
+                using (HttpClient client = new HttpClient())
+                {
+                    var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
+                    var cursoRequest = new MaterialRequest()
+                    {
+                        periodo = DateTime.Now.Year.ToString(),
+                        codigoClase = clase
+                    };
+                    var request = new HttpRequestMessage
+                    {
+                        Method = HttpMethod.Get,
+                        RequestUri = new Uri(apiBaseUrl + "/servicio/curso-detalle"),
+                        Content = new StringContent(JsonConvert.SerializeObject(cursoRequest), Encoding.UTF8, "application/json")
+                    };
+                    using (var Response = await client.SendAsync(request).ConfigureAwait(false))
+                    {
+                        CursoDetalleResponse cursoDetalleResponse = new CursoDetalleResponse();
+                        if (Response.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            var data = await Response.Content.ReadAsStringAsync();
+                            cursoDetalleResponse = JsonConvert.DeserializeObject<CursoDetalleResponse>(data);
+                            cursoDetalleResponse.cursoNombre = cursoNombre;
+                            return View(cursoDetalleResponse);
+                        }
+                        else if (Response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                        {
+                            ModelState.Clear();
+                            ModelState.AddModelError("Info", "Sin Cursos asociados");
+                            return View(cursoDetalleResponse);
+                        }
+                        else
+                        {
+                            ModelState.Clear();
+                            ModelState.AddModelError("ErorData", "A ocurrido un error favor contactar con el administrador");
+                            return RedirectToAction("Login", "Intranet");
+                        }
+                    }
 
-                //}
+                }
 
 
             }
@@ -145,6 +149,43 @@ namespace WebAppColegio.Controllers
                 return RedirectToAction("Login", "Intranet");
             }
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(IFormFile files)
+        {
+            string blobstorageconnection = _Configure.GetValue<string>("blobstorage");
+            string systemFileName = files.FileName;
+            // Retrieve storage account from connection string.
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(blobstorageconnection);
+            // Create the blob client.
+            CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
+            // Retrieve a reference to a container.
+            CloudBlobContainer container = blobClient.GetContainerReference("alumnocontainer");
+            // This also does not make a service call; it only creates a local object.
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(systemFileName);
+            await using (var data = files.OpenReadStream())
+            {
+                await blockBlob.UploadFromStreamAsync(data);
+            }
+            return View("Create");
+        }
+
+        public async Task<IActionResult> Download(string blobName)
+        {
+            CloudBlockBlob blockBlob;
+            await using (MemoryStream memoryStream = new MemoryStream())
+            {
+                string blobstorageconnection = _Configure.GetValue<string>("blobstorage");
+                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(blobstorageconnection);
+                CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+                CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("alumnocontainer");
+                blockBlob = cloudBlobContainer.GetBlockBlobReference(blobName);
+                await blockBlob.DownloadToStreamAsync(memoryStream);
+            }
+
+            Stream blobStream = blockBlob.OpenReadAsync().Result;
+            return File(blobStream, blockBlob.Properties.ContentType, blockBlob.Name);
         }
     }
 }

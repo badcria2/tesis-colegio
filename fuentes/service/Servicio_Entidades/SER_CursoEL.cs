@@ -11,7 +11,7 @@ namespace Servicio_Entidades
         public String periodo { get; set; }
         public String estado { get; set; }
         public String estilo { get; set; }
-
+        public String clase { get; set; } 
 
 
     }

@@ -39,15 +39,23 @@
                                 <div class="col-lg-6 mb-4">
                                     <div class="card text-white" style="background-color: #@item.estilo">
                                         <div class="card-body">
-                                            @{var _codigoCurso = item.codigo;}
+                                            @{
+                                                var _codigoCurso = item.codigo;
+                                                var _codigoClase = item.clase;
+                                                var _nombreCurso = item.nombre;
+                                            }
                                             @*<div class="text-white-50 small">#Ingresar</div>*@
-                                            <a class="sidebar-brand d-flex align-items-center justify-content-center" style="color: white;"
-                                               asp-controller="Curso" asp-route-curso=@_codigoCurso asp-action="Detalle">@Html.DisplayFor(modelItem => item.nombre)</a> 
+                                            <a class="sidebar-brand d-flex align-items-center" style="color: white;"
+                                               asp-controller="Curso" asp-route-curso=@_codigoCurso  asp-route-clase=@_codigoClase asp-route-cursoNombre=@_nombreCurso asp-action="Detalle">@Html.DisplayFor(modelItem => item.nombre)</a>
                                         </div>
                                     </div>
                                 </div>
                             }
                         }
+
+                        <div class="col-lg-6 mb-4">
+
+                        </div>
                         <div class="col-lg-6 mb-4">
 
                         </div>

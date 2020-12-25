@@ -1,4 +1,4 @@
-﻿
+﻿@model WebAppColegio.Models.Response.CursoDetalleResponse
 
 @{
     ViewData["Title"] = "CursoDetalle";
@@ -31,11 +31,11 @@
                                 <h2 class="screenreader-only">Curso de Análisis de Sistemas Hidráulicos</h2>
                                 <span role="button" tabindex="0" href="" class="ig-header-title collapse_module_link ellipsis" aria-controls="context_module_content_161594" aria-expanded="true" aria-label="Curso de Análisis de Sistemas Hidráulicos activar o desactivar visibilidad del módulo" title="Curso de Análisis de Sistemas Hidráulicos">
                                     <i class="fas fa-sort-down"></i>
-                                    <span class="name">Curso de Análisis de Sistemas Hidráulicos</span>
+                                    <span class="name">@Model.cursoNombre</span>
                                 </span>
                                 <span role="button" tabindex="0" href="" class="ig-header-title expand_module_link ellipsis" aria-controls="context_module_content_161594" aria-expanded="false" aria-label="Curso de Análisis de Sistemas Hidráulicos activar o desactivar visibilidad del módulo" title="Curso de Análisis de Sistemas Hidráulicos">
                                     <i class="fas fa-sort-down"></i>
-                                    <span class="name ellipsis">Curso de Análisis de Sistemas Hidráulicos</span>
+                                    <span class="name ellipsis">@Model.cursoNombre</span>
                                 </span>
                             </div>
                             <div class="content" id="context_module_content_161594">
@@ -77,62 +77,79 @@
                                 <!-- footer -->
                             </div>
                         </div>
-                        <div class="item-group-condensed context_module student-view completed" aria-label="Semana 01" data-workflow-state="active" id="context_module_161599">
-                            <div class="ig-header header" id="161599">
-                                <span role="button" tabindex="0" class="ig-header-title collapse_module_link ellipsis" aria-controls="context_module_content_161599" aria-expanded="true" aria-label="Semana 01: Load Sensing Presure Compesating LSPC activar o desactivar visibilidad del módulo" title="Semana 01: Load Sensing Presure Compesating LSPC">
-                                    <i class="fas fa-sort-down"></i>
-                                    <span class="name">Semana 01: Load Sensing Presure Compesating LSPC</span>
-                                </span>
-                                <span role="button" tabindex="0" class="ig-header-title expand_module_link ellipsis" aria-controls="context_module_content_161599" aria-expanded="false" aria-label="Semana 01: Load Sensing Presure Compesating LSPC activar o desactivar visibilidad del módulo" title="Semana 01: Load Sensing Presure Compesating LSPC">
-                                    <i class="fas fa-sort-down"></i>
-                                    <span class="name ellipsis">Semana 01: Load Sensing Presure Compesating LSPC</span>
-                                </span>
-                            </div>
-                            <div class="content" id="context_module_content_161599">
-                                <ul class="ig-list items context_module_items ">
+                        @for (int i = 1; i <= Model.numeroSemanas; i++)
+                        {
+                            <div class="item-group-condensed context_module student-view completed" aria-label="Semana 01" data-workflow-state="active" id="context_module_161599">
+                                <div class="ig-header header" id="161599">
+                                    <span role="button" tabindex="0" class="ig-header-title collapse_module_link ellipsis" aria-controls="context_module_content_161599" aria-expanded="true" aria-label="Semana 01: Load Sensing Presure Compesating LSPC activar o desactivar visibilidad del módulo" title="Semana 01: Load Sensing Presure Compesating LSPC">
+                                        <i class="fas fa-sort-down"></i>
+                                        <span class="name">Semana @i</span>
+                                    </span>
+                                    <span role="button" tabindex="0" class="ig-header-title expand_module_link ellipsis" aria-controls="context_module_content_161599" aria-expanded="false" aria-label="Semana 01: Load Sensing Presure Compesating LSPC activar o desactivar visibilidad del módulo" title="Semana 01: Load Sensing Presure Compesating LSPC">
+                                        <i class="fas fa-sort-down"></i>
+                                        <span class="name ellipsis">Semana @i</span>
+                                    </span>
+                                </div>
+                                <div class="content" id="context_module_content_161599">
+                                    <ul class="ig-list items context_module_items ">
 
-                                    <li id="context_module_item_419775" style="" class="context_module_item     student-view     external_url          indent_0          _requirement     ExternalUrl_0">
-                                        <div class="ig-row  ig-published student-view">
+                                        <li id="context_module_item_419775" style="" class="context_module_item     student-view     external_url          indent_0          _requirement     ExternalUrl_0">
+                                            <div class="ig-row  ig-published student-view">
 
-                                            <span class="type_icon" title="External Url" role="none">
-                                                <span class="fas fa-link">
-                                                </span>
-                                            </span>
-                                            <div class="ig-info">
-                                                <div class="module-item-title">
-                                                    <span class="item_name">
-                                                        <a title="Material de clase" class="ig-title title item_link" href="">
-                                                            Material de clase
-                                                        </a>
+                                                <span class="type_icon" title="External Url" role="none">
+                                                    <span class="fas fa-link">
                                                     </span>
+                                                </span>
+                                                <div class="ig-info">
+                                                    <div class="module-item-title">
+                                                        @{
+                                                            var nombreDocumento = "";
+                                                            var temporal = Model.material.FirstOrDefault(a => a.nroSemana == i);
+                                                            if (null != temporal)
+                                                            {
+                                                                nombreDocumento = temporal.nombre.Replace("/docente/", "");
+                                                            }
+                                                            if (nombreDocumento == "")
+                                                            {
+                                                                nombreDocumento = "Adjuntar documento";
+                                                            }
+                                                        }
+                                                        <span class="item_name">
+                                                            <a title="Material de clase" class="ig-title title item_link" href="/Curso/Download?blobName=@nombreDocumento">
+                                                                Material: @nombreDocumento
+                                                            </a>
+                                                            <a href="/Curso/Download?blobName=@nombreDocumento">Descargar</a>                                                           
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="module-item-status-icon"></div>
+                                            </div>
+                                        </li>
+
+                                        <li id="context_module_item_419780" style="" class="context_module_item     student-view            assignment     also_assignment     indent_0          _requirement     Assignment_240450     dupeable">
+                                            <div class="ig-row  ig-published student-view">
+
+                                                <span class="type_icon" title="Assignment" role="none">
+                                                    <span class="fas fa-tasks">
+                                                    </span>
+                                                </span>
+                                                <div class="ig-info">
+                                                    <div class="module-item-title">
+                                                        <span class="item_name">
+                                                            <a title="Laboratorio 01" class="ig-title title item_link" href="">
+                                                                Tarea: @nombreDocumento
+                                                            </a>
+                                                        </span>
+                                                    </div>
+
                                                 </div>
                                             </div>
-                                            <div class="module-item-status-icon"></div>
-                                        </div>
-                                    </li>
-
-                                    <li id="context_module_item_419780" style="" class="context_module_item     student-view            assignment     also_assignment     indent_0          _requirement     Assignment_240450     dupeable">
-                                        <div class="ig-row  ig-published student-view">
-
-                                            <span class="type_icon" title="Assignment" role="none">
-                                                <span class="fas fa-tasks">
-                                                </span>
-                                            </span>
-                                            <div class="ig-info">
-                                                <div class="module-item-title">
-                                                    <span class="item_name">
-                                                        <a title="Laboratorio 01" class="ig-title title item_link" href="">
-                                                            Tarea 01
-                                                        </a>
-                                                    </span>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
+                        }
+
                     </div>
                 </div>
             </div>

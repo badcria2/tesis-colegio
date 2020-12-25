@@ -14,11 +14,11 @@ namespace Servicio_Negocio
             get { return SER_CursoBL._instancia; }
         }
         #endregion Singleton
-        public List<SER_CursoEL> DevolverCursos(String usuario, String periodo)
+        public List<SER_CursoEL> GetCurso(String usuario, String periodo)
         {
             try
             {
-                var _CursoELs = SER_CursoDAL.Instancia.DevolverCursos(usuario, periodo); 
+                var _CursoELs = SER_CursoDAL.Instancia.GetCurso(usuario, periodo);
                 return _CursoELs;
 
             }
@@ -27,6 +27,19 @@ namespace Servicio_Negocio
                 throw e;
             }
         }
-
+        public SER_DetCursoEL GetDetCurso(String coodigoClase, String periodo)
+        {
+            try
+            {
+                var _DetCursoEL = SER_CursoDAL.Instancia.GetDetCurso(coodigoClase, periodo);
+                if (null != _DetCursoEL.codigo)
+                    return _DetCursoEL;
+                else return null;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }
