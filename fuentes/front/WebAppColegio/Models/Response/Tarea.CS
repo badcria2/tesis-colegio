@@ -5,14 +5,10 @@ using System.Threading.Tasks;
 
 namespace WebAppColegio.Models.Response
 {
-    public class MaterialResponse
+    public class Tarea
     {
         public String codigo { get; set; }
         public int nroSemana { get; set; }
-        public String extension { get; set; }
         public String nombre { get; set; }
-        public Boolean tareaHabilitada { get; set; }
-        public String tiempoRestante { get; set; }
-        public Tarea tarea { get; set; }
     }
 }

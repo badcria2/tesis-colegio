@@ -77,9 +77,12 @@ namespace Servicio_Datos
                         new SER_MaterialEL()
                         {
                             codigo = dr["codigo_material"].ToString(),
-                            nombre = dr["nombreMaterial"].ToString(),
+                            nombre = dr["nombre_material"].ToString(),
                             nroSemana = Int32.Parse(dr["semana"].ToString()),
-                            extension = dr["extension"].ToString()
+                            extension = dr["extension"].ToString(),
+                            tareaHabilitada = Boolean.Parse(dr["tarea_habilitada"].ToString()),
+                            tiempoRestante = dr["tiempo_restante"].ToString(),
+                            tarea = new SER_TareaEL() { codigo = "", nombre = "", nroSemana = 0 }
                         }
                  );
                     _CursoELs.material = _MaterialELs;
@@ -92,5 +95,7 @@ namespace Servicio_Datos
             finally { cmd.Connection.Close(); }
             return _CursoELs;
         }
+
+       
     }
 }

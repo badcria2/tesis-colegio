@@ -10,6 +10,10 @@ namespace Servicio_Entidades
         public int nroSemana { get; set; }
         public String extension { get; set; }
         public String nombre { get; set; }
+        public Boolean tareaHabilitada { get; set; }
+        public String tiempoRestante { get; set; }
+        public SER_TareaEL tarea { get; set; }
+
 
     }
 }

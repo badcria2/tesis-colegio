@@ -1,11 +1,13 @@
 ﻿@model WebAppColegio.Models.Response.CursoDetalleResponse
-
+@using WebAppColegio.Models.Response
 @{
     ViewData["Title"] = "CursoDetalle";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
+@{
+    var nombreDocumento = ""; var nombreTarea = "";
+}
 <link rel="stylesheet" media="all" href="~/estilos/master.css">
 <link rel="stylesheet" media="all" href="~/estilos/curso.css">
 <div id="main" class="ic-Layout-columns">
@@ -103,23 +105,35 @@
                                                 <div class="ig-info">
                                                     <div class="module-item-title">
                                                         @{
-                                                            var nombreDocumento = "";
-                                                            var temporal = Model.material.FirstOrDefault(a => a.nroSemana == i);
-                                                            if (null != temporal)
-                                                            {
-                                                                nombreDocumento = temporal.nombre.Replace("/docente/", "");
-                                                            }
-                                                            if (nombreDocumento == "")
-                                                            {
-                                                                nombreDocumento = "Adjuntar documento";
-                                                            }
+                                                            var sinInfo = false;
+                                                            nombreDocumento = Model.material
+                                                                                .Where(kv => kv.nroSemana == i)
+                                                                                .Select(kv => kv.nombre)   // not a problem even if no item matches
+                                                                                .DefaultIfEmpty("Sin documento") // or no argument -> null
+                                                                                .First();
+
                                                         }
+
                                                         <span class="item_name">
-                                                            <a title="Material de clase" class="ig-title title item_link" href="/Curso/Download?blobName=@nombreDocumento">
-                                                                Material: @nombreDocumento
-                                                            </a>
-                                                            <a href="/Curso/Download?blobName=@nombreDocumento">Descargar</a>                                                           
+                                                            @{ if (String.IsNullOrEmpty(nombreDocumento))
+                                                                {
+                                                                    <span title="Material de clase" class="ig-title title item_link" href="">
+                                                                        Material: Sin documento
+                                                                    </span>
+                                                                    sinInfo = true;
+                                                                }
+                                                                else
+                                                                {
+                                                                    var recursoDescarga = nombreDocumento.Equals("Sin Entrega") ? "#" : "/Curso/Download?blobName=" + nombreDocumento;
+                                                                    <a title="Material de clase" class="ig-title title item_link" href=@recursoDescarga>
+                                                                        Material: @nombreDocumento
+                                                                    </a>
+                                                                }
+                                                            }
                                                         </span>
+
+
+
                                                     </div>
                                                 </div>
                                                 <div class="module-item-status-icon"></div>
@@ -135,13 +149,58 @@
                                                 </span>
                                                 <div class="ig-info">
                                                     <div class="module-item-title">
-                                                        <span class="item_name">
-                                                            <a title="Laboratorio 01" class="ig-title title item_link" href="">
-                                                                Tarea: @nombreDocumento
-                                                            </a>
-                                                        </span>
-                                                    </div>
 
+                                                        @{
+                                                            var tarea = Model.material
+                                                                                                        .Where(kv => kv.nroSemana == i)
+                                                                                                        .Select(kv => kv.tarea)   // not a problem even if no item matches
+                                                                                                        .DefaultIfEmpty(new Tarea() { nombre = "Sin Entrega" }) // or no argument -> null
+                                                                                                        .First();
+                                                            var tareaHabilitada = Model.material
+                                                                                                       .Where(kv => kv.nroSemana == i)
+                                                                                                       .Select(kv => kv.tareaHabilitada)   // not a problem even if no item matches
+                                                                                                       .DefaultIfEmpty(false) // or no argument -> null
+                                                                                                       .First();
+                                                            if (null != tarea.nombre)
+                                                            {
+                                                                nombreTarea = tarea.nombre;
+                                                            }
+                                                        }
+                                                        <span class="item_name">
+                                                            @{ if (!tareaHabilitada)
+                                                                {
+                                                                    <span title="Tarea Adjunta" class="ig-title title item_link" href="">
+                                                                        Tarea no habilitada
+                                                                    </span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    var recurso = nombreTarea.Equals("Sin Entrega") || nombreTarea.Equals("") ? "#" : "/Curso/Download?blobName=" + nombreTarea;
+
+                                                                    @if (String.IsNullOrEmpty(nombreTarea))
+                                                                    {
+                                                                        <a title="Material de clase" class="ig-title title item_link" href=@recurso>
+                                                                            Tarea: Sin entrega
+                                                                        </a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        var recursoEliminar = "/Curso/EliminarArchivo?" + nombreTarea;
+                                                                        <a title="Material de clase" class="ig-title title item_link" href=@recurso>
+                                                                            Tarea: @nombreTarea &nbsp;<i class="fas fa-trash-alt" href=@recursoEliminar></i>
+                                                                        </a>
+                                                                    }
+                                                                    <form enctype="multipart/form-data" asp-controller="Curso" asp-action="Create">
+                                                                        <input type="file" id="myFile" name="files" placeholder=@nombreTarea>
+                                                                        <input type="submit" value="Subir o Remplazar">
+                                                                    </form>
+                                                                }
+                                                            }
+
+                                                        </span>
+
+
+                                                    </div>
                                                 </div>
                                             </div>
                                         </li>

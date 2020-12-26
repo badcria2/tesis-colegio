@@ -64,7 +64,7 @@ namespace WebAppColegio.Controllers
                         if (Response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             var data = await Response.Content.ReadAsStringAsync();
-                            _cursoResponseLst = JsonConvert.DeserializeObject<List<CursoResponse>>(data); 
+                            _cursoResponseLst = JsonConvert.DeserializeObject<List<CursoResponse>>(data);
                             return View(_cursoResponseLst);
                         }
                         else if (Response.StatusCode == System.Net.HttpStatusCode.NoContent)
@@ -101,10 +101,12 @@ namespace WebAppColegio.Controllers
                     ModelState.Clear();
                     ModelState.AddModelError("ErrorLogeo", "Tiempo sesión expirado");
                     return RedirectToAction("Login", "Intranet");
-                } 
+                }
+                HttpContext.Session.SetString("claseSession", curso);
+                HttpContext.Session.SetString("cursoSession", clase);
+                HttpContext.Session.SetString("cursoNombreSession", cursoNombre);
                 using (HttpClient client = new HttpClient())
                 {
-                    var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
                     var cursoRequest = new MaterialRequest()
                     {
                         periodo = DateTime.Now.Year.ToString(),
@@ -154,8 +156,9 @@ namespace WebAppColegio.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(IFormFile files)
         {
+            var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
             string blobstorageconnection = _Configure.GetValue<string>("blobstorage");
-            string systemFileName = files.FileName;
+            string systemFileName = usuario.codigoUsuario + "_" + files.FileName;
             // Retrieve storage account from connection string.
             CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(blobstorageconnection);
             // Create the blob client.
@@ -168,7 +171,8 @@ namespace WebAppColegio.Controllers
             {
                 await blockBlob.UploadFromStreamAsync(data);
             }
-            return View("Create");
+             
+            return RedirectToAction("Detalle", "Curso", new { clase = HttpContext.Session.GetString("claseSession"), curso = HttpContext.Session.GetString("cursoSession"), cursoNombre = HttpContext.Session.GetString("cursoNombreSession") });
         }
 
         public async Task<IActionResult> Download(string blobName)
@@ -186,6 +190,19 @@ namespace WebAppColegio.Controllers
 
             Stream blobStream = blockBlob.OpenReadAsync().Result;
             return File(blobStream, blockBlob.Properties.ContentType, blockBlob.Name);
+        }
+        public async Task<IActionResult> EliminarArchivo(string blobName)
+        {
+            var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
+            string blobstorageconnection = _Configure.GetValue<string>("blobstorage");
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(blobstorageconnection);
+            CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+            string strContainerName = "alumnocontainer";
+            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(strContainerName);
+            var blob = cloudBlobContainer.GetBlobReference(blobName);
+            await blob.DeleteIfExistsAsync();
+            return RedirectToAction("Detalle", "Curso", new { clase = HttpContext.Session.GetString("claseSession"), curso = HttpContext.Session.GetString("cursoSession"), cursoNombre = HttpContext.Session.GetString("cursoNombreSession") });
+
         }
     }
 }
