@@ -15,11 +15,11 @@ namespace Educacion_Negocio
             get { return EDU_TareaBL._instancia; }
         }
         #endregion Singleton
-        public List<SER_TareaEL> GetTareas(String codigoClase, String periodo)
+        public List<SER_TareaEL> GetTareas(String codigoClase, String periodo, String codigoUsuario)
         {
             try
             {
-                return EDU_TareaDAL.Instancia.GetTarea(codigoClase, periodo);
+                return EDU_TareaDAL.Instancia.GetTarea(codigoClase, periodo, codigoUsuario);
             }
             catch (Exception e)
             {
@@ -27,11 +27,19 @@ namespace Educacion_Negocio
             }
         }
 
-        public Boolean InsertTarea(EDU_TareaEL eDU_TareaEL)
+        public Boolean InsertTarea(String codigoClase, String nombre, int semana, String origen, String usuario)
         {
             try
             {
-                return EDU_TareaDAL.Instancia.InsertTarea(eDU_TareaEL);
+                switch (origen)
+                {
+                    case "Docente":
+                        return EDU_TareaDAL.Instancia.InsertMaterial(new EDU_MaterialEL() { codigo = codigoClase, nombre = nombre, semana = semana, usuario = usuario });
+                    case "Alumno":
+                        return EDU_TareaDAL.Instancia.InsertTarea(new EDU_MaterialEL() { codigo = codigoClase, nombre = nombre, semana = semana, usuario = usuario });
+                    default: return false;
+                } 
+               
             }
             catch (Exception e)
             {

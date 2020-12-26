@@ -96,21 +96,24 @@ namespace WebAppColegio.Controllers
         {
             try
             {
+
+                var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
                 if (HttpContext.Session.GetString("UsuarioSession") == null) //si el usuario se enuentra
                 {
                     ModelState.Clear();
                     ModelState.AddModelError("ErrorLogeo", "Tiempo sesión expirado");
                     return RedirectToAction("Login", "Intranet");
                 }
-                HttpContext.Session.SetString("claseSession", curso);
-                HttpContext.Session.SetString("cursoSession", clase);
+                HttpContext.Session.SetString("claseSession", clase);
+                HttpContext.Session.SetString("cursoSession", curso);
                 HttpContext.Session.SetString("cursoNombreSession", cursoNombre);
                 using (HttpClient client = new HttpClient())
                 {
                     var cursoRequest = new MaterialRequest()
                     {
                         periodo = DateTime.Now.Year.ToString(),
-                        codigoClase = clase
+                        codigoClase = clase,
+                        codigoUsuario = usuario.codigoUsuario
                     };
                     var request = new HttpRequestMessage
                     {
@@ -154,28 +157,63 @@ namespace WebAppColegio.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(IFormFile files)
+        public async Task<IActionResult> Create(IFormFile files, int semana)
         {
             var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
+            if (null != files)
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    var cursoRequest = new DocumentoRequest()
+                    {
+                        nombre = usuario.codigoUsuario + "_" + files.FileName,
+                        codigoClase = HttpContext.Session.GetString("claseSession"),
+                        origen = usuario.perfil,
+                        semana = semana,
+                        usuario = usuario.codigoUsuario
+                    };
+                    var request = new HttpRequestMessage
+                    {
+                        Method = HttpMethod.Post,
+                        RequestUri = new Uri(apiBaseUrl + "/educacion/documento"),
+                        Content = new StringContent(JsonConvert.SerializeObject(cursoRequest), Encoding.UTF8, "application/json")
+                    };
+                    using (var Response = await client.SendAsync(request).ConfigureAwait(false))
+                    {
+                        CursoDetalleResponse cursoDetalleResponse = new CursoDetalleResponse();
+                        if (Response.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            await CargarDocumentoAzureAsync(usuario, files);
+                            return RedirectToAction("Detalle", "Curso", new { clase = HttpContext.Session.GetString("claseSession"), curso = HttpContext.Session.GetString("cursoSession"), cursoNombre = HttpContext.Session.GetString("cursoNombreSession") });
+
+                        }
+                        else
+                        {
+                            ModelState.Clear();
+                            ModelState.AddModelError("ErorData", "A ocurrido un error favor contactar con el administrador");
+                            return RedirectToAction("Login", "Intranet");
+                        }
+                    }
+
+                }
+            }
+            else { return RedirectToAction("Detalle", "Curso", new { clase = HttpContext.Session.GetString("claseSession"), curso = HttpContext.Session.GetString("cursoSession"), cursoNombre = HttpContext.Session.GetString("cursoNombreSession") }); }
+
+        }
+        public async Task CargarDocumentoAzureAsync(AutenticacionResponse usuario, IFormFile archivo)
+        {
             string blobstorageconnection = _Configure.GetValue<string>("blobstorage");
-            string systemFileName = usuario.codigoUsuario + "_" + files.FileName;
-            // Retrieve storage account from connection string.
+            string systemFileName = usuario.codigoUsuario + "_" + archivo.FileName;
             CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(blobstorageconnection);
-            // Create the blob client.
             CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
-            // Retrieve a reference to a container.
             CloudBlobContainer container = blobClient.GetContainerReference("alumnocontainer");
-            // This also does not make a service call; it only creates a local object.
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(systemFileName);
-            await using (var data = files.OpenReadStream())
+            await using (var data = archivo.OpenReadStream())
             {
                 await blockBlob.UploadFromStreamAsync(data);
             }
-             
-            return RedirectToAction("Detalle", "Curso", new { clase = HttpContext.Session.GetString("claseSession"), curso = HttpContext.Session.GetString("cursoSession"), cursoNombre = HttpContext.Session.GetString("cursoNombreSession") });
         }
-
-        public async Task<IActionResult> Download(string blobName)
+        public async Task<IActionResult> Download(string blobName, String container)
         {
             CloudBlockBlob blockBlob;
             await using (MemoryStream memoryStream = new MemoryStream())
@@ -183,14 +221,15 @@ namespace WebAppColegio.Controllers
                 string blobstorageconnection = _Configure.GetValue<string>("blobstorage");
                 CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(blobstorageconnection);
                 CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-                CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference("alumnocontainer");
-                blockBlob = cloudBlobContainer.GetBlockBlobReference(blobName);
+                CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(container);
+                blockBlob = cloudBlobContainer.GetBlockBlobReference(blobName.Replace("%"," "));
                 await blockBlob.DownloadToStreamAsync(memoryStream);
             }
 
             Stream blobStream = blockBlob.OpenReadAsync().Result;
             return File(blobStream, blockBlob.Properties.ContentType, blockBlob.Name);
         }
+
         public async Task<IActionResult> EliminarArchivo(string blobName)
         {
             var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));

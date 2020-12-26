@@ -9,5 +9,6 @@ namespace WebAppColegio.Models.Response
     {
         public String codigoAcceso { get; set; }
         public String acceso { get; set; }
+        public String path { get; set; }
     }
 }

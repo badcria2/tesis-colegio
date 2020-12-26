@@ -2,11 +2,12 @@
 
 namespace Educacion_Entidades
 {
-    public class EDU_TareaEL
+    public class EDU_MaterialEL
     {
         public String codigo { get; set; }
-        public String semana { get; set; }
+        public int semana { get; set; }
         public String nombre { get; set; }
- 
+        public String usuario { get; set; }
+
     }
 }

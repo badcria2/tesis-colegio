@@ -63,6 +63,42 @@
                                             </div>
                                         </div>
                                     </li>
+                                    <li id="context_module_item_419775" style="" class="context_module_item     student-view     external_url          indent_0          _requirement     ExternalUrl_0">
+                                        <div class="ig-row  ig-published student-view">
+
+                                            <span class="type_icon" title="External Url" role="none">
+                                                <span class="fas fa-link">
+                                                </span>
+                                            </span>
+                                            <div class="ig-info">
+                                                <div class="module-item-title">
+                                                    @{ 
+                                                        var enlace = Model.enlace;
+                                                    }
+
+                                                    <span class="item_name">
+                                                        @{ if (String.IsNullOrEmpty(enlace))
+                                                            {
+                                                                <span title="Material de clase" class="ig-title title item_link" href="">
+                                                                     Sin Enlace.
+                                                                </span> 
+                                                            }
+                                                            else
+                                                            {
+                                                                 <a title="Material de clase" class="ig-title title item_link" href=@enlace>
+                                                                    Enlace:  Zoom
+                                                                </a>
+                                                            }
+                                                        }
+                                                    </span>
+
+
+
+                                                </div>
+                                            </div>
+                                            <div class="module-item-status-icon"></div>
+                                        </div>
+                                    </li>
                                 </ul>
                                 <div class="footer">
                                     <div class="progression_container">
@@ -115,16 +151,16 @@
                                                         }
 
                                                         <span class="item_name">
-                                                            @{ if (String.IsNullOrEmpty(nombreDocumento))
+                                                            @{ if (String.IsNullOrEmpty(nombreDocumento) || nombreDocumento.Equals("Sin documento"))
                                                                 {
                                                                     <span title="Material de clase" class="ig-title title item_link" href="">
-                                                                        Material: Sin documento
+                                                                        Material: Sin documento.
                                                                     </span>
                                                                     sinInfo = true;
                                                                 }
                                                                 else
                                                                 {
-                                                                    var recursoDescarga = nombreDocumento.Equals("Sin Entrega") ? "#" : "/Curso/Download?blobName=" + nombreDocumento;
+                                                                    var recursoDescarga = nombreDocumento.Equals("Sin Entrega") ? "#" : "/Curso/Download?container=docentecontainer&blobName=" + nombreDocumento.Replace(" ", "%");
                                                                     <a title="Material de clase" class="ig-title title item_link" href=@recursoDescarga>
                                                                         Material: @nombreDocumento
                                                                     </a>
@@ -175,23 +211,24 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    var recurso = nombreTarea.Equals("Sin Entrega") || nombreTarea.Equals("") ? "#" : "/Curso/Download?blobName=" + nombreTarea;
+                                                                    var recurso = nombreTarea.Equals("Sin Entrega") || nombreTarea.Equals("") ? "#" : "/Curso/Download?container=alumnocontainer&blobName=" + nombreTarea.Replace(" ", "%") ;
 
                                                                     @if (String.IsNullOrEmpty(nombreTarea))
                                                                     {
-                                                                        <a title="Material de clase" class="ig-title title item_link" href=@recurso>
+                                                                        <span title="" class="ig-title title item_link">
                                                                             Tarea: Sin entrega
-                                                                        </a>
+                                                                        </span>
                                                                     }
                                                                     else
                                                                     {
                                                                         var recursoEliminar = "/Curso/EliminarArchivo?" + nombreTarea;
-                                                                        <a title="Material de clase" class="ig-title title item_link" href=@recurso>
+                                                                        <a title="Tarea entregada" class="ig-title title item_link" href=@recurso>
                                                                             Tarea: @nombreTarea &nbsp;<i class="fas fa-trash-alt" href=@recursoEliminar></i>
                                                                         </a>
                                                                     }
                                                                     <form enctype="multipart/form-data" asp-controller="Curso" asp-action="Create">
                                                                         <input type="file" id="myFile" name="files" placeholder=@nombreTarea>
+                                                                        <input type="hidden" id="semana" name="semana" value=@i>
                                                                         <input type="submit" value="Subir o Remplazar">
                                                                     </form>
                                                                 }

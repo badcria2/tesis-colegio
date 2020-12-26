@@ -72,7 +72,9 @@ namespace Servicio_Datos
                     _CursoELs.codigo = dr["codigo_clase"].ToString();
                     _CursoELs.enlace = dr["enlace"].ToString();
                     _CursoELs.numeroSemanas = Int32.Parse(dr["numero_semanas"].ToString());
-                    _MaterialELs.Add(
+                    if (!String.IsNullOrEmpty(dr["codigo_material"].ToString()))
+                    {
+                        _MaterialELs.Add(
 
                         new SER_MaterialEL()
                         {
@@ -83,8 +85,8 @@ namespace Servicio_Datos
                             tareaHabilitada = Boolean.Parse(dr["tarea_habilitada"].ToString()),
                             tiempoRestante = dr["tiempo_restante"].ToString(),
                             tarea = new SER_TareaEL() { codigo = "", nombre = "", nroSemana = 0 }
-                        }
-                 );
+                        });
+                    }
                     _CursoELs.material = _MaterialELs;
                 }
             }
@@ -96,6 +98,6 @@ namespace Servicio_Datos
             return _CursoELs;
         }
 
-       
+
     }
 }

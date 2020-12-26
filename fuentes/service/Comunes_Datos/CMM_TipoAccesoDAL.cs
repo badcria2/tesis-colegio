@@ -36,6 +36,7 @@ namespace Comunes_Datos
                     cMM_TipoAccesoEL = new CMM_TipoAccesoEL();
                     cMM_TipoAccesoEL.acceso = dr["acceso"].ToString();
                     cMM_TipoAccesoEL.codigoAcceso = dr["codigo"].ToString();
+                    cMM_TipoAccesoEL.path = dr["path"].ToString();
                     cMM_TipoAccesoELs.Add(cMM_TipoAccesoEL);
                 }
             }

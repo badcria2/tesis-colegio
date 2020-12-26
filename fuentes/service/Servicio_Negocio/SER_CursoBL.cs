@@ -29,14 +29,14 @@ namespace Servicio_Negocio
                 throw e;
             }
         }
-        public SER_DetCursoEL GetDetCurso(String codigoClase, String periodo)
+        public SER_DetCursoEL GetDetCurso(String codigoClase, String periodo, String codigoUsuario)
         {
             try
             {
                 var _DetCursoEL = SER_CursoDAL.Instancia.GetDetCurso(codigoClase, periodo);
                 if (null != _DetCursoEL.codigo)
                 {
-                    var tareas = EDU_TareaBL.Instancia.GetTareas(codigoClase, periodo);
+                    var tareas = EDU_TareaBL.Instancia.GetTareas(codigoClase, periodo, codigoUsuario);
                     foreach (var tarea in tareas)
                     {
                         _DetCursoEL.material.Find(p => p.nroSemana == tarea.nroSemana).tarea = tarea;

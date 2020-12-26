@@ -9,5 +9,6 @@ namespace AppServiceColegio.Entidades
     {
         public String codigoClase { get; set; }
         public String periodo { get; set; }
+        public String codigoUsuario { get; set; }
     }
 }

@@ -36,7 +36,10 @@ namespace AppServiceColegio.Controllers
                 return BadRequest();
             }
 
-            return Ok(Servicio_Negocio.SER_CursoBL.Instancia.GetDetCurso(materialRequest.codigoClase, materialRequest.periodo == null ? DateTime.Now.Year.ToString() : materialRequest.periodo));
+            return Ok(Servicio_Negocio.SER_CursoBL.Instancia.GetDetCurso(
+                materialRequest.codigoClase, 
+                materialRequest.periodo == null ? DateTime.Now.Year.ToString() : materialRequest.periodo, 
+                materialRequest.codigoUsuario));
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Educacion_Datos
         }
         #endregion Singleton
 
-        public List<SER_TareaEL> GetTarea(String codigoClase, String periodo)
+        public List<SER_TareaEL> GetTarea(String codigoClase, String periodo, String codigoUsuario)
         {
             SqlCommand cmd = null;
             List<SER_TareaEL> _TareaELs = new List<SER_TareaEL>();
@@ -27,6 +27,7 @@ namespace Educacion_Datos
                 cmd = new SqlCommand("PRD_ObtenerTareas", cn);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@codigo_clase", codigoClase);
+                cmd.Parameters.AddWithValue("@codigo_usuario", codigoUsuario);
                 cmd.Parameters.AddWithValue("@periodo", periodo);
                 cn.Open();
                 SqlDataReader dr = cmd.ExecuteReader();
@@ -49,7 +50,7 @@ namespace Educacion_Datos
             finally { cmd.Connection.Close(); }
             return _TareaELs;
         }
-        public Boolean InsertTarea(EDU_TareaEL eDU_TareaEL)
+        public Boolean InsertTarea(EDU_MaterialEL eDU_MaterialEL)
         {
             SqlCommand cmd = null;
             Boolean inserto = false;
@@ -58,14 +59,41 @@ namespace Educacion_Datos
                 SqlConnection cn = Conexion.Instancia.Conectar();
                 cmd = new SqlCommand("PRD_InsertarTareas", cn);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@codigo_clase", eDU_TareaEL.codigo);
-                cmd.Parameters.AddWithValue("@semana", eDU_TareaEL.semana);
-                cmd.Parameters.AddWithValue("@nombre_tarea", eDU_TareaEL.nombre);                 
+                cmd.Parameters.AddWithValue("@codigo_clase", eDU_MaterialEL.codigo);
+                cmd.Parameters.AddWithValue("@semana", eDU_MaterialEL.semana);
+                cmd.Parameters.AddWithValue("@nombre_tarea", eDU_MaterialEL.nombre);
+                cmd.Parameters.AddWithValue("@usuario", eDU_MaterialEL.usuario); 
                 cn.Open();
                 if (cmd.ExecuteNonQuery() > 0)
                 {
                     inserto = true;
                 } 
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally { cmd.Connection.Close(); }
+            return inserto;
+        }
+        public Boolean InsertMaterial(EDU_MaterialEL eDU_MaterialEL)
+        {
+            SqlCommand cmd = null;
+            Boolean inserto = false;
+            try
+            {
+                SqlConnection cn = Conexion.Instancia.Conectar();
+                cmd = new SqlCommand("PRD_InsertarMaterial", cn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@codigo_clase", eDU_MaterialEL.codigo);
+                cmd.Parameters.AddWithValue("@semana", eDU_MaterialEL.semana);
+                cmd.Parameters.AddWithValue("@nombre_tarea", eDU_MaterialEL.nombre);
+                cmd.Parameters.AddWithValue("@usuario", eDU_MaterialEL.usuario);
+                cn.Open();
+                if (cmd.ExecuteNonQuery() > 0)
+                {
+                    inserto = true;
+                }
             }
             catch (Exception e)
             {
