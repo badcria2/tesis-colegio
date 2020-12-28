@@ -14,9 +14,17 @@
     <div class="ic-Layout-watermark"></div>
     <div id="not_right_side" class="ic-app-main-content">
         <div id="content-wrapper" class="ic-Layout-contentWrapper">
+            <div class="d-sm-flex align-items-center justify-content-between mb-12">
+
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item "><a href="~/Curso/Index">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Curso</li>
+                    <li class="breadcrumb-item active" aria-current="page">Detalle</li>
+                </ol>
+            </div>
             <div id="content" class="ic-Layout-contentMain" role="main">
                 <div class="header-bar">
-                    <div class="header-bar-right header-bar__module-layout">
+                    <div class="header-bar-left header-bar__module-layout">
                         <div class="header-bar-right__buttons">
                             <button class="btn" id="expand_collapse_all" aria-expanded="true" data-expand="false" data-url="/courses/10359/collapse_all_modules">Colapsar Todo</button>
                         </div>
@@ -54,7 +62,7 @@
                                             <div class="ig-info">
                                                 <div class="module-item-title">
                                                     <span class="item_name">
-                                                        <a title="FORO-CONSULTAS" class="ig-title title item_link" href="/courses/10359/modules/items/419762">
+                                                        <a title="FORO-CONSULTAS" class="ig-title title item_link" href="/Foro/Index">
                                                             FORO-CONSULTAS
                                                         </a>
                                                         <span title="FORO-CONSULTAS" class="title locked_title">FORO-CONSULTAS</span>
@@ -72,7 +80,7 @@
                                             </span>
                                             <div class="ig-info">
                                                 <div class="module-item-title">
-                                                    @{ 
+                                                    @{
                                                         var enlace = Model.enlace;
                                                     }
 
@@ -80,13 +88,13 @@
                                                         @{ if (String.IsNullOrEmpty(enlace))
                                                             {
                                                                 <span title="Material de clase" class="ig-title title item_link" href="">
-                                                                     Sin Enlace.
-                                                                </span> 
+                                                                    Sin Enlace.
+                                                                </span>
                                                             }
                                                             else
                                                             {
-                                                                 <a title="Material de clase" class="ig-title title item_link" href=@enlace>
-                                                                    Enlace:  Zoom
+                                                                <a title="Material de clase" class="ig-title title item_link" href=@enlace>
+                                                                    Entrar a clase
                                                                 </a>
                                                             }
                                                         }
@@ -160,7 +168,7 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    var recursoDescarga = nombreDocumento.Equals("Sin Entrega") ? "#" : "/Curso/Download?container=docentecontainer&blobName=" + nombreDocumento.Replace(" ", "%");
+                                                                    var recursoDescarga = nombreDocumento.Equals("Sin Entrega") ? "#" : "/Curso/Download?container=docentecontainer&blobName=" + nombreDocumento.Replace(" ", "+");
                                                                     <a title="Material de clase" class="ig-title title item_link" href=@recursoDescarga>
                                                                         Material: @nombreDocumento
                                                                     </a>
@@ -211,7 +219,7 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    var recurso = nombreTarea.Equals("Sin Entrega") || nombreTarea.Equals("") ? "#" : "/Curso/Download?container=alumnocontainer&blobName=" + nombreTarea.Replace(" ", "%") ;
+                                                                    var recurso = nombreTarea.Equals("Sin Entrega") || nombreTarea.Equals("") ? "#" : "/Curso/Download?container=alumnocontainer&blobName=" + nombreTarea.Replace(" ", "+");
 
                                                                     @if (String.IsNullOrEmpty(nombreTarea))
                                                                     {
@@ -254,9 +262,9 @@
     </div>
 
 </div>
-<link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/br/dist/brandable_css/default/variables-high_contrast-8391c84da435c9cfceea2b2b3317ff66.js" as="script" type="text/javascript">
+<link rel="preload" href="/estilos/variables-high_contrast-8391c84da435c9cfceea2b2b3317ff66.js" as="script" type="text/javascript">
 <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/br/dist/webpack-production/moment/locale/es-c-2e9fc8e1c3.js" as="script" type="text/javascript">
-<link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/br/dist/webpack-production/main-e-6ab1539807.js" as="script" type="text/javascript">
+<link rel="preload" href="/estilos/main-clone.js.js" as="script" type="text/javascript">
 <script>
     Object.assign(
         ENV,

@@ -34,23 +34,23 @@ namespace WebAppColegio.Controllers
 
 
 
-        public async Task<IActionResult> Index(String _codigoUsuario)
+        public async Task<IActionResult> Index(String _codigoUsuario="")
         {
             try
             {
-                if (HttpContext.Session.GetString("UsuarioSession") == null) //si el usuario se enuentra
+                var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
+                if (usuario == null) //si el usuario se enuentra
                 {
                     ModelState.Clear();
                     ModelState.AddModelError("ErrorLogeo", "Tiempo sesión expirado");
                     return RedirectToAction("Login", "Intranet");
                 }
                 using (HttpClient client = new HttpClient())
-                {
-                    // var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
+                { 
                     var cursoRequest = new CursoRequest()
                     {
                         periodo = DateTime.Now.Year.ToString(),
-                        usuario = _codigoUsuario
+                        usuario = _codigoUsuario.Equals("") ? usuario.codigoUsuario : _codigoUsuario
                     };
                     var request = new HttpRequestMessage
                     {
@@ -222,7 +222,7 @@ namespace WebAppColegio.Controllers
                 CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(blobstorageconnection);
                 CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
                 CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(container);
-                blockBlob = cloudBlobContainer.GetBlockBlobReference(blobName.Replace("%"," "));
+                blockBlob = cloudBlobContainer.GetBlockBlobReference(blobName.Replace("+"," "));
                 await blockBlob.DownloadToStreamAsync(memoryStream);
             }
 

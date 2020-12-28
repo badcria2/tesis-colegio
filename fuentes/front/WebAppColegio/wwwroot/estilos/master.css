@@ -1322,10 +1322,7 @@
     min-height: 1px;
     margin-left: 20px
 }
-
-.container {
-    width: 940px
-}
+ 
 
 @media (min-width: 768px) {
     .span12 {
@@ -1809,10 +1806,7 @@
     float: right
 }
 
-.container {
-    margin-right: auto;
-    margin-left: auto
-}
+ 
 
     .container:before, .container:after {
         display: table;
@@ -12812,7 +12806,7 @@ body.embedded .ic-Layout-wrapper {
 }
 
 .ic-Layout-columns {
-    position: relative;
+    /*position: relative;*/
     box-sizing: border-box;
     z-index: 10
 }

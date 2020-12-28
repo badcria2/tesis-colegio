@@ -1,0 +1,171 @@
+﻿@model IEnumerable<WebAppColegio.Models.Response.ForoResponse>
+@using Newtonsoft.Json;
+@using Microsoft.AspNetCore.Http;
+@using  WebAppColegio.Models.Response
+@inject IHttpContextAccessor HttpContextAccessor;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" media="all" href="~/estilos/foro-framework.css">
+<link rel="stylesheet" media="all" href="~/estilos/framework_responsive.css">
+<link rel="stylesheet" media="all" href="~/estilos/forums.css">
+<link rel="stylesheet" media="all" href="~/estilos/forums_responsive.css">
+@{
+    var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContextAccessor.HttpContext.Session.GetString("UsuarioSession"));
+    var tamanioData = Model.Count();
+    var nombreCurso = ViewBag.nombreCurso;
+    var brs = "";
+}
+<div id="ipsLayout_contentArea">
+    <div id="ipsLayout_contentWrapper">
+        <div id="ipsLayout_mainArea">
+            <a id="elContent"></a>
+
+            <section>
+                <ol class="ipsList_reset cForumList" data-controller="core.global.core.table, forums.front.forum.forumList" data-baseurl="">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-12">
+
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item "><a href="~/Curso/Index">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Curso</li>
+                            <li class="breadcrumb-item active" aria-current="page">Foro</li>
+                        </ol>
+                    </div>
+                    <li data-categoryid="13" class="cForumRow ipsBox ipsSpacer_bottom">
+                        <h2 class="ipsType_sectionTitle ipsType_reset cForumTitle">
+                            <a href="#" class="ipsPos_right ipsJS_show ipsType_noUnderline" data-action="toggleCategory" data-ipstooltip="" title="Minimizar categoría"></a>
+                            <a href="/Curso/Index">@nombreCurso: FORO DEL CURSO</a>
+                        </h2>
+                        @foreach (var item in Model)
+                        {
+                            var color = item.respondio ? "background:#598f5b;" : "background:#b63f3f;";
+                            <ol class="ipsDataList ipsDataList_large ipsDataList_zebra ipsAreaBackground_reset" data-role="forums">
+                                <li class="cForumRow ipsDataItem ipsDataItem_responsivePhoto  ipsClearfix" data-forumid="33">
+                                    <div class="ipsDataItem_icon ipsDataItem_category">
+                                        <span class="ipsItemStatus ipsItemStatus_large cForumIcon_normal ipsItemStatus_read" style=@color>
+                                            <i class="far fa-comments"></i>
+                                        </span>
+                                    </div>
+                                    <div class="ipsDataItem_main">
+                                        <h4 class="ipsDataItem_title ipsType_large ipsType_break">
+                                            <a href="/Foro/Detalle?">@item.tema</a>
+                                        </h4>
+                                        @{var hrefDetalle = "/Foro/Detalle?codigoForo=" + @item.codigo;}
+                                        <ul class="ipsDataItem_subList ipsList_inline">
+                                            <li class="">
+                                                <a href=@hrefDetalle>Ver detalle</a>
+                                            </li>
+                                        </ul>
+                                        <div class="ipsType_richText ipsDataItem_meta ipsContained" data-controller="core.front.core.lightboxedImages">
+                                            <p>
+                                                Por favor responder a la brevedad
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="ipsDataItem_stats ipsDataItem_statsLarge">
+                                        <dl>
+                                            <dt class="ipsDataItem_stats_number">@item.cantidadRespuestas</dt>
+                                            <dd class="ipsDataItem_stats_type ipsType_light"> respuestas</dd>
+                                        </dl>
+                                    </div>
+                                    <ul class="ipsDataItem_lastPoster ipsDataItem_withPhoto">
+                                        <li>
+                                            <a href="#" data-ipshover="" class="ipsUserPhoto ipsUserPhoto_tiny" title="Go to lupo's profile">
+
+                                                @{
+                                                    if (usuario.persona.sexo == 'M')
+                                                    {
+                                                        <img class="img-profile rounded-circle" src="/masterpage/img/man.png" alt=@usuario.persona.nombres>
+                                                    }
+                                                    else
+                                                    {
+                                                        <img class="img-profile rounded-circle" src="/masterpage/img/girl.png" style="max-width: 60px">
+                                                    }
+                                                }
+                                            </a>
+                                        </li>
+                                        <li class="ipsType_blendLinks">
+                                            Por: @item.creador
+                                        </li>
+                                        <li class="ipsType_light"><a href="#" title="Go to last post" class="ipsType_blendLinks"><time datetime=@item.fechaCreacion title=@item.fechaCreacion data-short=@item.fechaCreacion>@item.fechaCreacion</time></a></li>
+                                    </ul>
+                                </li>
+                            </ol>
+
+                        }
+                    </li>
+                </ol>
+
+            </section>
+            @switch (tamanioData)
+            {
+                case 0:
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    break;
+                case 1:
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    break;
+                case 2:
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    break;
+                case 3:
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    break;
+                case 4:
+                    <br><br><br><br><br><br><br><br><br><br><br><br>
+                    break;
+                case 5:
+                    <br><br><br><br><br><br><br><br><br><br>
+                    break;
+                case 6:
+                    <br><br><br><br><br>
+                    break;
+                default:
+                    brs = "";
+                    break;
+            }
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var ipsDebug = false;
+
+                var CKEDITOR_BASEPATH = '';
+
+                var ipsSettings = {
+
+
+        cookie_path: "/",
+
+        cookie_prefix: "ips4_",
+
+
+        cookie_ssl: true,
+
+        upload_imgURL: "",
+        message_imgURL: "",
+        notification_imgURL: "",
+        baseURL: "",
+        jsURL: "",
+        csrfKey: "c74743f105ce6257930692c52bfc5c13",
+        antiCache: "b2f8b39af1",
+        disableNotificationSounds: false,
+        useCompiledFiles: true,
+        links_external: true,
+        memberID: 0,
+        lazyLoadEnabled: false,
+        blankImg: "",
+        analyticsProvider: "custom",
+        viewProfiles: true,
+        mapProvider: 'none',
+        mapApiKey: '',
+
+    };
+</script>
+<script type="text/javascript" src="~/estilos/js/root_library.js" data-ips=""></script>
+<script type="text/javascript" src="~/estilos/js/root_framework.js" data-ips=""></script>
+<script type="text/javascript" src="~/estilos/js/root_front.js" data-ips=""></script>
+<script type="text/javascript" src="~/estilos/js/front_front_forum.js" data-ips=""></script>
