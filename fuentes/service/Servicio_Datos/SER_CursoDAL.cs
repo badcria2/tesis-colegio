@@ -1,4 +1,5 @@
 ﻿using Comunes_Datos;
+using Educacion_Entidades;
 using Servicio_Entidades;
 using System;
 using System.Collections.Generic;

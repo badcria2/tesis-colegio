@@ -5567,23 +5567,26 @@ input[type="submit"].btn-block, input[type="submit"].Button--block, input[type="
     }
 
 .btn-info, .Button--secondary {
-    background: #2D3B45;
     color: #fff;
-    border: 1px solid;
-    border-color: #0f1317
+    background-color: #3abaf4;
+    border-color: #3abaf4;
+    -webkit-box-shadow: 0 .125rem .25rem 0 rgba(58,59,69,.2) !important;
+    box-shadow: 0 .125rem .25rem 0 rgba(58,59,69,.2) !important;
+    border-radius: .25rem;
 }
 
     .btn-info:focus, .Button--secondary:focus {
-        color: #fff
+        color: #3abaf4
     }
 
     .btn-info:hover, .Button--secondary:hover {
-        background: #050607;
-        color: #fff
+        background: #0da8ee;
+        border-color: #0da8ee
+         
     }
 
         .btn-info:hover.ui-state-hover, .Button--secondary:hover.ui-state-hover {
-            background: #050607;
+            background: #3abaf4;
             color: #fff
         }
 
@@ -5592,7 +5595,7 @@ input[type="submit"].btn-block, input[type="submit"].Button--block, input[type="
     }
 
     .btn-info.active, .btn-info.Button--active, .btn-info.ui-button.ui-state-active, .ui-progressbar .btn-info.ui-button.ui-widget-header, .btn-info:active, .Button--secondary.active, .Button--secondary.Button--active, .Button--secondary.ui-button.ui-state-active, .ui-progressbar .Button--secondary.ui-button.ui-widget-header, .Button--secondary:active {
-        background: #232e36;
+        background: #3abaf4;
         box-shadow: none
     }
 
@@ -5640,7 +5643,7 @@ body.Underline-All-Links__enabled .btn-link:hover, body.Underline-All-Links__ena
 }
 
 .btn-link.disabled, .btn-link[disabled], .Button--link.disabled, .Button--link[disabled] {
-    color: #2D3B45;
+    color: #3abaf4;
     background: transparent
 }
 
@@ -5652,7 +5655,7 @@ body.Underline-All-Links__enabled .btn-link:hover, body.Underline-All-Links__ena
     display: block;
     text-align: left;
     border-bottom: 1px solid #C7CDD1;
-    color: #2D3B45;
+    color: #3abaf4;
     padding: 12px
 }
 
@@ -5662,13 +5665,13 @@ body.Underline-All-Links__enabled .btn-link:hover, body.Underline-All-Links__ena
     border: none;
     padding: 2px 4px;
     border-radius: 3px;
-    color: #455b6a;
+    color: #3abaf4;
     outline: none
 }
 
     .Button--icon-action:hover, .Button--icon-action-rev:hover, .Button--icon-action:focus, .Button--icon-action-rev:focus {
         background: transparent;
-        color: #2D3B45
+        color: #3abaf4
     }
 
     .Button--icon-action:focus, .Button--icon-action-rev:focus {

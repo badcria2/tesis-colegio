@@ -34,7 +34,7 @@ namespace WebAppColegio.Controllers
 
 
 
-        public async Task<IActionResult> Index(String _codigoUsuario="")
+        public async Task<IActionResult> Index(String _codigoUsuario = "")
         {
             try
             {
@@ -46,7 +46,7 @@ namespace WebAppColegio.Controllers
                     return RedirectToAction("Login", "Intranet");
                 }
                 using (HttpClient client = new HttpClient())
-                { 
+                {
                     var cursoRequest = new CursoRequest()
                     {
                         periodo = DateTime.Now.Year.ToString(),
@@ -166,7 +166,7 @@ namespace WebAppColegio.Controllers
                 {
                     var cursoRequest = new DocumentoRequest()
                     {
-                        nombre = usuario.codigoUsuario + "_" + files.FileName,
+                        nombre = usuario.codigoUsuario + "_" + files.FileName.Replace(" ", "-"),
                         codigoClase = HttpContext.Session.GetString("claseSession"),
                         origen = usuario.perfil,
                         semana = semana,
@@ -180,7 +180,6 @@ namespace WebAppColegio.Controllers
                     };
                     using (var Response = await client.SendAsync(request).ConfigureAwait(false))
                     {
-                        CursoDetalleResponse cursoDetalleResponse = new CursoDetalleResponse();
                         if (Response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             await CargarDocumentoAzureAsync(usuario, files);
@@ -203,7 +202,7 @@ namespace WebAppColegio.Controllers
         public async Task CargarDocumentoAzureAsync(AutenticacionResponse usuario, IFormFile archivo)
         {
             string blobstorageconnection = _Configure.GetValue<string>("blobstorage");
-            string systemFileName = usuario.codigoUsuario + "_" + archivo.FileName;
+            string systemFileName = usuario.codigoUsuario + "_" + archivo.FileName.Replace(" ", "-");
             CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(blobstorageconnection);
             CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference("alumnocontainer");
@@ -222,7 +221,7 @@ namespace WebAppColegio.Controllers
                 CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(blobstorageconnection);
                 CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
                 CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(container);
-                blockBlob = cloudBlobContainer.GetBlockBlobReference(blobName.Replace("+"," "));
+                blockBlob = cloudBlobContainer.GetBlockBlobReference(blobName);
                 await blockBlob.DownloadToStreamAsync(memoryStream);
             }
 
@@ -230,18 +229,46 @@ namespace WebAppColegio.Controllers
             return File(blobStream, blockBlob.Properties.ContentType, blockBlob.Name);
         }
 
-        public async Task<IActionResult> EliminarArchivo(string blobName)
+        public async Task<IActionResult> EliminarArchivo(string blobName, String codigo, String tipo)
         {
             var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
             string blobstorageconnection = _Configure.GetValue<string>("blobstorage");
             CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(blobstorageconnection);
             CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
             string strContainerName = "alumnocontainer";
-            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(strContainerName);
-            var blob = cloudBlobContainer.GetBlobReference(blobName);
-            await blob.DeleteIfExistsAsync();
-            return RedirectToAction("Detalle", "Curso", new { clase = HttpContext.Session.GetString("claseSession"), curso = HttpContext.Session.GetString("cursoSession"), cursoNombre = HttpContext.Session.GetString("cursoNombreSession") });
+            using (HttpClient client = new HttpClient())
+            {
+                var tareaRequest = new TareaRequest()
+                {
+                    codigo = codigo,
+                    tipo  = tipo
+                };
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri(apiBaseUrl + "/educacion/delete-documento"),
+                    Content = new StringContent(JsonConvert.SerializeObject(tareaRequest), Encoding.UTF8, "application/json")
+                };
+                using (var Response = await client.SendAsync(request).ConfigureAwait(false))
+                {
+                    if (Response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
 
+                        CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(strContainerName);
+                        var blob = cloudBlobContainer.GetBlobReference(blobName);
+                        await blob.DeleteIfExistsAsync();
+                        return RedirectToAction("Detalle", "Curso", new { clase = HttpContext.Session.GetString("claseSession"), curso = HttpContext.Session.GetString("cursoSession"), cursoNombre = HttpContext.Session.GetString("cursoNombreSession") });
+
+                    }
+                    else
+                    {
+                        ModelState.Clear();
+                        ModelState.AddModelError("ErorData", "A ocurrido un error favor contactar con el administrador");
+                        return RedirectToAction("Login", "Intranet");
+                    }
+                }
+
+            }
         }
     }
 }

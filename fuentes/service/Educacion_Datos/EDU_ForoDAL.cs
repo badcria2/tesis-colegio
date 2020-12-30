@@ -1,9 +1,10 @@
 ﻿using Comunes_Datos;
-using Educacion_Entidades;
+using Servicio_Entidades;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text;
+using System.IO; 
+using System.Web;
 
 namespace Educacion_Datos
 {
@@ -69,12 +70,14 @@ namespace Educacion_Datos
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
+                    StringWriter myWriter = new StringWriter();
+                    HttpUtility.HtmlDecode(dr["descripcion"].ToString(), myWriter);
                     _ForoELs.Add(
                         new SER_ForoBaseEL()
                         {
                             codigo = dr["codigo_foro"].ToString(),
                             clase = dr["codigo_clase"].ToString(),
-                            descripcion = dr["descripcion"].ToString(),
+                            descripcion = myWriter.ToString(),
                             fechaCreacion = dr["fecha_creacion"].ToString(),
                             tema = dr["tema"].ToString(),
                             sexo = dr["sexo"].ToString(),
@@ -105,13 +108,11 @@ namespace Educacion_Datos
                 cmd.Parameters.AddWithValue("@descripcion", descripcion);
                 cmd.Parameters.AddWithValue("@temaPadre", temaPadre);
                 cmd.Parameters.AddWithValue("@usuario", usuario); 
-                cn.Open();
-                SqlDataReader dr = cmd.ExecuteReader();
-                cn.Open();
+                cn.Open(); 
                 if (cmd.ExecuteNonQuery() > 0)
                 {
                     inserto = true;
-                } 
+                }
             }
             catch (Exception e)
             {

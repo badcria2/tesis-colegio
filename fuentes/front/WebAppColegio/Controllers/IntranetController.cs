@@ -29,6 +29,7 @@ namespace WebAppColegio.Controllers
         [HttpGet]
         public ActionResult login()
         {
+            HttpContext.Session.SetString("UsuarioSession", "");
             return View();
         }
 

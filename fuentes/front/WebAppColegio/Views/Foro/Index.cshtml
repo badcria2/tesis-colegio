@@ -41,24 +41,25 @@
                         @foreach (var item in Model)
                         {
                             var color = item.respondio ? "background:#598f5b;" : "background:#b63f3f;";
+                            var title = item.respondio ? "Resuelto" : "Por-resolver";
                             <ol class="ipsDataList ipsDataList_large ipsDataList_zebra ipsAreaBackground_reset" data-role="forums">
                                 <li class="cForumRow ipsDataItem ipsDataItem_responsivePhoto  ipsClearfix" data-forumid="33">
                                     <div class="ipsDataItem_icon ipsDataItem_category">
                                         <span class="ipsItemStatus ipsItemStatus_large cForumIcon_normal ipsItemStatus_read" style=@color>
-                                            <i class="far fa-comments"></i>
+                                            <i class="far fa-comments" title=@title ></i>
                                         </span>
                                     </div>
+                                    @{var hrefDetalle = "/Foro/Detalle?codigoForo=" + @item.codigo;}
                                     <div class="ipsDataItem_main">
                                         <h4 class="ipsDataItem_title ipsType_large ipsType_break">
-                                            <a href="/Foro/Detalle?">@item.tema</a>
+                                            <a href=@hrefDetalle >@item.tema</a>
                                         </h4>
-                                        @{var hrefDetalle = "/Foro/Detalle?codigoForo=" + @item.codigo;}
                                         <ul class="ipsDataItem_subList ipsList_inline">
                                             <li class="">
-                                                <a href=@hrefDetalle>Ver detalle</a>
+                                                <a href=@hrefDetalle >Ver detalle</a>
                                             </li>
                                         </ul>
-                                        <div class="ipsType_richText ipsDataItem_meta ipsContained" data-controller="core.front.core.lightboxedImages">
+                                        <div class="ipsType_richText ipsDataItem_meta ipsContained"  >
                                             <p>
                                                 Por favor responder a la brevedad
                                             </p>
@@ -72,7 +73,7 @@
                                     </div>
                                     <ul class="ipsDataItem_lastPoster ipsDataItem_withPhoto">
                                         <li>
-                                            <a href="#" data-ipshover="" class="ipsUserPhoto ipsUserPhoto_tiny" title="Go to lupo's profile">
+                                            <a href="#"  class="ipsUserPhoto ipsUserPhoto_tiny" >
 
                                                 @{
                                                     if (usuario.persona.sexo == 'M')
@@ -87,9 +88,9 @@
                                             </a>
                                         </li>
                                         <li class="ipsType_blendLinks">
-                                            Por: @item.creador
+                                            Autor: @item.creador
                                         </li>
-                                        <li class="ipsType_light"><a href="#" title="Go to last post" class="ipsType_blendLinks"><time datetime=@item.fechaCreacion title=@item.fechaCreacion data-short=@item.fechaCreacion>@item.fechaCreacion</time></a></li>
+                                        <li class="ipsType_light"> <time datetime=@item.fechaCreacion title=@item.fechaCreacion data-short=@item.fechaCreacion>@item.fechaCreacion</time></li>
                                     </ul>
                                 </li>
                             </ol>

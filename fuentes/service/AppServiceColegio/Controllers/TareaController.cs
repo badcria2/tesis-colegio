@@ -38,5 +38,31 @@ namespace AppServiceColegio.Controllers
             }
             return Ok(response);
         }
+
+        [HttpPost]
+        [Route("api/educacion/delete-documento")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteDocument(DocumentRequestDelete documentRequestDelete)
+        {
+            BaseResponse response = new BaseResponse();
+            if (null == documentRequestDelete || documentRequestDelete.tipo == null)
+            {
+                return BadRequest();
+            }
+            Boolean estado = EDU_TareaBL.Instancia.DeleteDocumento(documentRequestDelete.codigo, documentRequestDelete.tipo);
+            if (estado)
+            {
+                response.estado = estado;
+                response.codigo = 200;
+            }
+            else
+            {
+                response.estado = estado;
+                response.codigo = 500;
+            }
+            return Ok(response);
+        }
     }
 }

@@ -102,5 +102,29 @@ namespace Educacion_Datos
             finally { cmd.Connection.Close(); }
             return inserto;
         }
+        public Boolean DeleteDocumento(String codigo, String tipo)
+        {
+            SqlCommand cmd = null;
+            Boolean inserto = false;
+            try
+            {
+                SqlConnection cn = Conexion.Instancia.Conectar();
+                cmd = new SqlCommand("PRD_EliminarDocumento", cn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@codigo", codigo);
+                cmd.Parameters.AddWithValue("@tipo", tipo); 
+                cn.Open();
+                if (cmd.ExecuteNonQuery() > 0)
+                {
+                    inserto = true;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally { cmd.Connection.Close(); }
+            return inserto;
+        }
     }
 }

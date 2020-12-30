@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<WebAppColegio.Models.Response.ForoBase>
-@using Newtonsoft.Json;
+@using System.Web;
+@using System.IO;
 @using Microsoft.AspNetCore.Http;
 @using  WebAppColegio.Models.Response
 @inject IHttpContextAccessor HttpContextAccessor;
@@ -7,6 +8,7 @@
     ViewData["Title"] = "Detalle";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <link rel="stylesheet" media="all" href="~/estilos/foro-framework.css">
 <link rel="stylesheet" media="all" href="~/estilos/framework_responsive.css">
 <link rel="stylesheet" media="all" href="~/estilos/forums.css">
@@ -16,6 +18,14 @@
         <div id="ipsLayout_contentWrapper">
 
             <div id="ipsLayout_mainArea">
+                <div class="d-sm-flex align-items-center justify-content-between mb-12">
+
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item "><a href="~/Curso/Index">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Curso</li>
+                        <li class="breadcrumb-item active" aria-current="page">Foro</li>
+                    </ol>
+                </div>
                 <a id="elContent"></a>
                 <div class="ipsPageHeader ipsClearfix">
 
@@ -24,13 +34,13 @@
                             @{
                                 if (Model.FirstOrDefault().sexo == "M")
                                 {
-                                    <img class="img-profile rounded-circle" src="/masterpage/img/man.png" alt=@Model.FirstOrDefault().creador >
+                                    <img class="img-profile rounded-circle" src="/masterpage/img/man.png" alt=@Model.FirstOrDefault().creador>
                                 }
                                 else
                                 {
-                                    <img class="img-profile rounded-circle" src="/masterpage/img/girl.png" alt=@Model.FirstOrDefault().creador >
+                                    <img class="img-profile rounded-circle" src="/masterpage/img/girl.png" alt=@Model.FirstOrDefault().creador>
                                 }
-                            } 
+                            }
                         </a>
                         <div>
                             <h1 class="ipsType_pageTitle ipsContained_container">
@@ -41,7 +51,7 @@
                             </h1>
                             <p class="ipsType_reset ipsType_blendLinks ">
                                 <span class="ipsType_normal">
-                                    Creado por: @Model.FirstOrDefault().creador 
+                                    Creado por: @Model.FirstOrDefault().creador
                                     <span class="ipsType_light"><time>@Model.FirstOrDefault().fechaCreacion</time></span>
                                 </span>
                                 <br>
@@ -50,7 +60,7 @@
                     </div>
                 </div>
 
-                <div data-controller="core.front.core.commentFeed,forums.front.topic.view, core.front.core.ignoredComments"  data-lastpage="" data-feedid="topic-13397" class="cTopic ipsClear ipsSpacer_top">
+                <div data-controller="core.front.core.commentFeed,forums.front.topic.view, core.front.core.ignoredComments" data-lastpage="" data-feedid="topic-13397" class="cTopic ipsClear ipsSpacer_top">
 
                     <div id="elPostFeed" data-role="commentFeed" data-controller="core.front.core.moderation">
                         <form action="" method="post" data-ipspageaction="" data-role="moderationTools">
@@ -60,14 +70,14 @@
                                 <article id="elComment_76647" class="cPost ipsBox  ipsComment  ipsComment_parent ipsClearfix ipsClear ipsColumns ipsColumns_noSpacing ipsColumns_collapsePhone   ">
                                     <div class="cAuthorPane cAuthorPane_mobile ipsResponsive_showPhone ipsResponsive_block">
                                         <h3 class="ipsType_sectionHead cAuthorPane_author ipsResponsive_showPhone ipsResponsive_inlineBlock ipsType_break ipsType_blendLinks ipsTruncate ipsTruncate_line">
-                                            <a href="#" data-ipshover=""  class="ipsType_break"><span style="color:red;">@item.creador</span></a>
+                                            <a href="#" data-ipshover="" class="ipsType_break"><span style="color:red;">@item.creador</span></a>
                                             <span class="ipsResponsive_showPhone ipsResponsive_inline">
-                                                &nbsp;&nbsp; 
+                                                &nbsp;&nbsp;
                                             </span>
-                                        </h3> 
+                                        </h3>
                                     </div>
                                     <aside class="ipsComment_author cAuthorPane ipsColumn ipsColumn_medium ipsResponsive_hidePhone">
-                   
+
                                         <ul class="cAuthorPane_info ipsList_reset">
 
                                             <li class="cAuthorPane_photo">
@@ -75,17 +85,17 @@
                                                     @{
                                                         if (item.sexo == "M")
                                                         {
-                                                            <img class="img-profile rounded-circle" src="/masterpage/img/man.png" alt=item.creador >
+                                                            <img class="img-profile rounded-circle" src="/masterpage/img/man.png" alt=item.creador>
                                                         }
                                                         else
                                                         {
-                                                            <img class="img-profile rounded-circle" src="/masterpage/img/girl.png" alt=item.creador >
+                                                            <img class="img-profile rounded-circle" src="/masterpage/img/girl.png" alt=item.creador>
                                                         }
-                                                    } 
+                                                    }
                                                 </a>
                                             </li>
                                             <li><span style="color:red;">@item.creador </span></li>
-                                              
+
                                         </ul>
                                     </aside>
                                     <div class="ipsColumn ipsColumn_fluid">
@@ -93,14 +103,19 @@
                                             <div class="ipsComment_meta ipsType_light">
 
                                                 <div class="ipsType_reset">
-                                                     Posted <time datetime=@item.fechaCreacion title=@item.fechaCreacion data-short="5 yr">@item.fechaCreacion</time> 
+                                                    Posted <time datetime=@item.fechaCreacion title=@item.fechaCreacion data-short="5 yr">@item.fechaCreacion</time>
                                                     <span class="ipsResponsive_hidePhone">
                                                     </span>
                                                 </div>
                                             </div>
                                             <div class="cPost_contentWrap ipsPad">
                                                 <div data-role="commentContent" class="ipsType_normal ipsType_richText ipsContained" data-controller="core.front.core.lightboxedImages">
-                                                   <p>@item.descripcion</p>
+                                                    @{
+                                                        StringWriter myWriter = new StringWriter();
+                                                        HttpUtility.HtmlDecode(item.descripcion, myWriter);
+                                                        string myDecodedString = myWriter.ToString();
+                                                    }
+                                                    @Html.Raw(myDecodedString)
                                                 </div>
 
                                             </div>
@@ -111,160 +126,48 @@
 
                             }
 
-                             
+
                         </form>
                     </div>
                     <a id="replyForm"></a>
-                    <div data-role="replyArea" class="cTopicPostArea ipsAreaBackground ipsPad  ipsSpacer_top">
-                        <div class="ipsPad cGuestTeaser ipsSpacer_bottom">
-                            <h2 class="ipsType_pageTitle">Responder tema del foro</h2>
-                            <p class="ipsType_normal ipsType_reset ipsSpacer_top ipsSpacer_half">
-                                <span class="ipsType_warning"><strong>Recuerda:</strong> Una vez enviada, la respuesta no puede ser editada.</span>
-                            </p>
-                        </div>
-                        <form accept-charset="utf-8" class="ipsForm ipsForm_vertical" action="https://www.html5gamedevs.com/topic/13397-if-your-game-wasnt-made-with-html5-your-post-will-be-deleted/" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="commentform_13397_submitted" value="1">
-                            <input type="hidden" name="csrfKey" value="c74743f105ce6257930692c52bfc5c13">
-                            <input type="hidden" name="_contentReply" value="1">
-                            <input type="hidden" name="captcha_field" value="1">
-                            <input type="hidden" name="MAX_FILE_SIZE" value="2097152">
-                            <input type="hidden" name="plupload" value="7d62ce039e427fa5a703c308f2c3635f">
-                            <div class="ipsComposeArea ipsComposeArea_withPhoto ipsClearfix ipsContained ipsComposeArea_minimized">
-                                <div class="ipsPos_left ipsResponsive_hidePhone ipsResponsive_block">
-                                    <span class="ipsUserPhoto ipsUserPhoto_small ">
-                                        <img src="https://www.html5gamedevs.com/uploads/set_resources_1/84c1e40ea0e759e3f1505eb1788ddf3c_default_photo.png" alt="Guest">
-                                    </span>
-                                </div>
-                                <div class="ipsComposeArea_editor">
-                                    <ul class="ipsForm ipsForm_horizontal" data-ipseditor-toollist="" style="display: none;">
-                                        <li class="ipsFieldRow ipsFieldRow_fullWidth">
-                                            <input type="email" name="guest_email" id="elInput_guest_email" aria-required="true" placeholder="Enter your email address (this is not shown to other users)" autocomplete="email">
-                                        </li>
-                                    </ul>
-                                    <div class="ipsType_normal ipsType_richText ipsType_break" data-ipseditor="" data-ipseditor-controller="https://www.html5gamedevs.com/index.php?app=core&amp;module=system&amp;controller=editor" data-ipseditor-minimized="" data-ipseditor-toolbars="{&quot;desktop&quot;:[{&quot;name&quot;:&quot;row1&quot;,&quot;items&quot;:[&quot;ipsPreview&quot;,&quot;Bold&quot;,&quot;Italic&quot;,&quot;Underline&quot;,&quot;-&quot;,&quot;ipsLink&quot;,&quot;Ipsquote&quot;,&quot;CodeSnippet&quot;,&quot;ipsEmoticon&quot;,&quot;-&quot;,&quot;BulletedList&quot;,&quot;NumberedList&quot;,&quot;-&quot;,&quot;JustifyLeft&quot;,&quot;JustifyCenter&quot;,&quot;JustifyRight&quot;,&quot;-&quot;,&quot;Strike&quot;,&quot;Superscript&quot;,&quot;-&quot;,&quot;TextColor&quot;,&quot;FontSize&quot;]},&quot;\/&quot;],&quot;tablet&quot;:[{&quot;name&quot;:&quot;row1&quot;,&quot;items&quot;:[&quot;ipsPreview&quot;,&quot;Bold&quot;,&quot;Italic&quot;,&quot;Underline&quot;,&quot;-&quot;,&quot;CodeSnippet&quot;,&quot;ipsLink&quot;,&quot;Ipsquote&quot;,&quot;ipsEmoticon&quot;,&quot;-&quot;,&quot;BulletedList&quot;,&quot;NumberedList&quot;]},&quot;\/&quot;],&quot;phone&quot;:[{&quot;name&quot;:&quot;row1&quot;,&quot;items&quot;:[&quot;ipsPreview&quot;,&quot;Bold&quot;,&quot;Italic&quot;,&quot;Underline&quot;,&quot;-&quot;,&quot;CodeSnippet&quot;,&quot;ipsEmoticon&quot;,&quot;-&quot;,&quot;ipsLink&quot;]},&quot;\/&quot;]}" data-ipseditor-extraplugins="codesnippet" data-ipseditor-postkey="bdd3141ecfa3b3ab739e9763b23319a4" data-ipseditor-autosavekey="reply-forums/forums-13397" data-ipseditor-skin="ips" data-ipseditor-name="topic_comment_13397" data-ipseditor-pastebehaviour="rich" data-ipseditor-ipsplugins="ipsautolink,ipsautosave,ipsctrlenter,ipscode,ipscontextmenu,ipsemoticon,ipsimage,ipslink,ipsmentions,ipspage,ipspaste,ipspreview,ipsquote,ipsspoiler,ipsautogrow,ipssource,removeformat">
-                                        <div data-role="editorComposer" class="ipsContained">
-                                            <noscript>
-                                                <textarea name="topic_comment_13397_noscript" rows="15"></textarea>
-                                            </noscript>
-                                            <div class="ipsHide norewrite" data-role="mainEditorArea" style="display: none;">
-                                                <textarea name="topic_comment_13397" data-role="contentEditor" class="ipsHide" tabindex="1" style="visibility: hidden; display: none;"></textarea>
-                                                <div id="cke_topic_comment_13397" class="cke_1 cke cke_reset cke_chrome cke_editor_topic_comment_13397 cke_ltr cke_browser_gecko" dir="ltr" role="application" aria-labelledby="cke_topic_comment_13397_arialbl" lang="en">
-                                                    <span id="cke_topic_comment_13397_arialbl" class="cke_voice_label">Enter your text; hold ctrl and right click for more options</span>
-                                                    <div class="cke_inner cke_reset" role="presentation">
-                                                        <span id="cke_1_top" class="cke_top cke_reset_all" role="presentation" style="height: auto; user-select: none;"><span id="cke_8" class="cke_voice_label">Editor toolbars</span><span id="cke_1_toolbox" class="cke_toolbox" role="group" aria-labelledby="cke_8" onmousedown="return false;"><span id="cke_10" class="cke_toolbar cke_toolbar_last" aria-labelledby="cke_10_label" role="toolbar"><span id="cke_10_label" class="cke_voice_label">row1</span><span class="cke_toolbar_start"></span><span class="cke_toolgroup" role="presentation"><a id="cke_11" class="cke_button cke_button__ipspreview cke_button_off" title="Preview" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_11_label" aria-describedby="cke_11_description" aria-haspopup="false" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(0,event);" onfocus="return CKEDITOR.tools.callFunction(1,event);" onclick="CKEDITOR.tools.callFunction(2,this);return false;"><span class="cke_button_icon cke_button__ipspreview_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/icons.png?t=K148');background-position:0 -648px;background-size:auto;">&nbsp;</span><span id="cke_11_label" class="cke_button_label cke_button__ipspreview_label" aria-hidden="false">Preview</span><span id="cke_11_description" class="cke_button_label" aria-hidden="false"></span></a><a id="cke_12" class="cke_button cke_button__bold cke_button_off" title="Bold (Ctrl+B)" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_12_label" aria-describedby="cke_12_description" aria-haspopup="false" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(3,event);" onfocus="return CKEDITOR.tools.callFunction(4,event);" onclick="CKEDITOR.tools.callFunction(5,this);return false;"><span class="cke_button_icon cke_button__bold_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/icons.png?t=K148');background-position:0 0px;background-size:auto;">&nbsp;</span><span id="cke_12_label" class="cke_button_label cke_button__bold_label" aria-hidden="false">Bold</span><span id="cke_12_description" class="cke_button_label" aria-hidden="false">Keyboard shortcut Ctrl+B</span></a><a id="cke_13" class="cke_button cke_button__italic cke_button_off" title="Italic (Ctrl+I)" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_13_label" aria-describedby="cke_13_description" aria-haspopup="false" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(6,event);" onfocus="return CKEDITOR.tools.callFunction(7,event);" onclick="CKEDITOR.tools.callFunction(8,this);return false;"><span class="cke_button_icon cke_button__italic_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/icons.png?t=K148');background-position:0 -24px;background-size:auto;">&nbsp;</span><span id="cke_13_label" class="cke_button_label cke_button__italic_label" aria-hidden="false">Italic</span><span id="cke_13_description" class="cke_button_label" aria-hidden="false">Keyboard shortcut Ctrl+I</span></a><a id="cke_14" class="cke_button cke_button__underline cke_button_off" title="Underline (Ctrl+U)" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_14_label" aria-describedby="cke_14_description" aria-haspopup="false" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(9,event);" onfocus="return CKEDITOR.tools.callFunction(10,event);" onclick="CKEDITOR.tools.callFunction(11,this);return false;"><span class="cke_button_icon cke_button__underline_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/icons.png?t=K148');background-position:0 -120px;background-size:auto;">&nbsp;</span><span id="cke_14_label" class="cke_button_label cke_button__underline_label" aria-hidden="false">Underline</span><span id="cke_14_description" class="cke_button_label" aria-hidden="false">Keyboard shortcut Ctrl+U</span></a><span class="cke_toolbar_separator" role="separator"></span><a id="cke_15" class="cke_button cke_button__ipslink cke_button_off" title="Link" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_15_label" aria-describedby="cke_15_description" aria-haspopup="false" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(12,event);" onfocus="return CKEDITOR.tools.callFunction(13,event);" onclick="CKEDITOR.tools.callFunction(14,this);return false;"><span class="cke_button_icon cke_button__ipslink_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/icons.png?t=K148');background-position:0 -528px;background-size:auto;">&nbsp;</span><span id="cke_15_label" class="cke_button_label cke_button__ipslink_label" aria-hidden="false">Link</span><span id="cke_15_description" class="cke_button_label" aria-hidden="false"></span></a><a id="cke_16" class="cke_button cke_button__ipsquote cke_button_off" title="Quote" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_16_label" aria-describedby="cke_16_description" aria-haspopup="false" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(15,event);" onfocus="return CKEDITOR.tools.callFunction(16,event);" onclick="CKEDITOR.tools.callFunction(17,this);return false;"><span class="cke_button_icon cke_button__ipsquote_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/icons.png?t=K148');background-position:0 -672px;background-size:auto;">&nbsp;</span><span id="cke_16_label" class="cke_button_label cke_button__ipsquote_label" aria-hidden="false">Quote</span><span id="cke_16_description" class="cke_button_label" aria-hidden="false"></span></a><a id="cke_17" class="cke_button cke_button__codesnippet cke_button_off" title="Insert Code Snippet" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_17_label" aria-describedby="cke_17_description" aria-haspopup="false" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(18,event);" onfocus="return CKEDITOR.tools.callFunction(19,event);" onclick="CKEDITOR.tools.callFunction(20,this);return false;"><span class="cke_button_icon cke_button__codesnippet_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/codesnippet/icons/codesnippet.png?t=K148');background-position:0 0px;background-size:16px;">&nbsp;</span><span id="cke_17_label" class="cke_button_label cke_button__codesnippet_label" aria-hidden="false">Insert Code Snippet</span><span id="cke_17_description" class="cke_button_label" aria-hidden="false"></span></a><a id="cke_18" class="cke_button cke_button__ipsemoticon cke_button_off" title="Emoji" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_18_label" aria-describedby="cke_18_description" aria-haspopup="false" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(21,event);" onfocus="return CKEDITOR.tools.callFunction(22,event);" onclick="CKEDITOR.tools.callFunction(23,this);return false;"><span class="cke_button_icon cke_button__ipsemoticon_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/icons.png?t=K148');background-position:0 -456px;background-size:auto;">&nbsp;</span><span id="cke_18_label" class="cke_button_label cke_button__ipsemoticon_label" aria-hidden="false">Emoji</span><span id="cke_18_description" class="cke_button_label" aria-hidden="false"></span></a><span class="cke_toolbar_separator" role="separator"></span><a id="cke_19" class="cke_button cke_button__bulletedlist cke_button_off" title="Insert/Remove Bulleted List" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_19_label" aria-describedby="cke_19_description" aria-haspopup="false" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(24,event);" onfocus="return CKEDITOR.tools.callFunction(25,event);" onclick="CKEDITOR.tools.callFunction(26,this);return false;"><span class="cke_button_icon cke_button__bulletedlist_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/icons.png?t=K148');background-position:0 -840px;background-size:auto;">&nbsp;</span><span id="cke_19_label" class="cke_button_label cke_button__bulletedlist_label" aria-hidden="false">Insert/Remove Bulleted List</span><span id="cke_19_description" class="cke_button_label" aria-hidden="false"></span></a><a id="cke_20" class="cke_button cke_button__numberedlist cke_button_off" title="Insert/Remove Numbered List" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_20_label" aria-describedby="cke_20_description" aria-haspopup="false" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(27,event);" onfocus="return CKEDITOR.tools.callFunction(28,event);" onclick="CKEDITOR.tools.callFunction(29,this);return false;"><span class="cke_button_icon cke_button__numberedlist_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/icons.png?t=K148');background-position:0 -888px;background-size:auto;">&nbsp;</span><span id="cke_20_label" class="cke_button_label cke_button__numberedlist_label" aria-hidden="false">Insert/Remove Numbered List</span><span id="cke_20_description" class="cke_button_label" aria-hidden="false"></span></a><span class="cke_toolbar_separator" role="separator"></span><a id="cke_21" class="cke_button cke_button__justifyleft cke_button_on" title="Align Left" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_21_label" aria-describedby="cke_21_description" aria-haspopup="false" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(30,event);" onfocus="return CKEDITOR.tools.callFunction(31,event);" onclick="CKEDITOR.tools.callFunction(32,this);return false;" aria-pressed="true"><span class="cke_button_icon cke_button__justifyleft_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/icons.png?t=K148');background-position:0 -768px;background-size:auto;">&nbsp;</span><span id="cke_21_label" class="cke_button_label cke_button__justifyleft_label" aria-hidden="false">Align Left</span><span id="cke_21_description" class="cke_button_label" aria-hidden="false"></span></a><a id="cke_22" class="cke_button cke_button__justifycenter cke_button_off" title="Center" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_22_label" aria-describedby="cke_22_description" aria-haspopup="false" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(33,event);" onfocus="return CKEDITOR.tools.callFunction(34,event);" onclick="CKEDITOR.tools.callFunction(35,this);return false;"><span class="cke_button_icon cke_button__justifycenter_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/icons.png?t=K148');background-position:0 -744px;background-size:auto;">&nbsp;</span><span id="cke_22_label" class="cke_button_label cke_button__justifycenter_label" aria-hidden="false">Center</span><span id="cke_22_description" class="cke_button_label" aria-hidden="false"></span></a><a id="cke_23" class="cke_button cke_button__justifyright cke_button_off" title="Align Right" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_23_label" aria-describedby="cke_23_description" aria-haspopup="false" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(36,event);" onfocus="return CKEDITOR.tools.callFunction(37,event);" onclick="CKEDITOR.tools.callFunction(38,this);return false;"><span class="cke_button_icon cke_button__justifyright_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/icons.png?t=K148');background-position:0 -792px;background-size:auto;">&nbsp;</span><span id="cke_23_label" class="cke_button_label cke_button__justifyright_label" aria-hidden="false">Align Right</span><span id="cke_23_description" class="cke_button_label" aria-hidden="false"></span></a><span class="cke_toolbar_separator" role="separator"></span><a id="cke_24" class="cke_button cke_button__strike cke_button_off" title="Strikethrough" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_24_label" aria-describedby="cke_24_description" aria-haspopup="false" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(39,event);" onfocus="return CKEDITOR.tools.callFunction(40,event);" onclick="CKEDITOR.tools.callFunction(41,this);return false;"><span class="cke_button_icon cke_button__strike_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/icons.png?t=K148');background-position:0 -48px;background-size:auto;">&nbsp;</span><span id="cke_24_label" class="cke_button_label cke_button__strike_label" aria-hidden="false">Strikethrough</span><span id="cke_24_description" class="cke_button_label" aria-hidden="false"></span></a><a id="cke_25" class="cke_button cke_button__superscript cke_button_off" title="Superscript" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_25_label" aria-describedby="cke_25_description" aria-haspopup="false" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(42,event);" onfocus="return CKEDITOR.tools.callFunction(43,event);" onclick="CKEDITOR.tools.callFunction(44,this);return false;"><span class="cke_button_icon cke_button__superscript_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/icons.png?t=K148');background-position:0 -96px;background-size:auto;">&nbsp;</span><span id="cke_25_label" class="cke_button_label cke_button__superscript_label" aria-hidden="false">Superscript</span><span id="cke_25_description" class="cke_button_label" aria-hidden="false"></span></a><span class="cke_toolbar_separator" role="separator"></span><a id="cke_26" class="cke_button cke_button__textcolor cke_button_off cke_button_expandable" title="Text Color" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_26_label" aria-describedby="cke_26_description" aria-haspopup="listbox" aria-disabled="false" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(45,event);" onfocus="return CKEDITOR.tools.callFunction(46,event);" onclick="CKEDITOR.tools.callFunction(47,this);return false;" aria-expanded="false"><span class="cke_button_icon cke_button__textcolor_icon" style="background-image:url('//www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/plugins/icons.png?t=K148');background-position:0 -312px;background-size:auto;">&nbsp;</span><span id="cke_26_label" class="cke_button_label cke_button__textcolor_label" aria-hidden="false">Text Color</span><span id="cke_26_description" class="cke_button_label" aria-hidden="false"></span><span class="cke_button_arrow"></span></a></span><span id="cke_9" class="cke_combo cke_combo__fontsize cke_combo_off" role="presentation"><span id="cke_9_label" class="cke_combo_label">Size</span><a class="cke_combo_button" title="Font Size" tabindex="-1" hidefocus="true" role="button" aria-labelledby="cke_9_label" aria-haspopup="listbox" onblur="this.style.cssText = this.style.cssText;" onkeydown="return CKEDITOR.tools.callFunction(49,event,this);" onfocus="return CKEDITOR.tools.callFunction(50,event);" onclick="CKEDITOR.tools.callFunction(48,this);return false;"><span id="cke_9_text" class="cke_combo_text cke_combo_inlinelabel">Size</span><span class="cke_combo_open"><span class="cke_combo_arrow"></span></span></a></span><span class="cke_toolbar_end"></span></span><span class="cke_toolbar_break"></span></span></span>
-                                                        <div id="cke_1_contents" class="cke_contents cke_reset" role="presentation" style="height: auto;">
-                                                            <div class="cke_wysiwyg_div cke_reset cke_enable_context_menu cke_editable cke_editable_themed cke_contents_ltr" hidefocus="true" tabindex="1" spellcheck="true" role="textbox" aria-multiline="true" aria-label="Enter your text; hold ctrl and right click for more options" title="Enter your text; hold ctrl and right click for more options" data-gramm="false" style="max-height: 766px;" contenteditable="true">
-                                                                <p><br></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                    <article id="elComment_76647" class="cPost ipsBox  ipsComment  ipsComment_parent ipsClearfix ipsClear ipsColumns ipsColumns_noSpacing ipsColumns_collapsePhone   ">
+                        <!-- CKEditor -->
+                        <div class="col-lg-12">
+                            <section class="panel">
+                                <div class="panel-body">
+                                    <div class="form">
+                                        <form class="form-horizontal" asp-controller="Foro" asp-action="Create">
+                                            </br>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <textarea class="form-control ckeditor" name="inputForo" rows="6"></textarea>
                                                 </div>
                                             </div>
-                                            <div class="ipsComposeArea_dummy ipsJS_show" tabindex="1" style="">
-                                                <div class="ipsLoading ipsLoading_tiny">&nbsp;</div>
-                                            </div>
-                                            <div class="ipsHide ipsComposeArea_editorPaste" data-role="pasteMessage">
-                                                <p class="ipsType_reset ipsPad_half">
-                                                    <a class="ipsPos_right ipsType_normal ipsCursor_pointer ipsComposeArea_editorPasteSwitch" data-action="keepPasteFormatting" title="Keep formatting" data-ipstooltip="">×</a>
-                                                    <i class="fa fa-info-circle"></i>&nbsp; Pasted as rich text. &nbsp;&nbsp;<a class="ipsCursor_pointer" data-action="removePasteFormatting">Paste as plain text instead</a>
-                                                </p>
-                                            </div>
-                                            <div class="ipsHide ipsComposeArea_editorPaste" data-role="emoticonMessage">
-                                                <p class="ipsType_reset ipsPad_half">
-                                                    <i class="fa fa-info-circle"></i>&nbsp; Only 75 emoji are allowed.
-                                                </p>
-                                            </div>
-                                            <div class="ipsHide ipsComposeArea_editorPaste" data-role="embedMessage">
-                                                <p class="ipsType_reset ipsPad_half">
-                                                    <a class="ipsPos_right ipsType_normal ipsCursor_pointer ipsComposeArea_editorPasteSwitch" data-action="keepEmbeddedMedia" title="Keep embedded content" data-ipstooltip="">×</a>
-                                                    <i class="fa fa-info-circle"></i>&nbsp; Your link has been automatically embedded. &nbsp;&nbsp;<a class="ipsCursor_pointer" data-action="removeEmbeddedMedia">Display as a link instead</a>
-                                                </p>
-                                            </div>
-                                            <div class="ipsHide ipsComposeArea_editorPaste" data-role="embedFailMessage">
-                                                <p class="ipsType_reset ipsPad_half">
-                                                </p>
-                                            </div>
-                                            <div class="ipsHide ipsComposeArea_editorPaste" data-role="autoSaveRestoreMessage">
-                                                <p class="ipsType_reset ipsPad_half">
-                                                    <a class="ipsPos_right ipsType_normal ipsCursor_pointer ipsComposeArea_editorPasteSwitch" data-action="keepRestoredContents" title="Keep restored contents" data-ipstooltip="">×</a>
-                                                    <i class="fa fa-info-circle"></i>&nbsp; Your previous content has been restored. &nbsp;&nbsp;<a class="ipsCursor_pointer" data-action="clearEditorContents">Clear editor</a>
-                                                </p>
-                                            </div>
-                                            <div class="ipsHide ipsComposeArea_editorPaste" data-role="imageMessage">
-                                                <p class="ipsType_reset ipsPad_half">
-                                                    <a class="ipsPos_right ipsType_normal ipsCursor_pointer ipsComposeArea_editorPasteSwitch" data-action="removeImageMessage">×</a>
-                                                    <i class="fa fa-info-circle"></i>&nbsp; You cannot paste images directly. Upload or insert images from URL.
-                                                </p>
-                                            </div>
-                                            <div data-ipseditor-toollist="" data-ipseditor-toollistminimized="" data-name="topic_comment_13397" class="ipsAreaBackground_light ipsClearfix ipsHide" style="display: none;">
-                                                <div data-role="attachmentArea">
-                                                    <div class="ipsComposeArea_dropZone ipsComposeArea_dropZoneSmall ipsClearfix">
-                                                        <i class="fa fa-paperclip"></i>
-                                                        <div class="ipsType_light ipsType_normal">
-                                                            Loading...
-                                                        </div>
-                                                    </div>
+                                            <div class="form-group">
+                                                <div class="col-lg-offset-2 col-lg-10">
+                                                    <button type="submit" class="btn btn-info mb-1">Enviar respuesta</button>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div data-role="editorPreview" class="ipsHide">
-                                            <div class="ipsAreaBackground_light ipsPad_half" data-role="previewToolbar">
-                                                <a href="#" class="ipsPos_right" data-action="closePreview" title="Return to editing mode" data-ipstooltip="">×</a>
-                                                <ul class="ipsButton_split">
-                                                    <li data-action="resizePreview" data-size="desktop"><a href="#" title="View at approximate desktop size" data-ipstooltip="" class="ipsButton ipsButton_verySmall ipsButton_primary">Desktop</a></li>
-                                                    <li data-action="resizePreview" data-size="tablet"><a href="#" title="View at approximate tablet size" data-ipstooltip="" class="ipsButton ipsButton_verySmall ipsButton_light">Tablet</a></li>
-                                                    <li data-action="resizePreview" data-size="phone"><a href="#" title="View at approximate phone size" data-ipstooltip="" class="ipsButton ipsButton_verySmall ipsButton_light">Phone</a></li>
-                                                </ul>
-                                            </div>
-                                            <div data-role="previewContainer" class="ipsAreaBackground ipsType_center"></div>
-                                        </div>
+                                            <input type="hidden" name="codigoClase" value=@Model.FirstOrDefault().clase />
+                                            <input type="hidden" name="codigoForo" value=@Model.FirstOrDefault().codigo />
+                                        </form>
                                     </div>
-                                    <ul class="ipsToolList ipsToolList_horizontal ipsClear ipsClearfix ipsJS_hide" data-ipseditor-toollist="" style="display: none;">
-                                        <li class="ipsPos_left ipsResponsive_noFloat  ipsType_small">
-                                            <div data-ipscaptcha="" data-ipscaptcha-service="recaptcha_invisible" data-ipscaptcha-key="6LcH7UEUAAAAAIGWgOoyBKAqjLmOIKzfJTOjyC7z" data-ipscaptcha-lang="en_US">
-                                                <noscript>
-                                                    <div style="width: 302px; height: 352px;">
-                                                        <div style="width: 302px; height: 352px; position: relative;">
-                                                            <div style="width: 302px; height: 352px; position: absolute;">
-                                                                <iframe src="https://www.google.com/recaptcha/api/fallback?k=6LcH7UEUAAAAAIGWgOoyBKAqjLmOIKzfJTOjyC7z" style="width: 302px; height:352px; border-style: none;">
-                                                                </iframe>
-                                                            </div>
-                                                            <div style="width: 250px; height: 80px; position: absolute; border-style: none; bottom: 21px; left: 25px; margin: 0px; padding: 0px; right: 25px;">
-                                                                <textarea id="g-recaptcha-response" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 80px; border: 1px solid #c1c1c1; margin: 0px; padding: 0px; resize: none;"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </noscript>
-                                                <div data-captchacontainer="" id="ips_uid_5710_3">
-                                                    <div class="grecaptcha-badge" data-style="bottomright" style="width: 256px; height: 60px; display: block; transition: right 0.3s ease 0s; position: fixed; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-radius: 2px; overflow: hidden;">
-                                                        <div class="grecaptcha-logo"><iframe src="If%20your%20game%20wasn't%20made%20with%20HTML5%20your%20post%20will%20be%20deleted%20-%20Game%20Showcase%20-%20HTML5%20Game%20Devs%20Forum_files/anchor.htm" role="presentation" name="a-46jx5jiiufyz" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox allow-storage-access-by-user-activation" width="256" height="60" frameborder="0"></iframe></div>
-                                                        <div class="grecaptcha-error"></div>
-                                                        <textarea id="g-recaptcha-response" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea>
-                                                    </div>
-                                                    <iframe style="display: none;"></iframe>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <button type="submit" class="ipsButton ipsButton_primary" tabindex="2" accesskey="s" role="button">Submit Reply</button>
-                                        </li>
-                                    </ul>
                                 </div>
-                            </div>
-                        </form>
-                    </div>
+                            </section>
+                        </div>
+                    </article>
                 </div>
-
 
             </div>
 
         </div>
     </div>
 </main>
+<script type="text/javascript" src="~/estilos/ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
     var ipsDebug = false;
 
-    var CKEDITOR_BASEPATH = 'https://www.html5gamedevs.com/applications/core/interface/ckeditor/ckeditor/';
+    var CKEDITOR_BASEPATH = '';
 
     var ipsSettings = {
 

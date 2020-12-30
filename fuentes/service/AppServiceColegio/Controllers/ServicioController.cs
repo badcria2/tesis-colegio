@@ -1,5 +1,6 @@
 ﻿using System;
 using AppServiceColegio.Entidades;
+using Educacion_Negocio;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,6 +41,24 @@ namespace AppServiceColegio.Controllers
                 materialRequest.codigoClase, 
                 materialRequest.periodo == null ? DateTime.Now.Year.ToString() : materialRequest.periodo, 
                 materialRequest.codigoUsuario));
+        }
+
+        [HttpGet]
+        [Route("api/servicio/notas")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetNotas(NotasRequest notasRequest)
+        {
+            if (null == notasRequest || notasRequest.codigoUsuario == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(EDU_NotasBL.Instancia.GetNotas(
+                notasRequest.periodo == null ? DateTime.Now.Year.ToString() : notasRequest.periodo,
+                notasRequest.codigoUsuario
+                ));
         }
     }
 }

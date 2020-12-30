@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Educacion_Entidades
+namespace Servicio_Entidades
 {
     public class SER_ForoEL : SER_ForoBaseEL
     { 

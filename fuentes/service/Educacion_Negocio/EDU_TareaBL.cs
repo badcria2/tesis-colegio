@@ -38,8 +38,21 @@ namespace Educacion_Negocio
                     case "Alumno":
                         return EDU_TareaDAL.Instancia.InsertTarea(new EDU_MaterialEL() { codigo = codigoClase, nombre = nombre, semana = semana, usuario = usuario });
                     default: return false;
-                } 
-               
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public Boolean DeleteDocumento(String codigo, String tipo)
+        {
+            try
+            {
+                return EDU_TareaDAL.Instancia.DeleteDocumento(codigo, tipo);
+
             }
             catch (Exception e)
             {
