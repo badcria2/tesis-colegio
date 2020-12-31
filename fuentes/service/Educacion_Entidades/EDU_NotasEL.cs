@@ -8,6 +8,8 @@ namespace Educacion_Entidades
     {
         public String codigoCurso { get; set; }
         public int nota { get; set; }
+
+        public Boolean registro { get; set; }
         public String tipoCalificacion { get; set; }
 
     }

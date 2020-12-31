@@ -3,6 +3,7 @@ using AppServiceColegio.Entidades;
 using Educacion_Negocio;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Servicio_Negocio;
 
 namespace AppServiceColegio.Controllers
 {
@@ -59,6 +60,16 @@ namespace AppServiceColegio.Controllers
                 notasRequest.periodo == null ? DateTime.Now.Year.ToString() : notasRequest.periodo,
                 notasRequest.codigoUsuario
                 ));
+        }
+
+        [HttpGet]
+        [Route("api/servicio/avisos")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetAvisos()
+        {
+            return Ok(SER_AvisoBL.Instancia.GetAvisos());
         }
     }
 }

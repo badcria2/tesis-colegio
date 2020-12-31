@@ -15,7 +15,7 @@ namespace Educacion_Negocio
             get { return EDU_NotasBL._instancia; }
         }
         #endregion Singleton
-        public EDU_NotasCurso GetNotas(String periodo, String codigoUsuario)
+        public List<EDU_CursoEL> GetNotas(String periodo, String codigoUsuario)
         {
             try
             {

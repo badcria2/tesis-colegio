@@ -1,8 +1,57 @@
 ﻿
+@model IEnumerable<WebAppColegio.Models.Response.AvisosResponse>
+@using System.Globalization
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.theme.min.css">
+<link rel="stylesheet" href="/estilos/css/estilo.css">
 
-<h1>Index</h1>
+@{
+    DateTimeFormatInfo dtfi = DateTimeFormatInfo.CurrentInfo;
+    @*@System.Threading.Thread.CurrentThread.CurrentUICulture.DateTimeFormat.GetDayName(DateTime.Parse(item.fechaInicio).DayOfWeek)*@
+}
 
+<div class="d-sm-flex align-items-center justify-content-between mb-12">
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="~/Curso/Index">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Avisos</li>
+    </ol>
+</div>
+<h3 class="h3">Últimos avisos del presente año</h3>
+<div class="row">
+    <div class="col-md-12">
+        <div id="news-slider14" class="owl-carousel">
+            @foreach (var item in Model)
+            {
+                <div class="post-slide14">
+                    <h3 class="post-category"><a href="#">@item.titulo</a></h3>
+                    <div class="post-review">
+                        <div class="post-bar">
+                            <span class="month">@dtfi.GetAbbreviatedMonthName(Int32.Parse(item.fechaInicio.Substring(3, 2))) </span>
+                            <span class="date">@item.fechaInicio.Substring(0, 2)</span>
+                        </div>
+                        <h3 class="post-title"><a href="#">Ultimo aviso</a></h3>
+                    </div>
+                    <div class="post-img">
+                        <img src="@item.uri" alt="">
+                    </div>
+                    <p class="post-description">
+                        @item.contenido
+                    </p>
+                </div>
+            }
+
+
+
+        </div>
+    </div>
+</div>
+</br></br></br>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js"></script>
+<script type="text/javascript" src="/estilos/js/evento.js"></script>
