@@ -25,5 +25,17 @@ namespace Comunes_Negocio
                 throw e;
             }
         }
+
+        public List<CMM_PeriodoEL> ObtenerRangoMeses(String copdigoClase)
+        {
+            try
+            {
+                return CMM_TipoAccesoDAL.Instancia.ObtenerRangoMeses(copdigoClase);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }

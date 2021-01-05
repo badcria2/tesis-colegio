@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace WebAppColegio.Models.Response
 {
-    public class Nota
+    public class Periodo
     {
-        public int nota { get; set; }
-        public Boolean registro { get; set; }
-         
+        public String fecha { get; set; }
+        public int semanas { get; set; }
+        public String mes { get; set; }
     }
 }

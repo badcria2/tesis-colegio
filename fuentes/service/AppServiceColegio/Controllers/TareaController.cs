@@ -25,7 +25,7 @@ namespace AppServiceColegio.Controllers
             {
                 return BadRequest();
             }
-            Boolean estado = EDU_TareaBL.Instancia.InsertTarea(materialRequest.codigoClase, materialRequest.nombre, materialRequest.semana, materialRequest.origen, materialRequest.usuario);
+            Boolean estado = EDU_TareaBL.Instancia.InsertTarea(materialRequest.codigoClase, materialRequest.nombre, materialRequest.semana, materialRequest.origen, materialRequest.usuario, materialRequest.mes);
             if (estado)
             {
                 response.estado = estado;

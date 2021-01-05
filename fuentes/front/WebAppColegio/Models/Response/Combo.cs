@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace WebAppColegio.Models.Response
 {
-    public class TipoNota
+    public class Combo
     {
         public String codigo { get; set; }
-        public String nombre { get; set; } 
-        public List<Nota> nota { get; set; }
+        public String descripcion { get; set; }
     }
 }
