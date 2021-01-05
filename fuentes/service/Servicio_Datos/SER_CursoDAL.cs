@@ -17,7 +17,7 @@ namespace Servicio_Datos
         }
         #endregion Singleton
 
-        public List<SER_CursoEL> GetCurso(String usuario, String periodo)
+        public List<SER_CursoEL> GetCurso(String usuario, String periodo, String perfil, String grado, String seccion)
         {
             SqlCommand cmd = null;
             List<SER_CursoEL> _CursoELs = new List<SER_CursoEL>();
@@ -26,8 +26,11 @@ namespace Servicio_Datos
                 SqlConnection cn = Conexion.Instancia.Conectar();
                 cmd = new SqlCommand("PRD_ObtenerCursos", cn);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@codigo_usuario", usuario);
+                cmd.Parameters.AddWithValue("@codigo_usuario", usuario); 
                 cmd.Parameters.AddWithValue("@periodo", periodo);
+                cmd.Parameters.AddWithValue("@perfil", perfil);
+                cmd.Parameters.AddWithValue("@grado", grado);
+                cmd.Parameters.AddWithValue("@seccion", seccion); 
                 cn.Open();
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
@@ -83,6 +86,7 @@ namespace Servicio_Datos
                             nombre = dr["nombre_material"].ToString(),
                             nroSemana = Int32.Parse(dr["semana"].ToString()),
                             extension = dr["extension"].ToString(),
+                            mes = dr["mes"].ToString(),
                             tareaHabilitada = Boolean.Parse(dr["tarea_habilitada"].ToString()),
                             tiempoRestante = dr["tiempo_restante"].ToString(),
                             tarea = new SER_TareaEL() { codigo = "", nombre = "", nroSemana = 0 }

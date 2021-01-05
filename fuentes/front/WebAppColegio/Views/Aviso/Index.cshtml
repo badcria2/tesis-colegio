@@ -1,6 +1,10 @@
-﻿
+﻿@using  WebAppColegio.Models.Response
 @model IEnumerable<WebAppColegio.Models.Response.AvisosResponse>
 @using System.Globalization
+@inject IHttpContextAccessor HttpContextAccessor;
+@using Newtonsoft.Json;@using System.Web;
+@using System.IO;
+@using Microsoft.AspNetCore.Http;
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,10 +12,13 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.theme.min.css">
-<link rel="stylesheet" href="/estilos/css/estilo.css">
 
+<link href="~/masterpage/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="/estilos/css/estilo.css">
 @{
-    DateTimeFormatInfo dtfi = DateTimeFormatInfo.CurrentInfo;
+    var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContextAccessor.HttpContext.Session.GetString("UsuarioSession"));
+    DateTimeFormatInfo dtfi = new CultureInfo("es-ES", false).DateTimeFormat;
     @*@System.Threading.Thread.CurrentThread.CurrentUICulture.DateTimeFormat.GetDayName(DateTime.Parse(item.fechaInicio).DayOfWeek)*@
 }
 
@@ -22,6 +29,14 @@
         <li class="breadcrumb-item active" aria-current="page">Avisos</li>
     </ol>
 </div>
+<div class="row">
+    <div class="col-md-6">  </div>
+    <div class="col-md-6">
+        @{if (usuario.perfil.Equals("Director"))
+            { <button type="button" id="modalNuevo" class="btn btn-warning mb-2 btn-sm col-md-3 pull-right" style="background:#e67e22;" data-toggle="modal" data-target="#exampleModalCenter">Nuevo aviso</button>}
+        }
+    </div>
+</div>
 <h3 class="h3">Últimos avisos del presente año</h3>
 <div class="row">
     <div class="col-md-12">
@@ -29,7 +44,17 @@
             @foreach (var item in Model)
             {
                 <div class="post-slide14">
-                    <h3 class="post-category"><a href="#">@item.titulo</a></h3>
+                    <h3 class="post-category">
+                        @{if (usuario.perfil.Equals("Director"))
+                            {<span class="fas fa-edit" data-toggle="modal" id="modalEdit"
+                                   data-fechainidata="@item.fechaInicio"
+                                   data-imagen="@item.imagen"
+                                   data-imguri="@item.uri"
+                                   data-fechafindata="@item.fechaTermino"
+                                   data-contenido="@item.contenido"
+                                   data-id="@item.codigo" data-titulo="@item.titulo" data-target="#exampleModalCenter"></span>}
+                        } @item.titulo
+                    </h3>
                     <div class="post-review">
                         <div class="post-bar">
                             <span class="month">@dtfi.GetAbbreviatedMonthName(Int32.Parse(item.fechaInicio.Substring(3, 2))) </span>
@@ -41,7 +66,12 @@
                         <img src="@item.uri" alt="">
                     </div>
                     <p class="post-description">
-                        @item.contenido
+                        @{
+                            StringWriter myWriter = new StringWriter();
+                            HttpUtility.HtmlDecode(item.contenido, myWriter);
+                            string myDecodedString = myWriter.ToString();
+                        }
+                        @Html.Raw(myDecodedString)
                     </p>
                 </div>
             }
@@ -51,7 +81,130 @@
         </div>
     </div>
 </div>
+
 </br></br></br>
 
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title  col-11 text-center" id="exampleModalCenterTitle">Aviso</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form enctype="multipart/form-data" class="form-horizontal" asp-controller="Aviso" asp-action="Create">
+                <div class="modal-body">
+                    <div class="modal-body">
+
+                        <div class="col-lg-12">
+                            <div class="form-group row">
+                                <label for="inputEmail3" class="col-sm-3 col-form-label">Titulo</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="titulo" name="titulo" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group row">
+                                <label for="inputEmail3" class="col-sm-3 col-form-label">Fondo de aviso</label>
+                                <div class="col-sm-9">
+                                    <a title="Imagen de fondo" class="ig-title title item_link" target="_blank" id="imgFondo">
+                                        <span id="imgFondoSpan" name="imgFondoSpan"></span>
+                                    </a>
+                                    <input type="file" accept="image/png, image/jpeg" id="imagen" name="imagen" style="line-height: 1.375rem; " placeholder="banner">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group row" id="simple-date4">
+                                <label for="inputEmail3" class="col-sm-3 col-form-label">Rango de fechas</label>
+                                <div class="col-sm-9">
+                                    <div class="input-daterange input-group">
+                                        <input type="text" class="input-sm form-control" name="fechaInicio" id="fechaInicio">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">hasta</span>
+                                        </div>
+                                        <input type="text" class="input-sm form-control" name="fechaFin" id="fechaFin">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="codigoAviso" id="codigoAviso">
+                        <input type="hidden" name="inputfondospan" id="inputfondospan">
+
+                        <div class="col-lg-12">
+                            <section class="panel">
+                                <div class="panel-body">
+                                    <div class="form">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <textarea class="form-control ckeditor" id="contenido" name="contenido" rows="6"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/masterpage/vendor/bootstrap-touchspin/js/jquery.bootstrap-touchspin.js"></script>
+<!-- ClockPicker -->
+<script src="~/masterpage/vendor/clock-picker/clockpicker.js"></script>
+
+<script src="~/masterpage/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script>
+    $('#simple-date4 .input-daterange').datepicker({
+        format: 'dd/mm/yyyy',
+        autoclose: true,
+        todayHighlight: true,
+        todayBtn: 'linked',
+    });
+    $(document).on("click", "#modalNuevo", function () {
+        CKEDITOR.instances.contenido.setData('');
+        $("#codigoAviso").val('');
+        $("#titulo").val('');
+        $("#imagen").attr('placeholder', '');
+        $("#imgFondo").attr('href', '');
+        $("#imgFondoSpan").text('');
+        $("#fechaInicio").val('');
+        $("#fechaFin").val('');
+        $("#contenido").val('');
+        $("#inputfondospan").val('');
+    });
+    $(document).on("click", "#modalEdit", function () {
+        var data = $(this).data('id');
+        var titulo = $(this).data('titulo');
+        var contenido = $(this).data('contenido');
+        var fechaFin = $(this).data('fechafindata');
+        var fechaInicio = $(this).data('fechainidata');
+        var imagen = $(this).data('imagen');
+        var imagenuri = $(this).data('imguri');
+        CKEDITOR.instances.contenido.setData(contenido);
+        $("#codigoAviso").val(data);
+        $("#titulo").val(titulo);
+        $("#imagen").attr('placeholder', imagen);
+        $("#imgFondo").attr('href', imagenuri);
+        $("#imgFondoSpan").text(imagen);
+        $("#fechaInicio").val(fechaInicio);
+        $("#fechaFin").val(fechaFin);
+        $("#contenido").val(contenido);
+        $("#inputfondospan").val(imagen);
+    });
+
+</script>
+<script type="text/javascript" src="~/estilos/ckeditor/ckeditor.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js"></script>
-<script type="text/javascript" src="/estilos/js/evento.js"></script>
+<script type="text/javascript" src="~/estilos/js/evento.js"></script>
+
+

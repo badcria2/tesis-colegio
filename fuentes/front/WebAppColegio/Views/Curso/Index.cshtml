@@ -1,15 +1,16 @@
 ﻿@using  WebAppColegio.Models.Response
 @model IEnumerable<WebAppColegio.Models.Response.CursoResponse>
 
- 
+@inject IHttpContextAccessor HttpContextAccessor;
+@using Newtonsoft.Json;
+@using Microsoft.AspNetCore.Http;
 
 @{
     ViewData["Title"] = "Principal";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
-    //var autenticacionResponse = JsonConvert.DeserializeObject<AutenticacionResponse>(Convert.ToString(TempData["Permisos"]));
-    // var autenticacionResponse = System.Text.Json.JsonSerializer.Deserialize<WebAppColegio.Models.Response.AutenticacionResponse>(HttpContext.Session.Get("Profile"));
+    var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContextAccessor.HttpContext.Session.GetString("UsuarioSession"));
 }
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-12">
@@ -28,34 +29,46 @@
                         <h6 class="m-0 font-weight-bold text-primary">General Colors</h6>
                     </div>*@
                 <div class="card-body">
-                    <div class="row">
-                        @if (Model.Any())
+                    @{
+                        if (usuario.perfil.Equals("Director") ||  usuario.perfil.Equals("Docente"))
                         {
-                            @foreach (var item in Model)
-                            {
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card text-white" style="background-color: #@item.estilo">
-                                        <div class="card-body">
-                                            @{
-                                                var _codigoCurso = item.codigo;
-                                                var _codigoClase = item.clase;
-                                                var _nombreCurso = item.nombre;
-                                            }
-                                            @*<div class="text-white-50 small">#Ingresar</div>*@
-                                            <a class="sidebar-brand d-flex align-items-center" style="color: white;"
-                                               asp-controller="Curso" asp-route-curso=@_codigoCurso  asp-route-clase=@_codigoClase asp-route-cursoNombre=@_nombreCurso asp-action="Detalle">@Html.DisplayFor(modelItem => item.nombre)</a>
-                                        </div>
+                            <div class="row">
+                                <div class="btn-group mb-2 col-lg-6 mb-4">
+                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" hidden="">
+                                    </button>
+                                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(12px, 31px, 0px);">
+
                                     </div>
+                                </div><div class="col-lg-3  mb-4">
+                                    <select class="form-control" name="gradoID" id="gradoID">
+                                        <label class="col-lg-4 control-label">Grados</label>
+                                        @{
+                                            foreach (var it in (SelectList)ViewBag.ListaGrados)
+                                            {
+                                                <option value="@it.Value">@it.Text </option>
+                                            }
+                                        }
+                                    </select>
+                                </div><div class="col-lg-3  mb-4">
+                                    <select class="form-control" name="seccionID" id="seccionID">
+                                        <label class="col-lg-4 control-label">Sección</label>
+                                        @{
+                                            foreach (var it in (SelectList)ViewBag.ListaSeccion)
+                                            {
+                                                <option value="@it.Value">@it.Text </option>
+                                            }
+                                        }
+                                    </select>
                                 </div>
-                            }
+                            </div>
                         }
+                    }
 
-                        <div class="col-lg-6 mb-4">
 
-                        </div>
-                        <div class="col-lg-6 mb-4">
+                    <div class="row" id="dataCursos">
 
-                        </div>
+
+
                     </div>
                 </div>
             </div>
@@ -64,5 +77,36 @@
 
 
     <!--Row-->
-</div> 
+</div>
 
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        cursoDetalle();
+    });
+    $("#gradoID").change(function () {
+        cursoDetalle();
+    })
+    $("#seccionID").change(function () {
+        cursoDetalle();
+    })
+
+    var cursoDetalle = function (inicio, fin) {
+        var periodo = $('#seccionID').val();
+        var grado = document.getElementById("gradoID") == null? "Todos" : document.getElementById("gradoID").value;
+        var seccion = document.getElementById("seccionID") == null  ? "Todos" : document.getElementById("seccionID").value;
+         $.ajax({
+             url: '@Url.Action("CursosDetalle", "Curso")?' + '_grado=' + grado + '&_seccion=' + seccion,
+                type: 'POST',
+                contentType: "application/json",
+                data: { _perido: periodo },
+                success: function (partialView) {
+                    $('#dataCursos').html(partialView);
+                    $('#dataCursos').show();
+             },
+             error: function (error) {
+                alert('error; ' + eval(error));
+}
+            });
+    }
+</script>

@@ -7,6 +7,6 @@ namespace AppServiceColegio.Entidades
 {
     public class NotasRequest : BaseRequest
     {
-        public String periodo;
+        public String periodo { get; set; }
     }
 }

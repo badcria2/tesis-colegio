@@ -1,0 +1,66 @@
+﻿@model IEnumerable<WebAppColegio.Models.Response.NotasResponse>
+@using  WebAppColegio.Models.Response
+@using System.Globalization;
+@{
+    ViewData["Title"] = "Index";
+}
+@{
+    Boolean registro = false;
+    Boolean registroPromedio = false;
+    var promedios = new List<Nota>();
+    CultureInfo culture = new CultureInfo("en-US");
+}
+
+@if (Model.Count() == 0)
+{
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>  
+}
+
+@foreach (var curso in Model)
+{
+    <tr>
+        <td>
+            <span style=" text-align: justify;
+                                     text-justify: inter-word; font-size: 11px; color:black; ">@curso.nombre</span>
+                                </td>
+                                @foreach (var tipoNota in curso.tipoNota)
+                                {
+                                    foreach (var nota in tipoNota.nota)
+                                    {
+                                        if (nota.registro) { registro = nota.registro; }
+                                        var estiloNota = !nota.registro ? "badge badge-light" : (nota.nota < 11 ? "badge badge-danger" : "badge badge-success");
+                                        <td><span class="@estiloNota">@nota.nota</span></td>
+                                    }
+
+                                    {
+                                        promedios.Add(new Nota() { registro = registro });
+                                       
+                                    }
+                                }
+
+                                @{
+                                    foreach (var notasPromedioTemp in curso.promedio)
+                                    { 
+                                        var estiloTipoNota = !registro ? "badge badge-light" : (Decimal.Parse(notasPromedioTemp) < 11 ? "badge badge-danger" : "badge badge-success");
+                                        <td><span class="@estiloTipoNota">@notasPromedioTemp </span></td>
+                                    }
+                                }
+                                @{
+                                    var estiloPromedio = !registro ? "badge badge-light" : (Decimal.Parse(curso.promedioGeneral, culture) < 11 ? "badge badge-danger" : "badge badge-success");
+                                    <td style="width:30px; text-align: center;" colspan="1"><span class="@estiloPromedio"> @curso.promedioGeneral </span></td>
+                                    promedios = new List<Nota>(); 
+                                    registro = false;
+                                }
+
+                            </tr>
+                                    }

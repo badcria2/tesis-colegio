@@ -12,5 +12,6 @@ namespace WebAppColegio.Models.Response
         public String cursoNombre { get; set; }
         public int numeroSemanas { get; set; }        
         public List<MaterialResponse> material { get; set; }
+        public List<Periodo> periodos { get; set; }
     }
 }
