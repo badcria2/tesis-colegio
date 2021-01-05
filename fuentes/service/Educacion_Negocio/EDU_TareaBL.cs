@@ -27,16 +27,16 @@ namespace Educacion_Negocio
             }
         }
 
-        public Boolean InsertTarea(String codigoClase, String nombre, int semana, String origen, String usuario, String mes)
+        public Boolean InsertTarea(String codigoClase, String nombre, int semana, String origen, String usuario)
         {
             try
             {
                 switch (origen)
                 {
                     case "Docente":
-                        return EDU_TareaDAL.Instancia.InsertMaterial(new EDU_MaterialEL() { codigo = codigoClase, nombre = nombre, semana = semana, usuario = usuario , mes= mes});
+                        return EDU_TareaDAL.Instancia.InsertMaterial(new EDU_MaterialEL() { codigo = codigoClase, nombre = nombre, semana = semana, usuario = usuario });
                     case "Alumno":
-                        return EDU_TareaDAL.Instancia.InsertTarea(new EDU_MaterialEL() { codigo = codigoClase, nombre = nombre, semana = semana, usuario = usuario, mes = mes });
+                        return EDU_TareaDAL.Instancia.InsertTarea(new EDU_MaterialEL() { codigo = codigoClase, nombre = nombre, semana = semana, usuario = usuario });
                     default: return false;
                 }
 

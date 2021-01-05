@@ -23,9 +23,7 @@ namespace AppServiceColegio.Controllers
                 return BadRequest();
             }
 
-            var grado = String.IsNullOrEmpty(cursosRequest.grado) ? "Todos" : cursosRequest.grado;
-            var seccion = String.IsNullOrEmpty(cursosRequest.seccion) ? "Todos" : cursosRequest.seccion;
-            return Ok(Servicio_Negocio.SER_CursoBL.Instancia.GetCurso(cursosRequest.usuario, cursosRequest.periodo == null ? DateTime.Now.Year.ToString() : cursosRequest.periodo, cursosRequest.perfil, grado, seccion));
+            return Ok(Servicio_Negocio.SER_CursoBL.Instancia.GetCurso(cursosRequest.usuario, cursosRequest.periodo == null ? DateTime.Now.Year.ToString() : cursosRequest.periodo));
         }
 
         [HttpGet]
@@ -41,8 +39,8 @@ namespace AppServiceColegio.Controllers
             }
 
             return Ok(Servicio_Negocio.SER_CursoBL.Instancia.GetDetCurso(
-                materialRequest.codigoClase,
-                materialRequest.periodo == null ? DateTime.Now.Year.ToString() : materialRequest.periodo,
+                materialRequest.codigoClase, 
+                materialRequest.periodo == null ? DateTime.Now.Year.ToString() : materialRequest.periodo, 
                 materialRequest.codigoUsuario));
         }
 
@@ -59,7 +57,7 @@ namespace AppServiceColegio.Controllers
             }
 
             return Ok(EDU_NotasBL.Instancia.GetNotas(
-                notasRequest.periodo == null || notasRequest.periodo.Equals("") ? DateTime.Now.Year.ToString() : notasRequest.periodo,
+                notasRequest.periodo == null ? DateTime.Now.Year.ToString() : notasRequest.periodo,
                 notasRequest.codigoUsuario
                 ));
         }
@@ -72,30 +70,6 @@ namespace AppServiceColegio.Controllers
         public IActionResult GetAvisos()
         {
             return Ok(SER_AvisoBL.Instancia.GetAvisos());
-        }
-
-        [HttpPost]
-        [Route("api/servicio/avisos")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult InsertAvisos(AvisoRequest avisoRequest)
-        {
-            BaseResponse response = new BaseResponse();
-            Boolean estado = SER_AvisoBL.Instancia.InsertAviso(avisoRequest.titulo,
-                    avisoRequest.contenido, avisoRequest.imagen, avisoRequest.codigoAviso,
-                    avisoRequest.fechaInicio, avisoRequest.fechaFin, avisoRequest.usuario);
-            if (estado)
-            {
-                response.estado = estado;
-                response.codigo = 200;
-            }
-            else
-            {
-                response.estado = estado;
-                response.codigo = 500;
-            }
-            return Ok(response); 
         }
     }
 }

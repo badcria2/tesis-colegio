@@ -61,7 +61,6 @@ namespace Educacion_Datos
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@codigo_clase", eDU_MaterialEL.codigo);
                 cmd.Parameters.AddWithValue("@semana", eDU_MaterialEL.semana);
-                cmd.Parameters.AddWithValue("@mes", eDU_MaterialEL.mes);
                 cmd.Parameters.AddWithValue("@nombre_tarea", eDU_MaterialEL.nombre);
                 cmd.Parameters.AddWithValue("@usuario", eDU_MaterialEL.usuario); 
                 cn.Open();
@@ -88,8 +87,7 @@ namespace Educacion_Datos
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@codigo_clase", eDU_MaterialEL.codigo);
                 cmd.Parameters.AddWithValue("@semana", eDU_MaterialEL.semana);
-                cmd.Parameters.AddWithValue("@mes", eDU_MaterialEL.mes);
-                cmd.Parameters.AddWithValue("@nombre_material", eDU_MaterialEL.nombre);
+                cmd.Parameters.AddWithValue("@nombre_tarea", eDU_MaterialEL.nombre);
                 cmd.Parameters.AddWithValue("@usuario", eDU_MaterialEL.usuario);
                 cn.Open();
                 if (cmd.ExecuteNonQuery() > 0)

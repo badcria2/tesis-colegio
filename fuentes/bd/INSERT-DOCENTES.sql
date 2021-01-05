@@ -1,36 +1,25 @@
+insert into [dbo].[tbl_Persona] (codigo,nombres,apellidos,estado,sexo) values ('DC00LEOURI','Leon','Uribe Santos',1,'M');
+insert into [dbo].[tbl_Persona] (codigo,nombres,apellidos,estado,sexo) values ('DC0076266776','Ernesto','Huallaca Bonifacio',1,'M');
+insert into [dbo].[tbl_Persona] (codigo,nombres,apellidos,estado,sexo) values ('DC0076266776','Carmen Doris','Carrasco Floress',1,'F');
+insert into [dbo].[tbl_Persona] (codigo,nombres,apellidos,estado,sexo) values ('DC0076266776','Ronald','Bernabe Reyes',1,'M');
+insert into [dbo].[tbl_Persona] (codigo,nombres,apellidos,estado,sexo) values ('DC0076266776','Duwer','Grados Muñoz',1,'M');
+insert into [dbo].[tbl_Persona] (codigo,nombres,apellidos,estado,sexo) values ('DC0076266776','Noemi Soledad','Vilchez Carrión',1,'M');
+insert into [dbo].[tbl_Persona] (codigo,nombres,apellidos,estado,sexo) values ('DC0076266776','Carmen Doris','Carrasco Flores',1,'M');
+insert into [dbo].[tbl_Persona] (codigo,nombres,apellidos,estado,sexo) values ('DC0076266776','Yohan','Flores Santos',1,'M');
+insert into [dbo].[tbl_Persona] (codigo,nombres,apellidos,estado,sexo) values ('DC0076266776','Edwin','Ipanaque Vilchez',1,'M');
+insert into [dbo].[tbl_Persona] (codigo,nombres,apellidos,estado,sexo) values ('DC0076266776','Fiorella','Samame Mendoza',1,'M');
+insert into [dbo].[tbl_Persona] (codigo,nombres,apellidos,estado,sexo) values ('DC0076266776','walter','Santiago Irrazabal',1,'M');
+insert into [dbo].[tbl_Persona] (codigo,nombres,apellidos,estado,sexo) values ('DC0076266776','Ricardo','Rivas Velasquez',1,'M');
+insert into [dbo].[tbl_Persona] (codigo,nombres,apellidos,estado,sexo) values ('DC0076266776','Armando','Leon Santos',1,'M'); 
+ 
+ 
 
-
-
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-27845671','Leon ','Uribe Santos','27845671','M',1);
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-21851329','Ernesto ','Huallaca Bonifacio','21851329','F',1);
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-09755072','Carmen Doris','Carrasco Flores','09755072','F',1);
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-40346626','Ronald ','Bernabe Reyes','40346626','M',1);
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-22246581','Duwer ','Grados Muñoz','22246581','M',1);
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-34912340','Noemi Soledad ','Vilchez Carrión','34912340','F',1);
-
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-56432890','Yohan ','Flores Santos','56432890','M',1);
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-80615241','Edwin ','Ipanaque Vilchez','80615241','M',1);
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-72613922','Fiorella ','Samame Mendoza','72613922','F',1);
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-21843146','Walter ','Santiago Irrazabal','21843146','M',1);
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-09468871','Ricardo ','Rivas Velasquez','09468871','M',1);
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-23781004','Armando',' Leon Santos','23781004','M',1);
-
-
-
-
-
-
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-38916309','MARCO','Carrion Olivares','38916309','M',1);
-
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-45892506','ALBERTO','Manrique Garcia','45892506','M',1);
-
-
-
-
-
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-40567939','LUCERO','Carrión Gonzales','40567939','F',1);
-
-
-INSERT INTO tbl_Docente(codigo,nombres,apellidos,dni,sexo,estado) values ('DO-25673536','JOSELYN','Trelles Campos','25673536','F',1);
-
-
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

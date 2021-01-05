@@ -27,18 +27,5 @@ namespace Servicio_Negocio
                 throw e;
             }
         }
-
-        public Boolean InsertAviso(String titulo, String contenido, String imagen, String codigoAviso, String fechaInicio, String fechaFin, String usuario)
-        {
-            try
-            {
-                return SER_AvisoDAL.Instancia.InsertarAvisos( titulo,  contenido,  imagen,  codigoAviso,  fechaInicio,  fechaFin,  usuario);
-
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
     }
 }

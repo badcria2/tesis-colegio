@@ -1,5 +1,4 @@
-﻿using Comunes_Datos;
-using Educacion_Negocio;
+﻿using Educacion_Negocio;
 using Servicio_Datos;
 using Servicio_Entidades;
 using System;
@@ -17,11 +16,11 @@ namespace Servicio_Negocio
             get { return SER_CursoBL._instancia; }
         }
         #endregion Singleton
-        public List<SER_CursoEL> GetCurso(String usuario, String periodo, String perfil, String grado, String seccion)
+        public List<SER_CursoEL> GetCurso(String usuario, String periodo)
         {
             try
             {
-                var _CursoELs = SER_CursoDAL.Instancia.GetCurso(usuario, periodo, perfil, grado, seccion);
+                var _CursoELs = SER_CursoDAL.Instancia.GetCurso(usuario, periodo);
                 return _CursoELs;
 
             }
@@ -37,13 +36,11 @@ namespace Servicio_Negocio
                 var _DetCursoEL = SER_CursoDAL.Instancia.GetDetCurso(codigoClase, periodo);
                 if (null != _DetCursoEL.codigo)
                 {
-                    var periodos = CMM_TipoAccesoDAL.Instancia.ObtenerRangoMeses(codigoClase);
-                    _DetCursoEL.periodos = periodos;
                     var tareas = EDU_TareaBL.Instancia.GetTareas(codigoClase, periodo, codigoUsuario);
                     foreach (var tarea in tareas)
                     {
                         _DetCursoEL.material.Find(p => p.nroSemana == tarea.nroSemana).tarea = tarea;
-                    }
+                    } 
                     return _DetCursoEL;
                 }
                 else return null;
@@ -53,7 +50,7 @@ namespace Servicio_Negocio
                 throw e;
             }
         }
-
+       
 
     }
 }

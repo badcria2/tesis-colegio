@@ -9,7 +9,6 @@ namespace WebAppColegio.Models.Response
     {
         public String codigo { get; set; }
         public int nroSemana { get; set; }
-        public String mes { get; set; }
         public String extension { get; set; }
         public String nombre { get; set; }
         public Boolean tareaHabilitada { get; set; }

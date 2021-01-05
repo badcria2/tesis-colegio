@@ -104,38 +104,11 @@ namespace Educacion_Datos
                 {
                     lstNotas = eDU_NotasELs.FindAll(e => e.tipoCalificacion == tipoNota.codigo && e.codigoCurso == curso.codigo);
                     var suma = (Decimal)(eDU_NotasELs.FindAll(e => e.tipoCalificacion == tipoNota.codigo && e.codigoCurso == curso.codigo).Select(x => x.nota).Sum());
-                    lstTipoNotas.Add(new EDU_TipoNotaEL() { codigo = tipoNota.codigo, nombre = tipoNota.nombre, nota = (notasDefault(lstNotas)) });
+                    lstTipoNotas.Add(new EDU_TipoNotaEL() { codigo = tipoNota.codigo, nombre = tipoNota.nombre, nota = (notasDefault(lstNotas)), promedio = Decimal.Divide(suma, 3).ToString("0.##").Replace(",", ".") });
                 }
-                var cursoTemp = new EDU_CursoEL() { codigo = curso.codigo, nombre = curso.nombre, tipoNota = lstTipoNotas };
+                var promedio = Decimal.Divide(lstTipoNotas.Select(x => Decimal.Parse(x.promedio, culture)).Sum(), 3);
+                var cursoTemp = new EDU_CursoEL() { codigo = curso.codigo, nombre = curso.nombre, tipoNota = lstTipoNotas, promedio = promedio.ToString("0.##").Replace(",", ".") };
                 lstCursos.Add(cursoTemp);
-            }
-            for (int i = 0; i < lstCursos.Count; i++)
-            {
-                List<String> lstPromedios = new List<String>();
-                var nota1 = lstCursos[i].tipoNota[0].nota[0].nota;
-                var nota2 = lstCursos[i].tipoNota[1].nota[0].nota;
-                var nota3 = lstCursos[i].tipoNota[2].nota[0].nota;
-                var promedio1 = Decimal.Divide(nota1 + nota2 + nota3, 3);
-                lstPromedios.Add(promedio1.ToString("0.##").Replace(",", "."));
-                lstCursos[i].promedio = lstPromedios;
-
-                var nota4 = lstCursos[i].tipoNota[0].nota[1].nota;
-                var nota5 = lstCursos[i].tipoNota[1].nota[1].nota;
-                var nota6 = lstCursos[i].tipoNota[2].nota[1].nota;
-                var promedio2 = Decimal.Divide(nota4 + nota6 + nota5, 3);
-                lstPromedios.Add(promedio2.ToString("0.##").Replace(",", "."));
-                lstCursos[i].promedio = lstPromedios;
-
-                var nota7 = lstCursos[i].tipoNota[0].nota[2].nota;
-                var nota8 = lstCursos[i].tipoNota[1].nota[2].nota;
-                var nota9 = lstCursos[i].tipoNota[2].nota[2].nota;
-                var promedio3 = Decimal.Divide(nota7 + nota8 + nota9, 3);
-                lstPromedios.Add(promedio3.ToString("0.##").Replace(",", "."));
-                lstCursos[i].promedio = lstPromedios;
-
-
-                lstCursos[i].promedioGeneral = Decimal.Divide(promedio1 + promedio2 + promedio3, 3).ToString("0.##");
-
             }
             return lstCursos;
         }

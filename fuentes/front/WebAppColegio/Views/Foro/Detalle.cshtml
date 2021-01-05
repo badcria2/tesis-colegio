@@ -13,155 +13,156 @@
 <link rel="stylesheet" media="all" href="~/estilos/framework_responsive.css">
 <link rel="stylesheet" media="all" href="~/estilos/forums.css">
 <link rel="stylesheet" media="all" href="~/estilos/forums_responsive.css">
+<main role="main" id="ipsLayout_body" class="ipsLayout_container">
+    <div id="ipsLayout_contentArea">
+        <div id="ipsLayout_contentWrapper">
 
-<div id="ipsLayout_contentArea">
-    <div id="ipsLayout_contentWrapper">
+            <div id="ipsLayout_mainArea">
+                <div class="d-sm-flex align-items-center justify-content-between mb-12">
 
-        <div id="ipsLayout_mainArea">
-            <div class="d-sm-flex align-items-center justify-content-between mb-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item "><a href="~/Curso/Index">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Curso</li>
+                        <li class="breadcrumb-item active" aria-current="page">Foro</li>
+                    </ol>
+                </div>
+                <a id="elContent"></a>
+                <div class="ipsPageHeader ipsClearfix">
 
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item "><a href="~/Curso/Index">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Curso</li>
-                    <li class="breadcrumb-item active" aria-current="page">Foro</li>
-                </ol>
-            </div>
-            <a id="elContent"></a>
-            <div class="ipsPageHeader ipsClearfix">
-
-                <div class="ipsPhotoPanel ipsPhotoPanel_small ipsPhotoPanel_notPhone ipsClearfix">
-                    <a href="" class="ipsUserPhoto ipsUserPhoto_small">
-                        @{
-                            if (Model.FirstOrDefault().sexo == "M")
-                            {
-                                <img class="img-profile rounded-circle" src="/masterpage/img/man.png" alt=@Model.FirstOrDefault().creador>
+                    <div class="ipsPhotoPanel ipsPhotoPanel_small ipsPhotoPanel_notPhone ipsClearfix">
+                        <a href="" class="ipsUserPhoto ipsUserPhoto_small">
+                            @{
+                                if (Model.FirstOrDefault().sexo == "M")
+                                {
+                                    <img class="img-profile rounded-circle" src="/masterpage/img/man.png" alt=@Model.FirstOrDefault().creador>
+                                }
+                                else
+                                {
+                                    <img class="img-profile rounded-circle" src="/masterpage/img/girl.png" alt=@Model.FirstOrDefault().creador>
+                                }
                             }
-                            else
-                            {
-                                <img class="img-profile rounded-circle" src="/masterpage/img/girl.png" alt=@Model.FirstOrDefault().creador>
-                            }
-                        }
-                    </a>
-                    <div>
-                        <h1 class="ipsType_pageTitle ipsContained_container">
-                            <span><span class="ipsBadge ipsBadge_icon ipsBadge_positive" data-ipstooltip="" title="Pinned"><i class="fas fa-thumbtack"></i></span></span>
-                            <span class="ipsType_break ipsContained">
-                                <span>@Model.FirstOrDefault().tema</span>
-                            </span>
-                        </h1>
-                        <p class="ipsType_reset ipsType_blendLinks ">
-                            <span class="ipsType_normal">
-                                Creado por: @Model.FirstOrDefault().creador
-                                <span class="ipsType_light"><time>@Model.FirstOrDefault().fechaCreacion</time></span>
-                            </span>
-                            <br>
-                        </p>
+                        </a>
+                        <div>
+                            <h1 class="ipsType_pageTitle ipsContained_container">
+                                <span><span class="ipsBadge ipsBadge_icon ipsBadge_positive" data-ipstooltip="" title="Pinned"><i class="fas fa-thumbtack"></i></span></span>
+                                <span class="ipsType_break ipsContained">
+                                    <span>@Model.FirstOrDefault().tema</span>
+                                </span>
+                            </h1>
+                            <p class="ipsType_reset ipsType_blendLinks ">
+                                <span class="ipsType_normal">
+                                    Creado por: @Model.FirstOrDefault().creador
+                                    <span class="ipsType_light"><time>@Model.FirstOrDefault().fechaCreacion</time></span>
+                                </span>
+                                <br>
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div data-controller="core.front.core.commentFeed,forums.front.topic.view, core.front.core.ignoredComments" data-lastpage="" data-feedid="topic-13397" class="cTopic ipsClear ipsSpacer_top">
+                <div data-controller="core.front.core.commentFeed,forums.front.topic.view, core.front.core.ignoredComments" data-lastpage="" data-feedid="topic-13397" class="cTopic ipsClear ipsSpacer_top">
 
-                <div id="elPostFeed" data-role="commentFeed" data-controller="core.front.core.moderation">
-                    <form action="" method="post" data-ipspageaction="" data-role="moderationTools">
-                        <a id="comment-76647"></a>
-                        @foreach (var item in Model)
-                        {
-                            <article id="elComment_76647" class="cPost ipsBox  ipsComment  ipsComment_parent ipsClearfix ipsClear ipsColumns ipsColumns_noSpacing ipsColumns_collapsePhone   ">
-                                <div class="cAuthorPane cAuthorPane_mobile ipsResponsive_showPhone ipsResponsive_block">
-                                    <h3 class="ipsType_sectionHead cAuthorPane_author ipsResponsive_showPhone ipsResponsive_inlineBlock ipsType_break ipsType_blendLinks ipsTruncate ipsTruncate_line">
-                                        <a href="#" data-ipshover="" class="ipsType_break"><span style="color:red;">@item.creador</span></a>
-                                        <span class="ipsResponsive_showPhone ipsResponsive_inline">
-                                            &nbsp;&nbsp;
-                                        </span>
-                                    </h3>
-                                </div>
-                                <aside class="ipsComment_author cAuthorPane ipsColumn ipsColumn_medium ipsResponsive_hidePhone">
+                    <div id="elPostFeed" data-role="commentFeed" data-controller="core.front.core.moderation">
+                        <form action="" method="post" data-ipspageaction="" data-role="moderationTools">
+                            <a id="comment-76647"></a>
+                            @foreach (var item in Model)
+                            {
+                                <article id="elComment_76647" class="cPost ipsBox  ipsComment  ipsComment_parent ipsClearfix ipsClear ipsColumns ipsColumns_noSpacing ipsColumns_collapsePhone   ">
+                                    <div class="cAuthorPane cAuthorPane_mobile ipsResponsive_showPhone ipsResponsive_block">
+                                        <h3 class="ipsType_sectionHead cAuthorPane_author ipsResponsive_showPhone ipsResponsive_inlineBlock ipsType_break ipsType_blendLinks ipsTruncate ipsTruncate_line">
+                                            <a href="#" data-ipshover="" class="ipsType_break"><span style="color:red;">@item.creador</span></a>
+                                            <span class="ipsResponsive_showPhone ipsResponsive_inline">
+                                                &nbsp;&nbsp;
+                                            </span>
+                                        </h3>
+                                    </div>
+                                    <aside class="ipsComment_author cAuthorPane ipsColumn ipsColumn_medium ipsResponsive_hidePhone">
 
-                                    <ul class="cAuthorPane_info ipsList_reset">
+                                        <ul class="cAuthorPane_info ipsList_reset">
 
-                                        <li class="cAuthorPane_photo">
-                                            <a href="https://www.html5gamedevs.com/profile/1-rich/" data-ipshover="" class="ipsUserPhoto ipsUserPhoto_large">
-                                                @{
-                                                    if (item.sexo == "M")
-                                                    {
-                                                        <img class="img-profile rounded-circle" src="/masterpage/img/man.png" alt=item.creador>
+                                            <li class="cAuthorPane_photo">
+                                                <a href="https://www.html5gamedevs.com/profile/1-rich/" data-ipshover="" class="ipsUserPhoto ipsUserPhoto_large">
+                                                    @{
+                                                        if (item.sexo == "M")
+                                                        {
+                                                            <img class="img-profile rounded-circle" src="/masterpage/img/man.png" alt=item.creador>
+                                                        }
+                                                        else
+                                                        {
+                                                            <img class="img-profile rounded-circle" src="/masterpage/img/girl.png" alt=item.creador>
+                                                        }
                                                     }
-                                                    else
-                                                    {
-                                                        <img class="img-profile rounded-circle" src="/masterpage/img/girl.png" alt=item.creador>
+                                                </a>
+                                            </li>
+                                            <li><span style="color:red;">@item.creador </span></li>
+
+                                        </ul>
+                                    </aside>
+                                    <div class="ipsColumn ipsColumn_fluid">
+                                        <div id="comment-76647_wrap" data-controller="core.front.core.comment" class="ipsComment_content ipsType_medium  ipsFaded_withHover">
+                                            <div class="ipsComment_meta ipsType_light">
+
+                                                <div class="ipsType_reset">
+                                                    Posted <time datetime=@item.fechaCreacion title=@item.fechaCreacion data-short="5 yr">@item.fechaCreacion</time>
+                                                    <span class="ipsResponsive_hidePhone">
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="cPost_contentWrap ipsPad">
+                                                <div data-role="commentContent" class="ipsType_normal ipsType_richText ipsContained" data-controller="core.front.core.lightboxedImages">
+                                                    @{
+                                                        StringWriter myWriter = new StringWriter();
+                                                        HttpUtility.HtmlDecode(item.descripcion, myWriter);
+                                                        string myDecodedString = myWriter.ToString();
                                                     }
-                                                }
-                                            </a>
-                                        </li>
-                                        <li><span style="color:red;">@item.creador </span></li>
+                                                    @Html.Raw(myDecodedString)
+                                                </div>
 
-                                    </ul>
-                                </aside>
-                                <div class="ipsColumn ipsColumn_fluid">
-                                    <div id="comment-76647_wrap" data-controller="core.front.core.comment" class="ipsComment_content ipsType_medium  ipsFaded_withHover">
-                                        <div class="ipsComment_meta ipsType_light">
-
-                                            <div class="ipsType_reset">
-                                                Posted <time datetime=@item.fechaCreacion title=@item.fechaCreacion data-short="5 yr">@item.fechaCreacion</time>
-                                                <span class="ipsResponsive_hidePhone">
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="cPost_contentWrap ipsPad">
-                                            <div data-role="commentContent" class="ipsType_normal ipsType_richText ipsContained" data-controller="core.front.core.lightboxedImages">
-                                                @{
-                                                    StringWriter myWriter = new StringWriter();
-                                                    HttpUtility.HtmlDecode(item.descripcion, myWriter);
-                                                    string myDecodedString = myWriter.ToString();
-                                                }
-                                                @Html.Raw(myDecodedString)
                                             </div>
 
                                         </div>
+                                    </div>
+                                </article>
 
+                            }
+
+
+                        </form>
+                    </div>
+                    <a id="replyForm"></a>
+                    <article id="elComment_76647" class="cPost ipsBox  ipsComment  ipsComment_parent ipsClearfix ipsClear ipsColumns ipsColumns_noSpacing ipsColumns_collapsePhone   ">
+                        <!-- CKEditor -->
+                        <div class="col-lg-12">
+                            <section class="panel">
+                                <div class="panel-body">
+                                    <div class="form">
+                                        <form class="form-horizontal" asp-controller="Foro" asp-action="Create">
+                                            </br>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <textarea class="form-control ckeditor" name="inputForo" rows="6"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-lg-offset-2 col-lg-10">
+                                                    <button type="submit" class="btn btn-info mb-1">Enviar respuesta</button>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="codigoClase" value=@Model.FirstOrDefault().clase />
+                                            <input type="hidden" name="codigoForo" value=@Model.FirstOrDefault().codigo />
+                                        </form>
                                     </div>
                                 </div>
-                            </article>
-
-                        }
-
-
-                    </form>
+                            </section>
+                        </div>
+                    </article>
                 </div>
-                <a id="replyForm"></a>
-                <article id="elComment_76647" class="cPost ipsBox  ipsComment  ipsComment_parent ipsClearfix ipsClear ipsColumns ipsColumns_noSpacing ipsColumns_collapsePhone   ">
-                    <!-- CKEditor -->
-                    <div class="col-lg-12">
-                        <section class="panel">
-                            <div class="panel-body">
-                                <div class="form">
-                                    <form class="form-horizontal" asp-controller="Foro" asp-action="Create">
-                                        </br>
-                                        <div class="form-group">
-                                            <div class="col-sm-12">
-                                                <textarea class="form-control ckeditor" name="inputForo" rows="6"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-lg-offset-2 col-lg-10">
-                                                <button type="submit" class="btn btn-info mb-1">Enviar respuesta</button>
-                                            </div>
-                                        </div>
-                                        <input type="hidden" name="codigoClase" value=@Model.FirstOrDefault().clase />
-                                        <input type="hidden" name="codigoForo" value=@Model.FirstOrDefault().codigo />
-                                    </form>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </article>
+
             </div>
 
         </div>
-
     </div>
-</div>
+</main>
 <script type="text/javascript" src="~/estilos/ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
     var ipsDebug = false;

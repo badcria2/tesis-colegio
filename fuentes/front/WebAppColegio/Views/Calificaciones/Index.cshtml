@@ -6,6 +6,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
+
+    CultureInfo culture = new CultureInfo("en-US");
 }
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-12">
@@ -15,33 +17,6 @@
             <li class="breadcrumb-item active" aria-current="page">Cursos</li>
         </ol>
     </div>
-
-
-    <div class="row">
-        <div class="col-sm-6 col-md-2">
-            <div id="dataTableHover_filter" class="dataTables_filter"><label><input type="search" hidden class="form-control form-control-sm" placeholder="" aria-controls="dataTableHover"></label></div>
-        </div>
-
-        <div class="col-sm-6 col-md-2">
-            <div id="dataTableHover_filter" class="dataTables_filter"><label><input type="search" hidden class="form-control form-control-sm" placeholder="" aria-controls="dataTableHover"></label></div>
-        </div><div class="col-sm-6 col-md-2">
-            <div id="dataTableHover_filter" class="dataTables_filter"><label><input type="search" hidden class="form-control form-control-sm" placeholder="" aria-controls="dataTableHover"></label></div>
-        </div>
-        <div class="col-sm-6 col-md-2">
-            <div class="dataTables_length" id="dataTableHover_length">
-
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-2">
-            <div id="dataTableHover_filter" class="dataTables_filter"><label><input type="number" id="inpPeriodo" name="ipnPeriodo" class="form-control form-control-sm" placeholder="Ingresar periodo" aria-controls="dataTableHover"></label></div>
-        </div><div class="col-sm-6 col-md-2">
-            <div id="dataTableHover_filter" class="dataTables_filter">
-                <button id="buscarNotas" class="btn btn-info form-control form-control-sm" style="height: 31px ">Buscar Notas</button>
-            </div>
-        </div>
-    </div>
-
-
     <div class="row">
         <div class="col-lg-12 mb-4">
             <div class="table-responsive">
@@ -50,8 +25,8 @@
                         <tr>
                             <th style="width:130px"></th>
                             <th style="width:30px; text-align: center;" colspan="3">Tareas</th>
-                            <th style="width:30px; text-align: center;" colspan="3">Prácticas</th>
-                            <th style="width:30px; text-align: center;" colspan="3">Exámenes </th>
+                            <th style="width:30px; text-align: center;" colspan="3">Practicas</th>
+                            <th style="width:30px; text-align: center;" colspan="3">Examenes</th>
                             <th style="width:30px; text-align: center;" colspan="3">Calificaciones de promedios por bimestre/trimestre/semestre</th>
                             <th style="width:30px; text-align: center;" colspan="1" rowspan="2">Nivel de logro alcanzado al finalizar el periodo lectivo</th>
                         </tr>
@@ -71,42 +46,40 @@
                             <th style="width: 10px">PF3</th>
                         </tr>
                     </thead>
-                    <tbody id="datosCalificaciones">
+                    <tbody>
+                        @foreach (var curso in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span style=" text-align: justify;
+                                     text-justify: inter-word; font-size: 11px;">@curso.nombre</span>
+                                </td>
+                                @foreach (var tipoNota in curso.tipoNota)
+                                {
+                                    foreach (var nota in tipoNota.nota)
+                                    {
+
+                                        var estiloNota = !nota.registro ? "badge badge-light" : (nota.nota < 11 ? "badge badge-danger" : "badge badge-success");
+                                        <td><span class="@estiloNota">@nota.nota</span></td>
+                                    }
+                                    var estiloTipoNota = Decimal.Parse(tipoNota.promedio) < 11 ? "badge badge-danger" : "badge badge-success";
+                                    <td><span class="@estiloTipoNota">@tipoNota.promedio </span></td>
+
+                                }
+                                @{
+                                    var estiloPromedio = Decimal.Parse(curso.promedio, culture) < 11 ? "badge badge-danger" : "badge badge-success";
+                                    <td style="width:30px; text-align: center;" colspan="1" ><span class="@estiloPromedio"> @curso.promedio </span></td>
+                                }
+
+                            </tr>
+                        }
+
                     </tbody>
                 </table>
             </div>
-            <br><br><br><br><br><br>
+            <div class="card-footer"></div>
 
 
         </div>
     </div>
 </div>
-
-<script>
-    $(document).ready(function () {
-        datosNotas();
-    });
-    $("#buscarNotas").click(function () {
-        datosNotas();
-        @*$('#datosCalificaciones').load('@Url.Action("Calificaciones", "ListarNotasAsync")', { _perido: periodo });*@
-
-    });
-
-    var datosNotas = function (inicio, fin) {
-         var periodo = $('#inpPeriodo').val();
-         $.ajax({
-             url: '@Url.Action("listarNotas", "Calificaciones")?_periodo=' + periodo,
-                type: 'POST',
-                contentType: "application/json",
-                data: { _perido: periodo },
-                success: function (partialView) {
-                    $('#datosCalificaciones').html(partialView);
-                    $('#datosCalificaciones').show();
-             },
-             error: function (error) {
-                alert('error; ' + eval(error));
-}
-            });
-    }
-
-</script>
