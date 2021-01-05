@@ -12,6 +12,7 @@ namespace Servicio_Entidades
         public String nombre { get; set; }
         public Boolean tareaHabilitada { get; set; }
         public String tiempoRestante { get; set; }
+        public String mes { get; set; }
         public SER_TareaEL tarea { get; set; }
 
 

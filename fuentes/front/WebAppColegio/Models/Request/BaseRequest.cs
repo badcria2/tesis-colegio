@@ -8,5 +8,6 @@ namespace WebAppColegio.Models.Request
     public class BaseRequest
     {
         public String codigoUsuario { get; set; }
+        public String periodo { get; set; }
     }
 }

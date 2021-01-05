@@ -55,5 +55,34 @@ namespace Servicio_Datos
             finally { cmd.Connection.Close(); }
             return _AvisoELs;
         }
+        public Boolean InsertarAvisos(String titulo, String contenido, String imagen, String codigoAviso, String fechaInicio, String fechaFin, String usuario)
+        {
+            SqlCommand cmd = null;
+            Boolean inserto = false;
+            try
+            {
+                SqlConnection cn = Conexion.Instancia.Conectar();
+                cmd = new SqlCommand("PRD_InsertarAviso", cn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@titulo", titulo);
+                cmd.Parameters.AddWithValue("@contenido", contenido);
+                cmd.Parameters.AddWithValue("@imagen", imagen);
+                cmd.Parameters.AddWithValue("@codigo_aviso", null == codigoAviso ? "0" : codigoAviso);
+                cmd.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+                cmd.Parameters.AddWithValue("@fechaTermino", fechaFin);
+                cmd.Parameters.AddWithValue("@codigoUsuario", usuario); 
+                cn.Open();
+                if (cmd.ExecuteNonQuery() > 0)
+                {
+                    inserto = true;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally { cmd.Connection.Close(); }
+            return inserto;
+        }
     }
 }

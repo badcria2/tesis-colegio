@@ -47,6 +47,35 @@ namespace Comunes_Datos
             finally { cmd.Connection.Close(); }
             return cMM_TipoAccesoELs;
         }
-
+        public List<CMM_PeriodoEL> ObtenerRangoMeses(String codigoClase)
+        {
+            SqlCommand cmd = null;
+            List<CMM_PeriodoEL> periodoELLst = new List<CMM_PeriodoEL>();
+            CMM_PeriodoEL  _PeriodoEL = null;
+            try
+            {
+                SqlConnection cn = Conexion.Instancia.Conectar();
+                cmd = new SqlCommand("PRD_ObtenerRangoFechas", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@codigoClase", codigoClase); 
+                cn.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    _PeriodoEL = new CMM_PeriodoEL();
+                    _PeriodoEL.fecha = dr["fecha"].ToString();
+                    _PeriodoEL.mes= dr["mes"].ToString();
+                    _PeriodoEL.semanas = Int32.Parse(dr["semanas"].ToString());
+                    periodoELLst.Add(_PeriodoEL);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally { cmd.Connection.Close(); }
+            return periodoELLst;
+        }
     }
+    
 }
