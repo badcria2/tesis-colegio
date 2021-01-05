@@ -33,7 +33,6 @@ namespace WebAppColegio.Controllers
             return View();
         }
 
-
         public ViewResult AddReservation() => View();
 
         [HttpPost]

@@ -8,7 +8,8 @@ namespace WebAppColegio.Models.Response
     public class TipoNota
     {
         public String codigo { get; set; }
-        public String nombre { get; set; } 
+        public String nombre { get; set; }
+        public String promedio { get; set; }
         public List<Nota> nota { get; set; }
     }
 }

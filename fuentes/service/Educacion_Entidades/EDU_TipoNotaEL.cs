@@ -8,6 +8,7 @@ namespace Educacion_Entidades
     {
         public String codigo { get; set; }
         public String nombre { get; set; } 
+        public String promedio { get; set; }
         public List<EDU_NotasEL> nota { get; set; }
 
     }

@@ -12,6 +12,7 @@ namespace Seguridad_Entidades
         public String codigoTipoAcceso { get; set; }
         public PER_PersonalEL persona { get; set; }
         public List<CMM_TipoAccesoEL> permisos { get; set; }
+
         public Boolean estado { get; set; }
     }
 }

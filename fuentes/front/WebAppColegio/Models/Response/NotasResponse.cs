@@ -9,8 +9,7 @@ namespace WebAppColegio.Models.Response
     {
         public String codigo { get; set; }
         public String nombre { get; set; }
-        public List<String> promedio { get; set; }
+        public String promedio { get; set; }
         public List<TipoNota> tipoNota { get; set; }
-        public String promedioGeneral { get; set; }
     }
 }

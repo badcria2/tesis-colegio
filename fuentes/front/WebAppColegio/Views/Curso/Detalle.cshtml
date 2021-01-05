@@ -1,145 +1,138 @@
 ﻿@model WebAppColegio.Models.Response.CursoDetalleResponse
 @using WebAppColegio.Models.Response
-@inject IHttpContextAccessor HttpContextAccessor;
-@using Newtonsoft.Json;
-@using Microsoft.AspNetCore.Http;
 @{
     ViewData["Title"] = "CursoDetalle";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @{
-    var nombreMaterial = ""; var nombreTarea = "";
-    var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContextAccessor.HttpContext.Session.GetString("UsuarioSession"));
+    var nombreDocumento = ""; var nombreTarea = "";
 }
 <link rel="stylesheet" media="all" href="~/estilos/master.css">
 <link rel="stylesheet" media="all" href="~/estilos/curso.css">
+<div id="main" class="ic-Layout-columns">
+    <div class="ic-Layout-watermark"></div>
+    <div id="not_right_side" class="ic-app-main-content">
+        <div id="content-wrapper" class="ic-Layout-contentWrapper">
+            <div class="d-sm-flex align-items-center justify-content-between mb-12">
 
-<div id="not_right_side" class="ic-app-main-content">
-    <div id="content-wrapper" class="ic-Layout-contentWrapper">
-        <div class="d-sm-flex align-items-center justify-content-between mb-12">
-
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item "><a href="~/Curso/Index">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Curso</li>
-                <li class="breadcrumb-item active" aria-current="page">Detalle</li>
-            </ol>
-        </div>
-        <div id="content" class="ic-Layout-contentMain" role="main">
-            <div class="header-bar">
-                <div class="header-bar-left header-bar__module-layout">
-                    <div class="header-bar-right__buttons">
-                        <button class="btn" id="expand_collapse_all" aria-expanded="true" data-expand="false">Desplegar todo</button>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item "><a href="~/Curso/Index">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Curso</li>
+                    <li class="breadcrumb-item active" aria-current="page">Detalle</li>
+                </ol>
+            </div>
+            <div id="content" class="ic-Layout-contentMain" role="main">
+                <div class="header-bar">
+                    <div class="header-bar-left header-bar__module-layout">
+                        <div class="header-bar-right__buttons">
+                            <button class="btn" id="expand_collapse_all" aria-expanded="true" data-expand="false">Desplegar todo</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="item-group-container" id="context_modules_sortable_container">
-                <div id="context_modules" aria-label="Módulos del curso" class="ig-list ">
-                    <div class="item-group-condensed context_module student-view completed" aria-label="Cabecera principal" data-workflow-state="active" id="context_module_161594">
-                        <a id="module_161594"></a>
-                        <div class="ig-header header" id="161594">
-                            <span class="sortable-handle reorder_module_link" title="Arrastrar para reordenar los módulos" style="display: none;">
-                                <i aria-hidden="true" class="icon-drag-handle"></i>
-                            </span>
-                            <h2 class="screenreader-only">Curso de Análisis de Sistemas Hidráulicos</h2>
-                            <span role="button" tabindex="0" href="" class="ig-header-title collapse_module_link ellipsis" aria-controls="context_module_content_161594" aria-expanded="true" aria-label="Curso de Análisis de Sistemas Hidráulicos activar o desactivar visibilidad del módulo" title="Curso de Análisis de Sistemas Hidráulicos">
-                                <i class="fas fa-sort-down"></i>
-                                <span class="name" style="color: #F63606;">@Model.cursoNombre</span>
-                            </span>
-                            <span role="button" tabindex="0" href="" class="ig-header-title expand_module_link ellipsis" aria-controls="context_module_content_161594" aria-expanded="false" aria-label="Curso de Análisis de Sistemas Hidráulicos activar o desactivar visibilidad del módulo" title="Curso de Análisis de Sistemas Hidráulicos">
-                                <i class="fas fa-sort-down"></i>
-                                <span class="name ellipsis" style="color: #F63606;">@Model.cursoNombre</span>
-                            </span>
-                        </div>
-                        <div class="content" id="context_module_content_161594">
-                            <ul class="ig-list items context_module_items ">
-                                <li id="context_module_item_419762" style="" class="context_module_item     student-view     discussion_topic          indent_0          _requirement     DiscussionTopic_129274     dupeable context_module_item_hover">
-                                    <div class="ig-row  ig-published student-view">
-                                        <a aria-label="FORO-CONSULTAS" tabindex="-1" class="for-nvda">
-                                            FORO-CONSULTAS
-                                        </a>
-                                        <span class="type_icon" title="Foro abierto" role="none">
-                                            <span class="far fa-comments">
-                                            </span>
-                                        </span>
-                                        <div class="ig-info">
-                                            <div class="module-item-title">
-                                                <span class="item_name">
-                                                    <a title="FORO-CONSULTAS" class="ig-title title item_link" href="/Foro/Index">
-                                                        FORO-CONSULTAS
-                                                    </a>
-                                                    <span title="FORO-CONSULTAS" class="title locked_title">FORO-CONSULTAS</span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li id="context_module_item_419775" style="" class="context_module_item     student-view     external_url          indent_0          _requirement     ExternalUrl_0">
-                                    <div class="ig-row  ig-published student-view">
-
-                                        <span class="type_icon" title="External Url" role="none">
-                                            <img class="img-profile rounded-circle" style="max-width: 60px" src="~/estilos/img/iconoVinculoClase.png">
-                                        </span>
-                                        <div class="ig-info">
-                                            <div class="module-item-title">
-                                                @{
-                                                    var enlace = Model.enlace;
-                                                }
-
-                                                <span class="item_name">
-                                                    @{ if (String.IsNullOrEmpty(enlace))
-                                                        {
-                                                            <span title="Material de clase" class="ig-title title item_link" href="">
-                                                                Sin Enlace.
-                                                            </span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <a title="Material de clase" class="ig-title title item_link" href=@enlace>
-                                                                Entrar a clase
-                                                            </a>
-                                                        }
-                                                    }
-                                                </span>
-
-
-
-                                            </div>
-                                        </div>
-                                        <div class="module-item-status-icon"></div>
-                                    </div>
-                                </li>
-                            </ul>
-                            <div class="footer">
-                                <div class="progression_container">
-                                    <a href="#" class="progression_details_link" title="Ver el progreso del estudiante para este módulo" style="display: none;">
-                                        <span class="progression_started"><span class="progression_started_count">0</span> En progreso</span> <span class="progression_complete"><span class="progression_complete_count">0</span> Completo</span>
-                                    </a>
-                                    <div class="unlock_details" style="display: none;">
-                                        <div class="unlock_at" style="display: none;"></div>
-                                        Desbloqueará <span class="displayed_unlock_at">&nbsp;</span>
-                                    </div>
-                                </div>
-                                <!-- progression_container -->
+                <div class="item-group-container" id="context_modules_sortable_container">
+                    <div id="context_modules" aria-label="Módulos del curso" class="ig-list ">
+                        <div class="item-group-condensed context_module student-view completed" aria-label="Cabecera principal" data-workflow-state="active" id="context_module_161594">
+                            <a id="module_161594"></a>
+                            <div class="ig-header header" id="161594">
+                                <span class="sortable-handle reorder_module_link" title="Arrastrar para reordenar los módulos" style="display: none;">
+                                    <i aria-hidden="true" class="icon-drag-handle"></i>
+                                </span>
+                                <h2 class="screenreader-only">Curso de Análisis de Sistemas Hidráulicos</h2>
+                                <span role="button" tabindex="0" href="" class="ig-header-title collapse_module_link ellipsis" aria-controls="context_module_content_161594" aria-expanded="true" aria-label="Curso de Análisis de Sistemas Hidráulicos activar o desactivar visibilidad del módulo" title="Curso de Análisis de Sistemas Hidráulicos">
+                                    <i class="fas fa-sort-down"></i>
+                                    <span class="name" style="color: #F63606;" >@Model.cursoNombre</span>
+                                </span>
+                                <span role="button" tabindex="0" href="" class="ig-header-title expand_module_link ellipsis" aria-controls="context_module_content_161594" aria-expanded="false" aria-label="Curso de Análisis de Sistemas Hidráulicos activar o desactivar visibilidad del módulo" title="Curso de Análisis de Sistemas Hidráulicos">
+                                    <i class="fas fa-sort-down"></i>
+                                    <span class="name ellipsis" style="color: #F63606;">@Model.cursoNombre</span>
+                                </span>
                             </div>
-                            <!-- footer -->
-                        </div>
-                    </div>
-                    @foreach (var item in Model.periodos)
-                    {
-                        var indexSemana = 1;
-                        for (int i = 1; i <= item.semanas; i++)
-                        {
+                            <div class="content" id="context_module_content_161594">
+                                <ul class="ig-list items context_module_items ">
+                                    <li id="context_module_item_419762" style="" class="context_module_item     student-view     discussion_topic          indent_0          _requirement     DiscussionTopic_129274     dupeable context_module_item_hover">
+                                        <div class="ig-row  ig-published student-view">
+                                            <a aria-label="FORO-CONSULTAS" tabindex="-1" class="for-nvda" >
+                                                FORO-CONSULTAS
+                                            </a>
+                                            <span class="type_icon" title="Foro abierto" role="none">
+                                                <span class="far fa-comments">
+                                                </span>
+                                            </span>
+                                            <div class="ig-info">
+                                                <div class="module-item-title">
+                                                    <span class="item_name">
+                                                        <a title="FORO-CONSULTAS" class="ig-title title item_link" href="/Foro/Index">
+                                                            FORO-CONSULTAS
+                                                        </a>
+                                                        <span title="FORO-CONSULTAS" class="title locked_title">FORO-CONSULTAS</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li id="context_module_item_419775" style="" class="context_module_item     student-view     external_url          indent_0          _requirement     ExternalUrl_0">
+                                        <div class="ig-row  ig-published student-view">
 
+                                            <span class="type_icon" title="External Url" role="none">
+                                                <img class="img-profile rounded-circle" style="max-width: 60px" src="~/estilos/img/iconoVinculoClase.png">
+                                            </span>
+                                            <div class="ig-info">
+                                                <div class="module-item-title">
+                                                    @{
+                                                        var enlace = Model.enlace;
+                                                    }
+
+                                                    <span class="item_name">
+                                                        @{ if (String.IsNullOrEmpty(enlace))
+                                                            {
+                                                                <span title="Material de clase" class="ig-title title item_link" href="">
+                                                                    Sin Enlace.
+                                                                </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a title="Material de clase" class="ig-title title item_link" href=@enlace>
+                                                                    Entrar a clase
+                                                                </a>
+                                                            }
+                                                        }
+                                                    </span>
+
+
+
+                                                </div>
+                                            </div>
+                                            <div class="module-item-status-icon"></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="footer">
+                                    <div class="progression_container">
+                                        <a href="#" class="progression_details_link" title="Ver el progreso del estudiante para este módulo" style="display: none;">
+                                            <span class="progression_started"><span class="progression_started_count">0</span> En progreso</span> <span class="progression_complete"><span class="progression_complete_count">0</span> Completo</span>
+                                        </a>
+                                        <div class="unlock_details" style="display: none;">
+                                            <div class="unlock_at" style="display: none;"></div>
+                                            Desbloqueará <span class="displayed_unlock_at">&nbsp;</span>
+                                        </div>
+                                    </div>
+                                    <!-- progression_container -->
+                                </div>
+                                <!-- footer -->
+                            </div>
+                        </div>
+                        @for (int i = 1; i <= Model.numeroSemanas; i++)
+                        {
                             <div class="item-group-condensed context_module student-view completed" aria-label="Semana 01" data-workflow-state="active" id="context_module_161599">
                                 <div class="ig-header header" id="161599">
                                     <span role="button" tabindex="0" class="ig-header-title collapse_module_link ellipsis" aria-controls="context_module_content_161599" aria-expanded="true" aria-label="Semana 01: Load Sensing Presure Compesating LSPC activar o desactivar visibilidad del módulo" title="Semana 01: Load Sensing Presure Compesating LSPC">
                                         <i class="fas fa-sort-down"></i>
-                                        <span class="name">@item.mes  Semana @i  </span>
+                                        <span class="name">Semana @i</span>
                                     </span>
                                     <span role="button" tabindex="0" class="ig-header-title expand_module_link ellipsis" aria-controls="context_module_content_161599" aria-expanded="false" aria-label="Semana 01: Load Sensing Presure Compesating LSPC activar o desactivar visibilidad del módulo" title="Semana 01: Load Sensing Presure Compesating LSPC">
                                         <i class="fas fa-sort-down"></i>
-                                        <span class="name ellipsis">@item.mes Semana @i</span>
+                                        <span class="name ellipsis">Semana @i</span>
                                     </span>
                                 </div>
                                 <div class="content" id="context_module_content_161599">
@@ -154,68 +147,31 @@
                                                 <div class="ig-info">
                                                     <div class="module-item-title">
                                                         @{
-                                                            var material = Model.material
-                                                                                                        .Where(kv => kv.nroSemana == @i && kv.mes == item.mes)
-                                                                                                        .DefaultIfEmpty(new MaterialResponse() { nombre = "Sin Entrega" }) // or no argument -> null
-                                                                                                        .First();
                                                             var sinInfo = false;
-                                                            nombreMaterial = Model.material
-                                                                                .Where(kv => kv.nroSemana == i && kv.mes == item.mes)
+                                                            nombreDocumento = Model.material
+                                                                                .Where(kv => kv.nroSemana == i)
                                                                                 .Select(kv => kv.nombre)   // not a problem even if no item matches
                                                                                 .DefaultIfEmpty("Sin documento") // or no argument -> null
                                                                                 .First();
 
-                                                            var recursoDescarga = nombreMaterial.Equals("Sin documento") ? "#" : "/Curso/Download?container=docentecontainer&blobName=" + nombreMaterial;
-
                                                         }
 
                                                         <span class="item_name">
-                                                            @{ if (String.IsNullOrEmpty(nombreMaterial) || nombreMaterial.Equals("Sin documento"))
+                                                            @{ if (String.IsNullOrEmpty(nombreDocumento) || nombreDocumento.Equals("Sin documento"))
                                                                 {
                                                                     <span title="Material de clase" class="ig-title title item_link" href="">
                                                                         MATERIAL: Sin documento.
                                                                     </span>
                                                                     sinInfo = true;
-
-                                                                    if (usuario.perfil == "Docente")
-                                                                    {
-                                                                        <form enctype="multipart/form-data" asp-controller="Curso" asp-action="Create">
-                                                                            <input type="file" id="myFile" name="files" style="line-height: 1.375rem; " placeholder=@recursoDescarga>
-                                                                            <input type="hidden" id="semana" name="semana" value=@i>
-                                                                            <input type="hidden" id="mes" name="mes" value=@item.mes>
-                                                                            <input type="submit" class="btn-small btn-info mb-1" value="Guardar este archivo">
-                                                                        </form>
-                                                                    }
                                                                 }
                                                                 else
                                                                 {
-
-
-                                                                    if (usuario.perfil == "Docente")
-                                                                    {
-                                                                        var recursoEliminarMaterial = "/Curso/EliminarArchivo?blobName=" + recursoDescarga + "&codigo=" + @material.codigo + "&tipo=MATERIAL&container=docentecontainer";
-                                                                        <a title="Material de clase" class="ig-title title item_link" href=@recursoDescarga>
-                                                                            MATERIAL: @nombreMaterial
-                                                                        </a>
-                                                                        <a class="fas fa-trash-alt" style="color:#3abaf4;" href="@recursoEliminarMaterial"></a>
-                                                                        <form enctype="multipart/form-data" asp-controller="Curso" asp-action="Create">
-                                                                            <input type="file" id="myFile" name="files" style="line-height: 1.375rem; " placeholder=@nombreTarea>
-                                                                            <input type="hidden" id="semana" name="semana" value=@i>
-                                                                            <input type="hidden" id="mes" name="mes" value=@item.mes>
-                                                                            <input type="submit" class="btn-small btn-info mb-1" value="Guardar este archivo">
-                                                                        </form>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <a title="Material de clase" class="ig-title title item_link" href=@recursoDescarga>
-                                                                            MATERIAL: @nombreMaterial
-                                                                        </a>
-                                                                    }
-
-
+                                                                    var recursoDescarga = nombreDocumento.Equals("Sin Entrega") ? "#" : "/Curso/Download?container=docentecontainer&blobName=" + nombreDocumento;
+                                                                    <a title="Material de clase" class="ig-title title item_link" href=@recursoDescarga >
+                                                                        MATERIAL: @nombreDocumento
+                                                                    </a>
                                                                 }
                                                             }
-
                                                         </span>
 
 
@@ -239,12 +195,12 @@
 
                                                         @{
                                                             var tarea = Model.material
-                                                                                                        .Where(kv => kv.nroSemana == @i && kv.mes == item.mes)
+                                                                                                        .Where(kv => kv.nroSemana == i)
                                                                                                         .Select(kv => kv.tarea)   // not a problem even if no item matches
                                                                                                         .DefaultIfEmpty(new Tarea() { nombre = "Sin Entrega" }) // or no argument -> null
                                                                                                         .First();
                                                             var tareaHabilitada = Model.material
-                                                                                                       .Where(kv => kv.nroSemana == @i && kv.mes == item.mes)
+                                                                                                       .Where(kv => kv.nroSemana == i)
                                                                                                        .Select(kv => kv.tareaHabilitada)   // not a problem even if no item matches
                                                                                                        .DefaultIfEmpty(false) // or no argument -> null
                                                                                                        .First();
@@ -272,38 +228,18 @@
                                                                     }
                                                                     else
                                                                     {
-
-                                                                        var recursoEliminar = "/Curso/EliminarArchivo?blobName=" + nombreTarea + "&codigo=" + @tarea.codigo + "&tipo=TAREA&container=alumnocontainer";
+                                                                        var recursoEliminar = "/Curso/EliminarArchivo?blobName=" + nombreTarea + "&codigo=" +  @tarea.codigo + "&tipo=TAREA" ;
                                                                         <a title="Tarea entregada" class="ig-title title item_link" href=@recurso>
                                                                             TAREA: @nombreTarea &nbsp;
                                                                         </a>
-                                                                        if (usuario.perfil == "Alumno")
-                                                                        {
-                                                                            <a class="fas fa-trash-alt" style="color:#3abaf4;" href=@recursoEliminar></a>
-                                                                        }
+                                                                        <a class="fas fa-trash-alt" style="color:#3abaf4;" href=@recursoEliminar></a>
                                                                     }
-                                                                    if (usuario.perfil == "Alumno")
-                                                                    {
-                                                                        <form enctype="multipart/form-data" asp-controller="Curso" asp-action="Create">
-                                                                            <input type="file" id="myFile" name="files" style="line-height: 1.375rem; " placeholder=@nombreTarea>
-                                                                            <input type="hidden" id="semana" name="semana" value=@i>
-                                                                            <input type="hidden" id="mes" name="mes" value=@item.mes>
-                                                                            <input type="submit" class="btn-small btn-info mb-1" value="Guardar este archivo">
-                                                                        </form>
-                                                                    }
+                                                                    <form enctype="multipart/form-data" asp-controller="Curso" asp-action="Create">
+                                                                        <input type="file" id="myFile" name="files" style="line-height: 1.375rem; " placeholder=@nombreTarea>
+                                                                        <input type="hidden" id="semana" name="semana" value=@i>
+                                                                        <input type="submit" class="btn-small btn-info mb-1" value="Guardar este archivo">
+                                                                    </form>
                                                                 }
-                                                                if (null != material.tiempoRestante)
-                                                                {
-                                                                    var tiempoRestanteday = material.tiempoRestante;
-                                                                    if (material.tiempoRestante.Substring(0, 10).Equals("27/05/1900"))
-                                                                    {
-                                                                        tiempoRestanteday = material.tiempoRestante.Substring(10, 8);
-                                                                    }
-                                                                    <span title="" class="warning_message" style="color: #ffa426;">
-                                                                        Tiempo restante: @tiempoRestanteday
-                                                                    </span>
-                                                                }
-
                                                             }
 
                                                         </span>
@@ -317,13 +253,13 @@
                                 </div>
                             </div>
                         }
-                    }
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
+    </div>
 
 </div>
 <link rel="preload" href="/estilos/variables-high_contrast-8391c84da435c9cfceea2b2b3317ff66.js" as="script" type="text/javascript">

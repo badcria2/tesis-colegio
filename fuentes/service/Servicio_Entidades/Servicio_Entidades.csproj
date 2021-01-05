@@ -4,8 +4,4 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Comunes_Entidades\Comunes_Entidades.csproj" />
-  </ItemGroup>
-
 </Project>
