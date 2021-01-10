@@ -1,12 +1,21 @@
 ﻿@using  WebAppColegio.Models.Response
-@using System.Globalization;
+@using System.Globalization
+@inject IHttpContextAccessor HttpContextAccessor;
+@using Newtonsoft.Json;
+@using System.Web;
+@using System.IO;
+@using Microsoft.AspNetCore.Http;
 @model IEnumerable<WebAppColegio.Models.Response.NotasResponse>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
+    var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContextAccessor.HttpContext.Session.GetString("UsuarioSession"));
+    DateTimeFormatInfo dtfi = new CultureInfo("es-ES", false).DateTimeFormat;
+    @*@System.Threading.Thread.CurrentThread.CurrentUICulture.DateTimeFormat.GetDayName(DateTime.Parse(item.fechaInicio).DayOfWeek)*@
 }
+<input hidden="hidden" value="@usuario.perfil" id="perfilUsuario" />
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-12">
 
@@ -19,16 +28,49 @@
 
     <div class="row">
         <div class="col-sm-6 col-md-2">
-            <div id="dataTableHover_filter" class="dataTables_filter"><label><input type="search" hidden class="form-control form-control-sm" placeholder="" aria-controls="dataTableHover"></label></div>
+
         </div>
 
         <div class="col-sm-6 col-md-2">
-            <div id="dataTableHover_filter" class="dataTables_filter"><label><input type="search" hidden class="form-control form-control-sm" placeholder="" aria-controls="dataTableHover"></label></div>
-        </div><div class="col-sm-6 col-md-2">
-            <div id="dataTableHover_filter" class="dataTables_filter"><label><input type="search" hidden class="form-control form-control-sm" placeholder="" aria-controls="dataTableHover"></label></div>
+            <div id="dataTableHover_filter" class="dataTables_filter">
+
+                @{
+                    if (usuario.perfil.Equals("Docente"))
+                    {
+                        <select class="form-control form-control-sm" name="gradoID" id="gradoID">
+                            @foreach (var it in (SelectList)ViewBag.ListaGrados)
+                            {
+                                <option value="@it.Value">@it.Text </option>
+                            }
+                        </select>
+                    }
+                }
+            </div>
         </div>
         <div class="col-sm-6 col-md-2">
-            <div class="dataTables_length" id="dataTableHover_length">
+            <div id="dataTableHover_filter" class="dataTables_filter">
+                @{
+                    if (usuario.perfil.Equals("Docente"))
+                    {
+                        <select class="form-control form-control-sm" name="seccionID" id="seccionID">
+                            @foreach (var it in (SelectList)ViewBag.ListaSeccion)
+                            {
+                                <option value="@it.Value">@it.Text </option>
+                            }
+                        </select>
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-2">
+            <div id="dataTableHover_filter" class="dataTables_filter">
+                @{
+                    if (usuario.perfil.Equals("Docente"))
+                    {
+                        <select class="form-control form-control-sm" name="claseSelect" id="claseSelect">
+                        </select>
+                    }
+                }
 
             </div>
         </div>
@@ -36,7 +78,16 @@
             <div id="dataTableHover_filter" class="dataTables_filter"><label><input type="number" id="inpPeriodo" name="ipnPeriodo" class="form-control form-control-sm" placeholder="Ingresar periodo" aria-controls="dataTableHover"></label></div>
         </div><div class="col-sm-6 col-md-2">
             <div id="dataTableHover_filter" class="dataTables_filter">
-                <button id="buscarNotas" class="btn btn-info form-control form-control-sm" style="height: 31px ">Buscar Notas</button>
+                @{
+                    if (usuario.perfil.Equals("Docente"))
+                    {
+                        <button id="buscarNotasDocente" class="btn btn-info form-control form-control-sm" style="height: 31px ">Buscar Notas</button>
+                    }
+                    else
+                    {
+                        <button id="buscarNotas" class="btn btn-info form-control form-control-sm" style="height: 31px ">Buscar Notas</button>
+                    }
+                }
             </div>
         </div>
     </div>
@@ -45,7 +96,7 @@
     <div class="row">
         <div class="col-lg-12 mb-4">
             <div class="table-responsive">
-                <table class="table align-items-center table-flush">
+                <table class="table align-items-center table-flush" id="tblNotasDocente">
                     <thead class="thead-light">
                         <tr>
                             <th style="width:130px"></th>
@@ -54,6 +105,7 @@
                             <th style="width:30px; text-align: center;" colspan="3">Exámenes </th>
                             <th style="width:30px; text-align: center;" colspan="3">Calificaciones de promedios por bimestre/trimestre/semestre</th>
                             <th style="width:30px; text-align: center;" colspan="1" rowspan="2">Nivel de logro alcanzado al finalizar el periodo lectivo</th>
+                            <th style="width:30px; text-align: center;" colspan="1" rowspan="2"></th>
                         </tr>
                         <tr>
                             <th style="width:130px">Curso</th>
@@ -73,27 +125,119 @@
                     </thead>
                     <tbody id="datosCalificaciones">
                     </tbody>
+                    <tbody id="datosCalificacionesDocente">
+                    </tbody>
                 </table>
             </div>
-            <br><br><br><br><br><br>
-
-
         </div>
     </div>
+    @{
+        if (usuario.perfil.Equals("Docente"))
+        {
+            <div class="row">
+                <div class="col-sm-10"></div>
+                <div class="col-sm-2">
+                    <button type="button" id="registrarNotasDocente" class="btn btn-info form-control form-control-sm" style="" data-toggle="modal" data-target="#exampleModalCenter">Registrar</button>
+                </div>
+            </div> 
+        }
+    }
+
 </div>
 
 <script>
+    $("body").on("click", "#registrarNotasDocente", function () { 
+        var notasRequest = new Array(); 
+        $("#datosCalificacionesDocente tr").each(function () {
+            var row = $(this); 
+            var nota = {}; 
+            nota.nota = row.find("td").eq(1).find('input').eq(0).val();
+            nota.tipo = row.find("td").eq(1).find('input').eq(1).val();
+            nota.clase = row.find("td").eq(14).find('input').eq(0).val(); 
+            notasRequest.push(nota);
+
+            nota.nota = row.find("td").eq(2).find('input').eq(0).val();
+            nota.tipo = row.find("td").eq(1).find('input').eq(1).val();
+            nota.clase = row.find("td").eq(14).find('input').eq(0).val();
+            notasRequest.push(nota);
+
+            nota.nota = row.find("td").eq(3).find('input').eq(0).val();
+            nota.tipo = row.find("td").eq(1).find('input').eq(1).val();
+            nota.clase = row.find("td").eq(14).find('input').eq(0).val();
+            notasRequest.push(nota);
+
+            nota.nota = row.find("td").eq(4).find('input').eq(0).val();
+            nota.tipo = row.find("td").eq(4).find('input').eq(1).val();
+            nota.clase = row.find("td").eq(14).find('input').eq(0).val();
+            notasRequest.push(nota);
+
+            nota.nota = row.find("td").eq(5).find('input').eq(0).val();
+            nota.tipo = row.find("td").eq(4).find('input').eq(1).val();
+            nota.clase = row.find("td").eq(14).find('input').eq(0).val();
+            notasRequest.push(nota);
+
+            nota.nota = row.find("td").eq(6).find('input').eq(0).val();
+            nota.tipo = row.find("td").eq(4).find('input').eq(1).val();
+            nota.clase = row.find("td").eq(14).find('input').eq(0).val();
+            notasRequest.push(nota);
+
+
+            nota.nota = row.find("td").eq(7).find('input').eq(0).val();
+            nota.tipo = row.find("td").eq(7).find('input').eq(1).val();
+            nota.clase = row.find("td").eq(14).find('input').eq(0).val();
+            notasRequest.push(nota);
+
+
+            nota.nota = row.find("td").eq(8).find('input').eq(0).val();
+            nota.tipo = row.find("td").eq(7).find('input').eq(1).val();
+            nota.clase = row.find("td").eq(14).find('input').eq(0).val();
+            notasRequest.push(nota);
+
+
+            nota.nota = row.find("td").eq(9).find('input').eq(0).val();
+            nota.tipo = row.find("td").eq(7).find('input').eq(1).val();
+            nota.clase = row.find("td").eq(14).find('input').eq(0).val();
+
+            notasRequest.push(nota); 
+  
+        });
+        var ids =  [1, 2, 3]
+        var info = { request: notasRequest}; 
+        //Send the JSON array to Controller using AJAX.  
+        $.ajax({
+            type: "POST",
+            url: "/Calificaciones/Registrar",
+            data: JSON.stringify(notasRequest),
+            contentType: "application/json; charset=utf-8",
+            processdata: true,  //True or False      
+            traditional: true,     
+            dataType: "json",  
+            success: function (r) {
+                alert(r + " record(s) inserted.");
+            }
+        });
+    }); 
+</script>
+<script>
+
     $(document).ready(function () {
-        datosNotas();
+        var perfil = $('#perfilUsuario').val();
+        if (perfil != "Docente") {
+            datosNotas();
+        } else {
+            getListCurso();
+            datosNotasDocente();
+        }
     });
     $("#buscarNotas").click(function () {
         datosNotas();
-        @*$('#datosCalificaciones').load('@Url.Action("Calificaciones", "ListarNotasAsync")', { _perido: periodo });*@
-
+    });
+    $("#buscarNotasDocente").click(function () {
+        datosNotasDocente();
     });
 
     var datosNotas = function (inicio, fin) {
-         var periodo = $('#inpPeriodo').val();
+        var periodo = $('#inpPeriodo').val() == null || $('#inpPeriodo').val() == "" ? new Date().getFullYear() : $('#inpPeriodo').val();
          $.ajax({
              url: '@Url.Action("listarNotas", "Calificaciones")?_periodo=' + periodo,
                 type: 'POST',
@@ -107,6 +251,87 @@
                 alert('error; ' + eval(error));
 }
             });
+    }
+    var datosNotasDocente = function (inicio, fin) {
+        var periodo = $('#inpPeriodo').val() == null || $('#inpPeriodo').val() == ""? new Date().getFullYear() : $('#inpPeriodo').val() ;
+        var clase = document.getElementById("claseSelect") == null ? "Todos" : document.getElementById("claseSelect").value;
+
+        if (clase != "") {
+            $.ajax({
+                url: '@Url.Action("listarNotas", "Calificaciones")?_periodo=' + periodo + "&_clase=" + clase,
+                type: 'POST',
+                contentType: "application/json",
+                data: { _perido: periodo },
+                success: function (partialView) {
+                    $('#datosCalificacionesDocente').html(partialView);
+                    $('#datosCalificacionesDocente').show();
+                },
+                error: function (error) {
+                    alert('error; ' + eval(error));
+                }
+            });
+        } else {
+
+            $('#datosCalificacionesDocente').html("<tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr > <tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+   " <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+     "</tr><tr>"+
+      "   <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+     "</tr><tr>"+
+      "   <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+     "</tr><tr>"+
+       " <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+     "</tr><tr>"+
+      "   <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr>");
+            $('#datosCalificacionesDocente').show();
+        }
+    }
+
+    $("#gradoID").change(function () {
+        getListCurso();
+    })
+    $("#seccionID").change(function () {
+        getListCurso();
+    })
+
+    var getListCurso = function (inicio, fin) {
+        var grado = document.getElementById("gradoID") == null ? "Todos" : document.getElementById("gradoID").value;
+        if (inicio == "0") {
+            grado = inicio
+        }
+        var seccion = document.getElementById("seccionID") == null ? "Todos" : document.getElementById("seccionID").value;
+
+
+        $.getJSON('@Url.Action("ListarCursos", "Calificaciones")', { _grado: grado, _seccion: seccion },
+            function (data) {
+                var opciones = '';
+                $.each(data, function (i, item) {
+                    opciones += '<option value="' + item.clase + '">' + item.nombre + '</option>'
+                });
+                $("#claseSelect").html(opciones);
+            });
+
+
     }
 
 </script>

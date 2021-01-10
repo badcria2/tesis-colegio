@@ -158,7 +158,15 @@
           "Comunes_Entidades.dll": {}
         }
       },
+      "Educacion_Entidades/1.0.0": {
+        "runtime": {
+          "Educacion_Entidades.dll": {}
+        }
+      },
       "Persona_Entidades/1.0.0": {
+        "dependencies": {
+          "Educacion_Entidades": "1.0.0"
+        },
         "runtime": {
           "Persona_Entidades.dll": {}
         }
@@ -298,6 +306,11 @@
       "sha512": ""
     },
     "Comunes_Entidades/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Educacion_Entidades/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

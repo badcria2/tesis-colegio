@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AppServiceColegio.Entidades;
 using Educacion_Negocio;
 using Microsoft.AspNetCore.Http;
@@ -35,13 +36,13 @@ namespace AppServiceColegio.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetDetCurso(MaterialRequest materialRequest)
         {
-            if (null == materialRequest || materialRequest.codigoClase == null)
+            if (null == materialRequest || materialRequest.clase == null)
             {
                 return BadRequest();
             }
 
             return Ok(Servicio_Negocio.SER_CursoBL.Instancia.GetDetCurso(
-                materialRequest.codigoClase,
+                materialRequest.clase,
                 materialRequest.periodo == null ? DateTime.Now.Year.ToString() : materialRequest.periodo,
                 materialRequest.codigoUsuario));
         }
@@ -62,6 +63,46 @@ namespace AppServiceColegio.Controllers
                 notasRequest.periodo == null || notasRequest.periodo.Equals("") ? DateTime.Now.Year.ToString() : notasRequest.periodo,
                 notasRequest.codigoUsuario
                 ));
+        }
+        [HttpGet]
+        [Route("api/servicio/notas-docente")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetNotasDocente(NotasRequest notasRequest)
+        {
+            if (null == notasRequest || notasRequest.codigoUsuario == null || notasRequest.clase == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(EDU_NotasBL.Instancia.GetNotasDocente(
+                notasRequest.periodo == null || notasRequest.periodo.Equals("") ? DateTime.Now.Year.ToString() : notasRequest.periodo,
+                notasRequest.clase,
+                notasRequest.codigoUsuario
+                ));
+        }
+
+        [HttpGet]
+        [Route("api/servicio/registrar-notas")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult RegisterNotas(List<NotasRequest> notasRequest)
+        {
+            if (null == notasRequest || notasRequest.Count == 0)
+            {
+                return BadRequest();
+            }
+            int count = 0;
+            notasRequest.ForEach(x =>
+            {
+                var estado = EDU_NotasBL.Instancia.RegisterNotas(x.nota, x.clase, x.tipo);
+                if (estado) { count++; }
+            });
+            if (count == notasRequest.Count)
+                return Ok(new BaseResponse() { codigo = 200, estado = true });
+            else return StatusCode(500);
         }
 
         [HttpGet]
@@ -95,7 +136,7 @@ namespace AppServiceColegio.Controllers
                 response.estado = estado;
                 response.codigo = 500;
             }
-            return Ok(response); 
+            return Ok(response);
         }
     }
 }

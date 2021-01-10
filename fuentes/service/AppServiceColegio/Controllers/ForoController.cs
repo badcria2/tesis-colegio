@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System; 
 using AppServiceColegio.Entidades;
 using Educacion_Negocio;
 using Microsoft.AspNetCore.Http;

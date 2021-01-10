@@ -7,6 +7,7 @@ namespace Educacion_Entidades
     public class EDU_NotasEL
     {
         public String codigoCurso { get; set; }
+        public String codigoAlumno { get; set; }
         public int nota { get; set; }
 
         public Boolean registro { get; set; }

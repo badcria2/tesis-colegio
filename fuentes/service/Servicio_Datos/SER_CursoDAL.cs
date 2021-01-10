@@ -26,11 +26,11 @@ namespace Servicio_Datos
                 SqlConnection cn = Conexion.Instancia.Conectar();
                 cmd = new SqlCommand("PRD_ObtenerCursos", cn);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@codigo_usuario", usuario); 
+                cmd.Parameters.AddWithValue("@codigo_usuario", usuario);
                 cmd.Parameters.AddWithValue("@periodo", periodo);
                 cmd.Parameters.AddWithValue("@perfil", perfil);
                 cmd.Parameters.AddWithValue("@grado", grado);
-                cmd.Parameters.AddWithValue("@seccion", seccion); 
+                cmd.Parameters.AddWithValue("@seccion", seccion);
                 cn.Open();
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
@@ -103,6 +103,33 @@ namespace Servicio_Datos
             return _CursoELs;
         }
 
+        public Boolean UpdateClase(String codigoClase, String periodo, String fechaFin , String fechaInicio, String enlace)
+        {
+            SqlCommand cmd = null;
+            Boolean actualizo = false;
+            try
+            {
+                SqlConnection cn = Conexion.Instancia.Conectar();
+                cmd = new SqlCommand("PRD_ActualizarDetalleCurso", cn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@codigo_clase", codigoClase);
+                cmd.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+                cmd.Parameters.AddWithValue("@fechaFin", fechaFin);
+                cmd.Parameters.AddWithValue("@enlace", enlace);
+                cmd.Parameters.AddWithValue("@periodo", periodo);
+                cn.Open();
+                if (cmd.ExecuteNonQuery() > 0)
+                {
+                    actualizo = true;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally { cmd.Connection.Close(); }
+            return actualizo;
+        }
 
     }
 }

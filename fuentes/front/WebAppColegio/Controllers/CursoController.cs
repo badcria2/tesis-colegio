@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using WebAppColegio.Models;
 using WebAppColegio.Models.Request;
 using WebAppColegio.Models.Response;
+using WebAppColegio.Utilitarios;
 
 namespace WebAppColegio.Controllers
 {
@@ -35,11 +36,12 @@ namespace WebAppColegio.Controllers
 
 
 
-        public async Task<IActionResult> Index(String _codigoUsuario = "")
+        public IActionResult Index(String _codigoUsuario = "")
         {
             try
             {
-                lstCombos();
+                ViewBag.ListaSeccion = Combos.lstComboSeccion();
+                ViewBag.ListaGrados = Combos.lstComboGrado();
                 return View();
             }
             catch (Exception e)
@@ -66,10 +68,10 @@ namespace WebAppColegio.Controllers
                 HttpContext.Session.SetString("cursoNombreSession", cursoNombre);
                 using (HttpClient client = new HttpClient())
                 {
-                    var cursoRequest = new MaterialRequest()
+                    var cursoRequest = new CursoMRequest()
                     {
                         periodo = DateTime.Now.Year.ToString(),
-                        codigoClase = clase,
+                        clase = clase,
                         codigoUsuario = usuario.codigoUsuario
                     };
                     var request = new HttpRequestMessage
@@ -229,30 +231,7 @@ namespace WebAppColegio.Controllers
         }
 
 
-        public void lstCombos()
-        {
-            var lstGrado = new List<Combo>();
-            lstGrado.Add(new Combo() { codigo = "Todos", descripcion = "Todos" });
-            lstGrado.Add(new Combo() { codigo = "1", descripcion = "1º Grado" });
-            lstGrado.Add(new Combo() { codigo = "2", descripcion = "2º Grado" });
-            lstGrado.Add(new Combo() { codigo = "3", descripcion = "3º Grado" });
-            lstGrado.Add(new Combo() { codigo = "4", descripcion = "4º Grado" });
-            lstGrado.Add(new Combo() { codigo = "5", descripcion = "5º Grado" });
-
-
-            var lstSeccion = new List<Combo>();
-            lstSeccion.Add(new Combo() { codigo = "Todos", descripcion = "Todos" });
-            lstSeccion.Add(new Combo() { codigo = "A", descripcion = "Sección A" });
-            lstSeccion.Add(new Combo() { codigo = "B", descripcion = "Sección B" });
-            lstSeccion.Add(new Combo() { codigo = "C", descripcion = "Sección C" });
-
-
-            var ListaGrados = new SelectList(lstGrado, "codigo", "descripcion");
-            ViewBag.ListaGrados = ListaGrados;
-
-            var ListaSeccion = new SelectList(lstSeccion, "codigo", "descripcion");
-            ViewBag.ListaSeccion = ListaSeccion;
-        }
+       
 
         [HttpPost]
         [ActionName("CursosDetalle")]
@@ -327,5 +306,6 @@ namespace WebAppColegio.Controllers
 
             }
         }
+    
     }
 }

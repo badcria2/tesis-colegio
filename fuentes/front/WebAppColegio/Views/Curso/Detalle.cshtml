@@ -295,7 +295,7 @@
                                                                 if (null != material.tiempoRestante)
                                                                 {
                                                                     var tiempoRestanteday = material.tiempoRestante;
-                                                                    if (material.tiempoRestante.Substring(0, 10).Equals("27/05/1900"))
+                                                                    if (material.tiempoRestante.IndexOf("1900") > 0)
                                                                     {
                                                                         tiempoRestanteday = material.tiempoRestante.Substring(10, 8);
                                                                     }

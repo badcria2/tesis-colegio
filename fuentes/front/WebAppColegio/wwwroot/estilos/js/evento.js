@@ -128,7 +128,7 @@ $(document).ready(function() {
         itemsDesktop:[1199,3],
         itemsDesktopSmall:[980,2],
         itemsMobile : [550,1],
-        pagination:false,
+        pagination:true,
         autoPlay:true
     });
 });

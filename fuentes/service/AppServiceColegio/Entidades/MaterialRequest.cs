@@ -7,7 +7,7 @@ namespace AppServiceColegio.Entidades
 {
     public class MaterialRequest
     {
-        public String codigoClase { get; set; }
+        public String clase { get; set; }
         public String periodo { get; set; }
         public String codigoUsuario { get; set; }
     }

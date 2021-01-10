@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Comunes_Datos\Comunes_Datos.csproj" />
     <ProjectReference Include="..\Educacion_Entidades\Educacion_Entidades.csproj" />
+    <ProjectReference Include="..\Persona_Entidades\Persona_Entidades.csproj" />
     <ProjectReference Include="..\Servicio_Entidades\Servicio_Entidades.csproj" />
   </ItemGroup>
 

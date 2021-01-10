@@ -8,6 +8,7 @@ namespace WebAppColegio.Models.Response
     public class Nota
     {
         public int nota { get; set; }
+        public int clasealumno { get; set; }
         public Boolean registro { get; set; }
          
     }

@@ -2,7 +2,8 @@
 @model IEnumerable<WebAppColegio.Models.Response.AvisosResponse>
 @using System.Globalization
 @inject IHttpContextAccessor HttpContextAccessor;
-@using Newtonsoft.Json;@using System.Web;
+@using Newtonsoft.Json;
+@using System.Web;
 @using System.IO;
 @using Microsoft.AspNetCore.Http;
 @{
@@ -29,15 +30,16 @@
         <li class="breadcrumb-item active" aria-current="page">Avisos</li>
     </ol>
 </div>
+<div class="row"></br></div>
 <div class="row">
     <div class="col-md-6">  </div>
     <div class="col-md-6">
         @{if (usuario.perfil.Equals("Director"))
-            { <button type="button" id="modalNuevo" class="btn btn-warning mb-2 btn-sm col-md-3 pull-right" style="background:#e67e22;" data-toggle="modal" data-target="#exampleModalCenter">Nuevo aviso</button>}
+            { <button type="button" id="modalNuevo" class="btn btn-warning mb-2 btn-sm col-md-3 pull-right" style="background:#e67e22;" data-toggle="modal" data-target="#exampleModalCenter">Crear aviso</button>}
         }
     </div>
 </div>
-<h3 class="h3">Últimos avisos del presente año</h3>
+<h3 class="h3 post-title" style="color: #0da8ee">AVISOS DEL PRESENTE AÑO ESCOLAR</h3>
 <div class="row">
     <div class="col-md-12">
         <div id="news-slider14" class="owl-carousel">
@@ -60,7 +62,7 @@
                             <span class="month">@dtfi.GetAbbreviatedMonthName(Int32.Parse(item.fechaInicio.Substring(3, 2))) </span>
                             <span class="date">@item.fechaInicio.Substring(0, 2)</span>
                         </div>
-                        <h3 class="post-title"><a href="#">Ultimo aviso</a></h3>
+                        <h3 class="post-title"><a href="#">6069 PACHACUTEC VILLA EL SALVADOR </a></h3>
                     </div>
                     <div class="post-img">
                         <img src="@item.uri" alt="">
@@ -89,8 +91,8 @@
      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title  col-11 text-center" id="exampleModalCenterTitle">Aviso</h5>
+            <div class="modal-header" style="background-color: #0da8ee; border-color: #0da8ee; ">
+                <h5 class="modal-title  col-11 text-center" id="modalCenterTitleCustom" style="color:#0a0a0a;" >Aviso</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -101,15 +103,15 @@
 
                         <div class="col-lg-12">
                             <div class="form-group row">
-                                <label for="inputEmail3" class="col-sm-3 col-form-label">Titulo</label>
+                                <label for="inputEmail3" class="col-sm-3 col-form-label" style="color:#0a0a0a;">Titulo</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="titulo" name="titulo" placeholder="">
+                                    <input type="text" class="form-control" id="titulo" name="titulo" style="color:#0a0a0a;" placeholder="">
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group row">
-                                <label for="inputEmail3" class="col-sm-3 col-form-label">Fondo de aviso</label>
+                                <label for="inputEmail3" class="col-sm-3 col-form-label" style="color:#0a0a0a;">Fondo de aviso</label>
                                 <div class="col-sm-9">
                                     <a title="Imagen de fondo" class="ig-title title item_link" target="_blank" id="imgFondo">
                                         <span id="imgFondoSpan" name="imgFondoSpan"></span>
@@ -120,12 +122,12 @@
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group row" id="simple-date4">
-                                <label for="inputEmail3" class="col-sm-3 col-form-label">Rango de fechas</label>
+                                <label for="inputEmail3" class="col-sm-3 col-form-label" style="color:#0a0a0a;">Rango de fechas</label>
                                 <div class="col-sm-9">
                                     <div class="input-daterange input-group">
                                         <input type="text" class="input-sm form-control" name="fechaInicio" id="fechaInicio">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text">hasta</span>
+                                            <span class="input-group-text" style="background-color:#0da8ee; border-color:#0da8ee; ">hasta</span>
                                         </div>
                                         <input type="text" class="input-sm form-control" name="fechaFin" id="fechaFin">
                                     </div>
@@ -151,8 +153,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-outline-info" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-info">Guardar</button>
                 </div>
             </form>
         </div>
@@ -163,12 +165,14 @@
 <script src="~/masterpage/vendor/clock-picker/clockpicker.js"></script>
 
 <script src="~/masterpage/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="~/masterpage/vendor/bootstrap-datepicker/js/bootstrap-datepicker.es.min.js"></script>
 <script>
     $('#simple-date4 .input-daterange').datepicker({
         format: 'dd/mm/yyyy',
         autoclose: true,
         todayHighlight: true,
         todayBtn: 'linked',
+        language: 'es'
     });
     $(document).on("click", "#modalNuevo", function () {
         CKEDITOR.instances.contenido.setData('');
@@ -181,6 +185,8 @@
         $("#fechaFin").val('');
         $("#contenido").val('');
         $("#inputfondospan").val('');
+        $("#modalCenterTitleCustom").text("Nuevo aviso");
+
     });
     $(document).on("click", "#modalEdit", function () {
         var data = $(this).data('id');
@@ -200,6 +206,8 @@
         $("#fechaFin").val(fechaFin);
         $("#contenido").val(contenido);
         $("#inputfondospan").val(imagen);
+        $("#modalCenterTitleCustom").text("Editar aviso");
+
     });
 
 </script>

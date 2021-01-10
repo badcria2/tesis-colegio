@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AppServiceColegio.Entidades
+namespace WebAppColegio.Models.Request
 {
-    public class NotasRequest : BaseRequest
-    { 
+    public class NotaRequest
+    {
+        public String nota { get; set; }
         public String clase { get; set; }
-        public String nota { get; set; } 
         public String tipo { get; set; }
-    } 
+    }
 }
+
+
+ 

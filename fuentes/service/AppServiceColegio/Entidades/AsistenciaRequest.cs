@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 namespace AppServiceColegio.Entidades
 {
-    public class BaseRequest
+    public class AsistenciaRequest: BaseRequest
     {
-        public String codigoUsuario { get; set; }
-        public String periodo { get; set; }
+        public String clase { get; set; } 
+        public String fechaRegistro { get; set; }
+
+
+      
     }
 }

@@ -30,7 +30,7 @@
                     </div>*@
                 <div class="card-body">
                     @{
-                        if (usuario.perfil.Equals("Director") ||  usuario.perfil.Equals("Docente"))
+                        if (usuario.perfil.Equals("Director") || usuario.perfil.Equals("Docente"))
                         {
                             <div class="row">
                                 <div class="btn-group mb-2 col-lg-6 mb-4">
@@ -63,13 +63,16 @@
                             </div>
                         }
                     }
+                    <input hidden="hidden" type="text" id="perfilinput" value="@usuario.perfil" />
 
-
-                    <div class="row" id="dataCursos">
+                    <div class="row" id="dataCursos"> 
+                        @* PARA IMAGEN DE FONDO *@
+                        @*style="background-image: url('/masterpage/img/logo/fondoCurso.jpg'); background-repeat: no-repeat; background-position: center; ">*@
 
 
 
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -82,7 +85,11 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        cursoDetalle();
+        if (document.getElementById("perfilinput").value == 'Alumno') {
+            cursoDetalle();
+        } else {
+            cursoDetalle("0","0");
+        } 
     });
     $("#gradoID").change(function () {
         cursoDetalle();
@@ -93,7 +100,10 @@
 
     var cursoDetalle = function (inicio, fin) {
         var periodo = $('#seccionID').val();
-        var grado = document.getElementById("gradoID") == null? "Todos" : document.getElementById("gradoID").value;
+        var grado = document.getElementById("gradoID") == null ? "Todos" : document.getElementById("gradoID").value;
+        if (inicio == "0") {
+            grado = inicio
+        }
         var seccion = document.getElementById("seccionID") == null  ? "Todos" : document.getElementById("seccionID").value;
          $.ajax({
              url: '@Url.Action("CursosDetalle", "Curso")?' + '_grado=' + grado + '&_seccion=' + seccion,

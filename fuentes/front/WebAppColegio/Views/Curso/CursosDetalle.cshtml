@@ -27,7 +27,7 @@
                     {
 
                         <a class="sidebar-brand d-flex align-items-center" style="color: white;"
-                          href='@item.estado ' target="_blank" >@Html.DisplayFor(modelItem => item.nombre)</a>
+                           href='@item.estado ' target="_blank">@Html.DisplayFor(modelItem => item.nombre)</a>
                     }
                     else
                     {
@@ -41,9 +41,62 @@
     </div>
 }
 
-<div class="col-lg-6 mb-4">
+@{
+    if (Model.Count() > 0)
+    {
+        <div class="col-lg-6 mb-4">
 
-</div>
-<div class="col-lg-6 mb-4">
+        </div>
+        <div class="col-lg-6 mb-4">
 
-</div>
+        </div>
+    }
+
+    @if (usuario.perfil.Equals("Director") || usuario.perfil.Equals("Docente") && Model.Count() == 0)
+    {
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+    }
+    @if ((usuario.perfil.Equals("Director") || usuario.perfil.Equals("Docente")) && (Model.Count() < 5 && Model.Count() > 0))
+    {
+        <br>
+        <br>
+        <br>
+        <br> 
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+    }
+}

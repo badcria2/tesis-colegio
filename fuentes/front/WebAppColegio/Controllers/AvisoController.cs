@@ -98,12 +98,7 @@ namespace WebAppColegio.Controllers
 
             BlobContinuationToken continuationToken = null;
 
-            var response = container.ListBlobsSegmentedAsync(continuationToken);
-
-            foreach (var item in response.Result.Results)
-            {
-
-            }
+            var response = container.ListBlobsSegmentedAsync(continuationToken); 
 
             return response.Result.Results.Where(p => p.Uri.AbsolutePath.ToString().Replace("/avisocontainer/", "") == archivo).Select(X => X.Uri.ToString()).FirstOrDefault();
         }

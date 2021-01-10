@@ -1,0 +1,86 @@
+﻿@model IEnumerable<WebAppColegio.Models.Response.NotasAlumnoResponse>
+@using  WebAppColegio.Models.Response
+@using System.Globalization;
+@{
+    ViewData["Title"] = "Index";
+}
+@{
+    Boolean registro = false;
+    var promedios = new List<Nota>();
+    CultureInfo culture = new CultureInfo("en-US");
+}
+
+@if (Model.Count() == 0)
+{
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr> <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr>   <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr>   <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr> <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr>   <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+
+}
+
+@foreach (var alumno in Model)
+{
+    var nombres = alumno.nombres + " " + alumno.apellidos;
+
+    <tr>
+        <td>
+            <span style=" text-align: justify;
+                                     text-justify: inter-word; font-size: 11px; color:black; ">@nombres </span>
+                                </td>
+                                @foreach (var tipoNota in alumno.tipoNota)
+                                {
+                                    foreach (var nota in tipoNota.nota)
+                                    {
+                                        if (nota.registro) { registro = nota.registro; }
+                                        var estiloNota = !nota.registro ? "badge badge-light" : (nota.nota < 11 ? "badge badge-danger" : "badge badge-success");
+                                        <td>
+                                            <input style="text-align: left; font-size: 13px; width: 23px; height: 20px;" value="@nota.nota">
+
+                                            <input hidden="hidden" value="@tipoNota.codigo">
+                                        </td>
+
+                                    }
+
+                                    {
+                                        promedios.Add(new Nota() { registro = registro });
+
+                                    }
+                                }
+
+                                @{
+                                    foreach (var notasPromedioTemp in alumno.promedio)
+                                    {
+                                        var estiloTipoNota = !registro ? "badge badge-light" : (Decimal.Parse(notasPromedioTemp) < 11 ? "badge badge-danger" : "badge badge-success");
+                                        <td>
+                                            @*<input style="width: 20px; height:20px;"  value="@notasPromedioTemp">*@
+                                            <span class="@estiloTipoNota">@notasPromedioTemp </span>
+                                        </td>
+                                    }
+                                }
+                                @{
+                                    var estiloPromedio = !registro ? "badge badge-light" : (Decimal.Parse(alumno.promedioGeneral, culture) < 11 ? "badge badge-danger" : "badge badge-success");
+                                    <td style="width:30px; text-align: center;" colspan="1">
+
+                                        @*<input style="width: 20px; height:20px;"  value="@alumno.promedioGeneral">*@
+                                        <span class="@estiloPromedio"> @alumno.promedioGeneral </span>
+                                    </td>
+                                    promedios = new List<Nota>();
+                                    registro = false;
+                                }
+                                <td>
+                                    <input hidden="hidden" value="@alumno.codigo"  />
+                                </td>
+                            </tr>
+                        }
+ 
