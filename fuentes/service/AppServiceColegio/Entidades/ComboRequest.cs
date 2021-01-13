@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace AppServiceColegio.Entidades
 {
-    public class MaterialRequest : BaseRequest
+    public class ComboRequest : BaseRequest
     {
-        public String clase { get; set; } 
+        public String codigo { get; set; }
+        public String perfil { get; set; }
     }
 }

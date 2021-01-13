@@ -36,12 +36,18 @@ namespace WebAppColegio.Controllers
 
 
 
-        public IActionResult Index(String _codigoUsuario = "")
+        public async Task<IActionResult> IndexAsync(String _codigoUsuario = "")
         {
             try
             {
-                ViewBag.ListaSeccion = Combos.lstComboSeccion();
-                ViewBag.ListaGrados = Combos.lstComboGrado();
+                var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
+
+                ViewBag.ListaGrados = new SelectList(await Combos.LstComboGrado(usuario.codigoUsuario, apiBaseUrl, usuario.perfil),
+                              "Value",
+                              "Text");
+                ViewBag.ListaSeccion = new SelectList(await Combos.LstComboSeccion(usuario.codigoUsuario, apiBaseUrl, "Todos", usuario.perfil),
+                              "Value",
+                              "Text");
                 return View();
             }
             catch (Exception e)
@@ -50,6 +56,7 @@ namespace WebAppColegio.Controllers
             }
 
         }
+
 
         public async Task<IActionResult> Detalle(String curso, String clase, String cursoNombre)
         {
@@ -194,7 +201,7 @@ namespace WebAppColegio.Controllers
             var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
             string blobstorageconnection = _Configure.GetValue<string>("blobstorage");
             CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(blobstorageconnection);
-            CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient(); 
+            CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
             using (HttpClient client = new HttpClient())
             {
                 var tareaRequest = new TareaRequest()
@@ -231,7 +238,7 @@ namespace WebAppColegio.Controllers
         }
 
 
-       
+
 
         [HttpPost]
         [ActionName("CursosDetalle")]
@@ -272,7 +279,7 @@ namespace WebAppColegio.Controllers
                     periodo = DateTime.Now.Year.ToString(),
                     perfil = usuario.perfil,
                     grado = _grado,
-                    seccion =_seccion,
+                    seccion = _seccion,
                     usuario = _codigoUsuario.Equals("") ? usuario.codigoUsuario : _codigoUsuario
                 };
                 var request = new HttpRequestMessage
@@ -306,6 +313,15 @@ namespace WebAppColegio.Controllers
 
             }
         }
-    
+
+        [ActionName("ListarSeccion")]
+        public async Task<SelectList> ListarSeccion(String _grado = "")
+        {
+            var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
+            return new SelectList(await Combos.LstComboSeccion(usuario.codigoUsuario, apiBaseUrl, _grado, usuario.perfil),
+                            "Value",
+                            "Text");
+        }
+
     }
 }

@@ -40,11 +40,11 @@ namespace Educacion_Negocio
             }
         }
 
-        public Boolean RegisterNotas(String nota, String clase, String tipo)
+        public Boolean RegisterNotas(String nota, String clase, String tipo, int eliminar)
         {
             try
             {
-                return EDU_NotasDAL.Instancia.RegisterNotas(nota, clase, tipo);
+                return EDU_NotasDAL.Instancia.RegisterNotas(nota, clase, tipo, eliminar);
             }
             catch (Exception e)
             {

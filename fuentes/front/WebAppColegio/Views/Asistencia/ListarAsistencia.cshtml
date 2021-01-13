@@ -1,0 +1,89 @@
+﻿@model IEnumerable<WebAppColegio.Models.Response.AsistenciaResponse>
+@using  WebAppColegio.Models.Response
+@using System.Globalization;
+@using System.Web;
+@using System.IO;
+@{
+    ViewData["Title"] = "Index";
+}
+@{
+    CultureInfo culture = new CultureInfo("en-US");
+}
+
+@if (Model.Count() == 0)
+{
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr> <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr>   <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr>   <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr> <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr>   <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+
+}
+
+@foreach (var alumno in Model)
+{
+    var nombres = alumno.nombres + " " + alumno.apellidos;
+    //var checkedAsistio = alumno.asistencia.estado.Equals("A") ? " checked" : "";
+    //var checkedFalto = alumno.asistencia.estado.Equals("F") ? " checked " : "";
+    //var checkedANP = alumno.asistencia.estado.Equals("N") ? " checked " : "";
+    var alumnoCodigo = alumno.codigo;
+    var alumnoName = alumno.codigo + "_1";
+    var alumnoName2 = alumno.codigo + "_2";
+    var alumnoName3 = alumno.codigo + "_3";
+
+    StringWriter myWriterA = new StringWriter();
+    HttpUtility.HtmlDecode(alumno.asistencia.estado.ToString().Equals("A") ? " checked" : "", myWriterA);
+    string checkedAsistio = myWriterA.ToString();
+
+    StringWriter myWriterB = new StringWriter();
+    HttpUtility.HtmlDecode(alumno.asistencia.estado.ToString().Equals("F") ? " checked " : "", myWriterB);
+    string checkedFalto = myWriterB.ToString();
+
+    StringWriter myWriterC = new StringWriter();
+    HttpUtility.HtmlDecode(alumno.asistencia.estado.ToString().Equals("N") ? " checked " : "", myWriterC);
+    string checkedANP = myWriterC.ToString();
+
+
+    <tr>
+        <td colspan="2">
+            <span style=" text-align: justify; text-justify: inter-word; font-size: 11px; color:black; ">@nombres </span>
+        </td>
+
+        <td style="text-align: center;" colspan="2">
+            @{
+                var color = Int32.Parse(alumno.numeroFaltas) < 12 ? "black" : "red";
+            }
+            <span style=" text-align: justify; text-justify: inter-word; font-size: 11px; color:@color ">@alumno.numeroFaltas </span>
+        </td>
+
+        <td style="text-align: center;" colspan="11">
+            <div class="form-inline">
+                <div class="custom-radio custom-control col-lg-4  d-flex justify-content-center" style="">
+                    <input type="radio" id="@alumnoName" name=@alumnoCodigo @Html.Raw(checkedAsistio) class="d-flex justify-content-center" style="">
+                    <label class="d-flex justify-content-center" for="@alumnoName">
+                    </label>
+                </div>
+                <div class="custom-radio custom-control col-lg-4  d-flex justify-content-center" style="">
+                    <input type="radio" id="@alumnoName2" name=@alumnoCodigo @Html.Raw(checkedFalto) class="d-flex justify-content-center">
+                    <label class="d-flex justify-content-center" for="@alumnoName2"> </label>
+                </div>
+                <div class="custom-radio custom-control col-lg-4  d-flex justify-content-center">
+                    <input type="radio" id="@alumnoName3" name=@alumnoCodigo @Html.Raw(checkedANP) class="d-flex justify-content-center">
+                    <label class="d-flex justify-content-center" for="@alumnoName3">  </label>
+                    <input hidden="hidden" value="@alumno.codigo" />
+                </div>
+            </div>
+        </td>
+        @*<td><input hidden="hidden" value="@alumno.codigo" /></td>*@
+    </tr>
+
+}

@@ -37,5 +37,29 @@ namespace Comunes_Negocio
                 throw e;
             }
         }
+
+        public List<CMM_ComboEL> ObtenerGrados(String codigoUsuario, String perfil)
+        {
+            try
+            {
+                return CMM_TipoAccesoDAL.Instancia.ObtenerGrados(codigoUsuario, perfil);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public List<CMM_ComboEL> ObtenerSeccion(String copdigoClase, String grado, String perfil)
+        {
+            try
+            {
+                return CMM_TipoAccesoDAL.Instancia.ObtenerSeccion(copdigoClase, grado, perfil);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }

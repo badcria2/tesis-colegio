@@ -7,16 +7,14 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "Seguridad_Datos/1.0.0": {
+      "Educacion_Negocio/1.0.0": {
         "dependencies": {
-          "Comunes_Datos": "1.0.0",
-          "NETStandard.Library": "2.0.3",
-          "Persona_Entidades": "1.0.0",
-          "Seguridad_Entidades": "1.0.0",
-          "System.Data.SqlClient": "4.8.2"
+          "Educacion_Datos": "1.0.0",
+          "Educacion_Entidades": "1.0.0",
+          "NETStandard.Library": "2.0.3"
         },
         "runtime": {
-          "Seguridad_Datos.dll": {}
+          "Educacion_Negocio.dll": {}
         }
       },
       "Microsoft.NETCore.Platforms/1.1.0": {},
@@ -158,6 +156,18 @@
           "Comunes_Entidades.dll": {}
         }
       },
+      "Educacion_Datos/1.0.0": {
+        "dependencies": {
+          "Comunes_Datos": "1.0.0",
+          "Educacion_Entidades": "1.0.0",
+          "Persona_Entidades": "1.0.0",
+          "Servicio_Entidades": "1.0.0",
+          "System.Data.SqlClient": "4.8.2"
+        },
+        "runtime": {
+          "Educacion_Datos.dll": {}
+        }
+      },
       "Educacion_Entidades/1.0.0": {
         "runtime": {
           "Educacion_Entidades.dll": {}
@@ -171,19 +181,18 @@
           "Persona_Entidades.dll": {}
         }
       },
-      "Seguridad_Entidades/1.0.0": {
+      "Servicio_Entidades/1.0.0": {
         "dependencies": {
-          "Comunes_Entidades": "1.0.0",
-          "Persona_Entidades": "1.0.0"
+          "Comunes_Entidades": "1.0.0"
         },
         "runtime": {
-          "Seguridad_Entidades.dll": {}
+          "Servicio_Entidades.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "Seguridad_Datos/1.0.0": {
+    "Educacion_Negocio/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -310,6 +319,11 @@
       "serviceable": false,
       "sha512": ""
     },
+    "Educacion_Datos/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "Educacion_Entidades/1.0.0": {
       "type": "project",
       "serviceable": false,
@@ -320,7 +334,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Seguridad_Entidades/1.0.0": {
+    "Servicio_Entidades/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

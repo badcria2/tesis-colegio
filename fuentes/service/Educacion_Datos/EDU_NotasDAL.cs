@@ -265,7 +265,7 @@ namespace Educacion_Datos
             return lstCursos;
         }
 
-        public Boolean RegisterNotas(String nota, String clase, String tipo)
+        public Boolean RegisterNotas(String nota, String clase, String tipo, int eliminar)
         {
 
             SqlCommand cmd = null;
@@ -278,6 +278,7 @@ namespace Educacion_Datos
                 cmd.Parameters.AddWithValue("@nota", nota);
                 cmd.Parameters.AddWithValue("@clase", clase);
                 cmd.Parameters.AddWithValue("@tipo_nota", tipo);
+                cmd.Parameters.AddWithValue("@eliminar", eliminar);
                 cn.Open();
                 if (cmd.ExecuteNonQuery() > 0)
                 {

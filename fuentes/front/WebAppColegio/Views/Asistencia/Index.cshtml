@@ -1,0 +1,329 @@
+﻿@using  WebAppColegio.Models.Response
+@using System.Globalization
+@inject IHttpContextAccessor HttpContextAccessor;
+@using Newtonsoft.Json;
+@using System.Web;
+@using System.IO;
+@using Microsoft.AspNetCore.Http;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContextAccessor.HttpContext.Session.GetString("UsuarioSession"));
+    DateTimeFormatInfo dtfi = new CultureInfo("es-ES", false).DateTimeFormat;
+    @*@System.Threading.Thread.CurrentThread.CurrentUICulture.DateTimeFormat.GetDayName(DateTime.Parse(item.fechaInicio).DayOfWeek)*@
+}
+<link href="~/masterpage/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+
+<input hidden="hidden" value="@usuario.perfil" id="perfilUsuario" />
+<div class="container-fluid" id="container-wrapper">
+    <div class="d-sm-flex align-items-center justify-content-between mb-12">
+
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="~/Curso/Index">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Asistencia</li>
+        </ol>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-6 col-md-2">
+            <div class="form-group" id="simple-date1" style="height: 31px;">
+                <div class="input-group date" style="height: 31px;">
+                    <div class="input-group-prepend" style="height: 31px;">
+                        <span class="input-group-text" style="height: 31px;"><i class="fas fa-calendar"></i></span>
+                    </div>
+                    
+                    <input type="text" class="input-sm  form-control" style="height: 31px;" value="@DateTime.Now.ToString("dd'/'MM'/'yyyy")" id="fechaRegistro">
+                    <input type="text" hidden="hidden" class="input-sm  form-control" style="height: 31px;" value="@usuario.codigoUsuario" id="codigoUsuario">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-2">
+            <div id="dataTableHover_filter" class="dataTables_filter">
+
+                @{
+                    if (usuario.perfil.Equals("Docente"))
+                    {
+                        <select class="form-control form-control-sm" name="gradoID" id="gradoID">
+                            @foreach (var it in (SelectList)ViewBag.ListaGrados)
+                            {
+                                <option value="@it.Value">@it.Text </option>
+                            }
+                        </select>
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-2">
+            <div id="dataTableHover_filter" class="dataTables_filter">
+                @{
+                    if (usuario.perfil.Equals("Docente"))
+                    {
+                        <select class="form-control form-control-sm" name="seccionID" id="seccionID">
+                            @foreach (var it in (SelectList)ViewBag.ListaSeccion)
+                            {
+                                <option value="@it.Value">@it.Text </option>
+                            }
+                        </select>
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-2">
+            <div id="dataTableHover_filter" class="dataTables_filter">
+                @{
+                    if (usuario.perfil.Equals("Docente"))
+                    {
+                        <select class="form-control form-control-sm" name="claseSelect" id="claseSelect">
+                        </select>
+                    }
+                }
+
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-2">
+            <div id="dataTableHover_filter" class="dataTables_filter"><label><input type="number" id="inpPeriodo" name="ipnPeriodo" class="form-control form-control-sm" placeholder="Ingresar periodo" aria-controls="dataTableHover"></label></div>
+        </div><div class="col-sm-6 col-md-2">
+            <div id="dataTableHover_filter" class="dataTables_filter">
+                @{
+                    if (usuario.perfil.Equals("Docente"))
+                    {
+                        <button id="buscarNotasDocente" class="btn btn-info form-control form-control-sm" style="height: 31px ">Buscar Asistencia</button>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-12 mb-4">
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush" id="tblNotasDocente">
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="width:130px" colspan="2">Alumnos</th>
+                            <th style="width:30px; text-align: center;" colspan="2">Numero Faltas</th>
+                            <th style="width:30px; text-align: center;" colspan="4">Asistió</th>
+                            <th style="width:30px; text-align: center;" colspan="4">Faltó</th>
+                            <th style="width:30px; text-align: center;" colspan="3">No se presentó </th>
+                        </tr>
+                    </thead>
+                    <tbody id="datosAsistencia">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @{
+        if (usuario.perfil.Equals("Docente"))
+        {
+            <div class="row">
+                <div class="col-sm-10"></div>
+                <div class="col-sm-2">
+                    <button type="button" disabled="true" id="registrarAsistencia" class="btn btn-info form-control form-control-sm" style="" data-toggle="modal" data-target="#exampleModalCenter">Registrar</button>
+                </div>
+            </div>
+        }
+    }
+
+</div>
+
+<script src="~/masterpage/vendor/bootstrap-touchspin/js/jquery.bootstrap-touchspin.js"></script>
+<!-- ClockPicker -->
+<script src="~/masterpage/vendor/clock-picker/clockpicker.js"></script>
+
+<script src="~/masterpage/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="~/masterpage/vendor/bootstrap-datepicker/js/bootstrap-datepicker.es.min.js"></script>
+
+<script>
+
+    $('#simple-date1 .input-group.date').datepicker({
+        format: 'dd/mm/yyyy',
+        todayBtn: 'linked',
+        todayHighlight: true,
+        autoclose: true,
+        language: 'es'
+    });
+    $(document).ready(function () {
+        getListCurso();
+        datosAsistenciaDocente();
+    });
+    $("#gradoID").change(function () {
+        getListSeccion();
+        getListCurso();
+    })
+    $("#seccionID").change(function () {
+        getListCurso();
+    })
+    $("#buscarNotasDocente").click(function () {
+        datosAsistenciaDocente();
+    });
+    var getListCurso = function (inicio, fin) {
+        var grado = document.getElementById("gradoID") == null ? "Todos" : document.getElementById("gradoID").value;
+        if (inicio == "0") {
+            grado = inicio
+        }
+        var seccion = document.getElementById("seccionID") == null ? "Todos" : document.getElementById("seccionID").value;
+
+
+        $.getJSON('@Url.Action("ListarCursos", "Calificaciones")', { _grado: grado, _seccion: seccion },
+        function (data) {
+        var opciones = '';
+        $.each(data, function (i, item) {
+            opciones += '<option value="' + item.clase + '">' + item.nombre + '</option>'
+        });
+        $("#claseSelect").html(opciones);
+        });
+
+    }
+
+      var getListSeccion = function (inicio, fin) {
+        var grado = document.getElementById("gradoID") == null ? "Todos" : document.getElementById("gradoID").value;
+        var opciones = '';
+
+            $.ajax({
+                url: '@Url.Action("ListarSeccion", "Curso")?_grado=' + grado ,
+                type: 'POST',
+                contentType: "application/json",
+                data: { _perido: grado },
+                success: function (data) {
+                    $.each(data, function (i, item) {
+                        opciones += '<option value="' + item.value + '">' + item.text + '</option>'
+                    });
+                    $("#seccionID").html(opciones);
+                },
+                error: function (error) {
+                    alert('error; ' + eval(error));
+                }
+            });
+
+
+        }
+    var datosAsistenciaDocente = function (inicio, fin) {
+        var periodo = $('#inpPeriodo').val() == null || $('#inpPeriodo').val() == "" ? new Date().getFullYear() : $('#inpPeriodo').val();
+        var fechaRegistro = $('#fechaRegistro').val() == null || $('#fechaRegistro').val() == "" ? new Date().getFullYear() : $('#fechaRegistro').val();
+        var clase = document.getElementById("claseSelect") == null ? "Todos" : document.getElementById("claseSelect").value;
+
+            if (clase != "") {
+            $.ajax({
+                url: '@Url.Action("ListarAsistencia", "Asistencia")?_clase=' + clase + "&_fechaRegistro=" + fechaRegistro + "&_periodo=" + periodo,
+                type: 'POST',
+                contentType: "application/json",
+                data: { _perido: periodo },
+                success: function (partialView) {
+                    $('#datosAsistencia').html(partialView);
+                    $('#datosAsistencia').show();
+                    $('#registrarAsistencia').attr('disabled', false);
+                },
+                error: function (error) {
+                    $('#registrarAsistencia').attr('disabled', true);
+                    alert('error; ' + eval(error));
+                }
+            });
+        } else {
+
+            $('#datosAsistencia').html("<tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr > <tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+   " <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr><tr>"+
+    "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+     "</tr><tr>"+
+      "   <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+     "</tr><tr>"+
+      "   <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+     "</tr><tr>"+
+       " <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+     "</tr><tr>"+
+      "   <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>"+
+    " </tr>");
+            $('#datosCalificacionesDocente').show();
+        }
+    }
+
+</script>
+<!-- Modal -->
+<div class="modal fade" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="loader"></div>
+                <div clas="loader-txt">
+                    <p>Procesando su información <br><br><small>Por favor espere... </small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("body").on("click", "#registrarAsistencia", function () {
+        var asistenciaRequest = new Array();
+       
+        var clase = document.getElementById("claseSelect") == null ? "Todos" : document.getElementById("claseSelect").value;
+        var fechaRegistro = $('#fechaRegistro').val() == null || $('#fechaRegistro').val() == "" ? new Date().getFullYear() : $('#fechaRegistro').val();
+        var codigoUsuario = $('#codigoUsuario').val();
+
+        $("#datosAsistencia tr").each(function () {
+            var row = $(this);
+            var asistencia = {};
+            var flagAsistio = 'N';
+            if (row.find("td").eq(2).find('div').eq(0).find('input').eq(0).is(":checked")) {
+                flagAsistio = 'A';
+            }
+            if (row.find("td").eq(2).find('div').eq(0).find('input').eq(1).is(":checked")) {
+                flagAsistio = 'F';
+            }
+            if (row.find("td").eq(2).find('div').eq(0).find('input').eq(2).is(":checked")) {
+                flagAsistio = 'N';
+            }
+            asistencia.estado = flagAsistio;
+            asistencia.codigoUsuario = row.find("td").eq(2).find('div').eq(0).find('input').eq(3).val(); 
+            asistencia.clase = clase;
+            asistencia.fechaRegistro = fechaRegistro;
+            asistenciaRequest.push(asistencia);  
+
+        });
+        //Send the JSON array to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url: "/Asistencia/Registrar",
+            data: JSON.stringify(asistenciaRequest),
+            contentType: "application/json; charset=utf-8",
+            processdata: true,  //True or False
+            traditional: true,
+            dataType: "json",
+            success: function (r) {
+                toastr.success('Registro exitoso');
+                
+            }, error: function (error) {
+                toastr.error('Registro fallido')
+               
+            }
+        });
+
+        $("#loadMe").modal("hide");
+    });
+
+</script> 

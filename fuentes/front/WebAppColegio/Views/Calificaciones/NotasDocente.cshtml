@@ -61,7 +61,7 @@
                                 @{
                                     foreach (var notasPromedioTemp in alumno.promedio)
                                     {
-                                        var estiloTipoNota = !registro ? "badge badge-light" : (Decimal.Parse(notasPromedioTemp) < 11 ? "badge badge-danger" : "badge badge-success");
+                                        var estiloTipoNota = !registro ? "badge badge-light" : (Decimal.Parse(notasPromedioTemp.Replace(",", "."), culture) < 11 ? "badge badge-danger" : "badge badge-success");
                                         <td>
                                             @*<input style="width: 20px; height:20px;"  value="@notasPromedioTemp">*@
                                             <span class="@estiloTipoNota">@notasPromedioTemp </span>
@@ -69,11 +69,11 @@
                                     }
                                 }
                                 @{
-                                    var estiloPromedio = !registro ? "badge badge-light" : (Decimal.Parse(alumno.promedioGeneral, culture) < 11 ? "badge badge-danger" : "badge badge-success");
+                                    var estiloPromedio = !registro ? "badge badge-light" : (Decimal.Parse(alumno.promedioGeneral.Replace(",","."), culture) < 11 ? "badge badge-danger" : "badge badge-success");
                                     <td style="width:30px; text-align: center;" colspan="1">
 
                                         @*<input style="width: 20px; height:20px;"  value="@alumno.promedioGeneral">*@
-                                        <span class="@estiloPromedio"> @alumno.promedioGeneral </span>
+                                        <span class="@estiloPromedio"> @alumno.promedioGeneral.Replace(",", ".") </span>
                                     </td>
                                     promedios = new List<Nota>();
                                     registro = false;

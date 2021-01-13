@@ -17,7 +17,9 @@
     <link href="~/masterpage/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="~/masterpage/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="~/masterpage/css/ruang-admin.min.css" rel="stylesheet">
-    <script src="~/masterpage/vendor/jquery/jquery.min.js"></script>
+    <script src="~/masterpage/vendor/jquery/jquery.min.js"></script> 
+    <link rel="stylesheet" href="~/estilos/css/toastr.min.css">
+    <link rel="stylesheet" media="all" href="~/estilos/spinner/Spinner.css">
 </head>
 
 <body id="page-top">
@@ -56,7 +58,7 @@
                                     }
                                 }
 
-                            <span class="ml-2 d-none d-lg-inline text-white small">@usuario.persona.nombres  @usuario.persona.apellidos </span>
+                                <span class="ml-2 d-none d-lg-inline text-white small">@usuario.persona.nombres  @usuario.persona.apellidos </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                 @*<a class="dropdown-item" href="#">
@@ -71,7 +73,7 @@
                                     foreach (TipoAcceso acceso in usuario.permisos)
                                     {
                                         var path = @acceso.path + "?_codigoUsuario=" + usuario.codigoUsuario;
-                                        <a class="dropdown-item" href=@path >
+                                        <a class="dropdown-item" href=@path>
                                             <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                             @acceso.acceso
                                         </a>
@@ -162,6 +164,7 @@
     <script src="~/masterpage/js/ruang-admin.min.js"></script>
     <script src="~/masterpage/vendor/chart.js/Chart.min.js"></script>
     <script src="~/masterpage/js/demo/chart-area-demo.js"></script>
+    <script src="~/estilos/js/toastr.min.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -65,14 +65,14 @@
                     }
                     <input hidden="hidden" type="text" id="perfilinput" value="@usuario.perfil" />
 
-                    <div class="row" id="dataCursos"> 
+                    <div class="row" id="dataCursos">
                         @* PARA IMAGEN DE FONDO *@
                         @*style="background-image: url('/masterpage/img/logo/fondoCurso.jpg'); background-repeat: no-repeat; background-position: center; ">*@
 
 
 
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -89,9 +89,10 @@
             cursoDetalle();
         } else {
             cursoDetalle("0","0");
-        } 
+        }
     });
     $("#gradoID").change(function () {
+        getListSeccion();
         cursoDetalle();
     })
     $("#seccionID").change(function () {
@@ -119,4 +120,28 @@
 }
             });
     }
+
+
+      var getListSeccion = function (inicio, fin) {
+        var grado = document.getElementById("gradoID") == null ? "Todos" : document.getElementById("gradoID").value; 
+        var opciones = '';
+
+            $.ajax({
+                url: '@Url.Action("ListarSeccion", "Curso")?_grado=' + grado ,
+                type: 'POST',
+                contentType: "application/json",
+                data: { _perido: grado },
+                success: function (data) {
+                    $.each(data, function (i, item) {
+                        opciones += '<option value="' + item.value + '">' + item.text + '</option>'
+                    });
+                    $("#seccionID").html(opciones);
+                },
+                error: function (error) {
+                    alert('error; ' + eval(error));
+                }
+            });
+
+
+        }
 </script>

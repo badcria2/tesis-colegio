@@ -28,5 +28,18 @@ namespace Educacion_Negocio
                 throw e;
             }
         }
+
+        public Boolean InsertAsistencia(Char estado, String codigoClase, String usuario, String fechaRegistro)
+        {
+            try
+            {
+                return EDU_AsistenciaDAL.Instancia.InsertAsistencia(estado, codigoClase, usuario, fechaRegistro);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        
     }
 }

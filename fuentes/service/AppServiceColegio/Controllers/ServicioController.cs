@@ -94,12 +94,20 @@ namespace AppServiceColegio.Controllers
             {
                 return BadRequest();
             }
+            int eliminar = 0;
             int count = 0;
-            notasRequest.ForEach(x =>
+            for (int i = 0; i < notasRequest.Count; i++)
             {
-                var estado = EDU_NotasBL.Instancia.RegisterNotas(x.nota, x.clase, x.tipo);
-                if (estado) { count++; }
-            });
+                if ((i) % 3 == 0)
+                    eliminar = 1;
+                else eliminar = 0;
+                if(EDU_NotasBL.Instancia.RegisterNotas(notasRequest[i].nota, notasRequest[i].clase, notasRequest[i].tipo, eliminar))
+                {
+                    count++;
+                }
+
+            }
+
             if (count == notasRequest.Count)
                 return Ok(new BaseResponse() { codigo = 200, estado = true });
             else return StatusCode(500);

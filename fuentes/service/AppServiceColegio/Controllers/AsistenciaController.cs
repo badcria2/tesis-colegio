@@ -31,5 +31,38 @@ namespace AppServiceColegio.Controllers
                 asistenciaRequest.fechaRegistro,
                 asistenciaRequest.periodo == null ? DateTime.Now.Year.ToString() : asistenciaRequest.periodo));
         }
+        [HttpPost]
+        [Route("api/educacion/asistencia")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult RegisterNotas(List<AsistenciaRequest> asistenciaRequest)
+        {
+            if (null == asistenciaRequest || asistenciaRequest.Count == 0)
+            {
+                return BadRequest();
+            }
+            int count = 0;
+            foreach (var item in asistenciaRequest)
+            {
+
+                if (EDU_AsistenciaBL.Instancia.InsertAsistencia(
+                    item.estado,
+                    item.clase,
+                    item.codigoUsuario,
+                    item.fechaRegistro))
+                {
+                    count++;
+                }
+
+            }
+
+            if (count == asistenciaRequest.Count)
+                return Ok(new BaseResponse() { codigo = 200, estado = true });
+            else return StatusCode(500);
+        }
+
+
+
     }
 }

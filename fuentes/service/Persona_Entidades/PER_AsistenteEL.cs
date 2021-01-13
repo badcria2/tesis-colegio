@@ -8,6 +8,7 @@ namespace Persona_Entidades
     public class PER_AsistenteEL : PER_PersonalEL
     {
         public String codigo { get; set; }
-        public List<EDU_AsistenciaEL> asistencia { get; set; }
+        public String numeroFaltas { get; set; }
+        public EDU_AsistenciaEL asistencia { get; set; }
     }
 }

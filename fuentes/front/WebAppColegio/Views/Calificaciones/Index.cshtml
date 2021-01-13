@@ -15,6 +15,8 @@
     DateTimeFormatInfo dtfi = new CultureInfo("es-ES", false).DateTimeFormat;
     @*@System.Threading.Thread.CurrentThread.CurrentUICulture.DateTimeFormat.GetDayName(DateTime.Parse(item.fechaInicio).DayOfWeek)*@
 }
+
+
 <input hidden="hidden" value="@usuario.perfil" id="perfilUsuario" />
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-12">
@@ -108,7 +110,14 @@
                             <th style="width:30px; text-align: center;" colspan="1" rowspan="2"></th>
                         </tr>
                         <tr>
-                            <th style="width:130px">Curso</th>
+                            @if (usuario.perfil.Equals("Docente"))
+                            {
+                                <th style="width:130px">Alumnos </th>
+                            }
+                            else
+                            {
+                                <th style="width:130px">Curso</th>  
+                            }
                             <th style="width: 10px">T1</th>
                             <th style="width: 10px">T2</th>
                             <th style="width: 10px">T3</th>
@@ -137,86 +146,118 @@
             <div class="row">
                 <div class="col-sm-10"></div>
                 <div class="col-sm-2">
-                    <button type="button" id="registrarNotasDocente" class="btn btn-info form-control form-control-sm" style="" data-toggle="modal" data-target="#exampleModalCenter">Registrar</button>
+                    <button type="button" disabled="true" id="registrarNotasDocente" class="btn btn-info form-control form-control-sm" style="" data-toggle="modal" data-target="#exampleModalCenter">Registrar</button>
                 </div>
-            </div> 
+            </div>
         }
     }
 
 </div>
 
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="loader"></div>
+                <div clas="loader-txt">
+                    <p>Procesando su información <br><br><small>Por favor espere... </small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    $("body").on("click", "#registrarNotasDocente", function () { 
-        var notasRequest = new Array(); 
+    $("body").on("click", "#registrarNotasDocente", function () {
+        var notasRequest = new Array();
+        $("#loadMe").modal({
+            backdrop: "static", //remove ability to close modal with click
+            keyboard: false, //remove option to close with keyboard
+            show: true //Display loader!
+        });
+
         $("#datosCalificacionesDocente tr").each(function () {
-            var row = $(this); 
-            var nota = {}; 
+            var row = $(this);
+            var nota = {};
             nota.nota = row.find("td").eq(1).find('input').eq(0).val();
             nota.tipo = row.find("td").eq(1).find('input').eq(1).val();
-            nota.clase = row.find("td").eq(14).find('input').eq(0).val(); 
+            nota.clase = row.find("td").eq(14).find('input').eq(0).val();
             notasRequest.push(nota);
+            nota = {};
 
             nota.nota = row.find("td").eq(2).find('input').eq(0).val();
             nota.tipo = row.find("td").eq(1).find('input').eq(1).val();
             nota.clase = row.find("td").eq(14).find('input').eq(0).val();
             notasRequest.push(nota);
+            nota = {};
 
             nota.nota = row.find("td").eq(3).find('input').eq(0).val();
             nota.tipo = row.find("td").eq(1).find('input').eq(1).val();
             nota.clase = row.find("td").eq(14).find('input').eq(0).val();
             notasRequest.push(nota);
+            nota = {};
 
             nota.nota = row.find("td").eq(4).find('input').eq(0).val();
             nota.tipo = row.find("td").eq(4).find('input').eq(1).val();
             nota.clase = row.find("td").eq(14).find('input').eq(0).val();
             notasRequest.push(nota);
+            nota = {};
 
             nota.nota = row.find("td").eq(5).find('input').eq(0).val();
             nota.tipo = row.find("td").eq(4).find('input').eq(1).val();
             nota.clase = row.find("td").eq(14).find('input').eq(0).val();
             notasRequest.push(nota);
+            nota = {};
 
             nota.nota = row.find("td").eq(6).find('input').eq(0).val();
             nota.tipo = row.find("td").eq(4).find('input').eq(1).val();
             nota.clase = row.find("td").eq(14).find('input').eq(0).val();
             notasRequest.push(nota);
+            nota = {};
 
 
             nota.nota = row.find("td").eq(7).find('input').eq(0).val();
             nota.tipo = row.find("td").eq(7).find('input').eq(1).val();
             nota.clase = row.find("td").eq(14).find('input').eq(0).val();
             notasRequest.push(nota);
+            nota = {};
 
 
             nota.nota = row.find("td").eq(8).find('input').eq(0).val();
             nota.tipo = row.find("td").eq(7).find('input').eq(1).val();
             nota.clase = row.find("td").eq(14).find('input').eq(0).val();
             notasRequest.push(nota);
-
+            nota = {};
 
             nota.nota = row.find("td").eq(9).find('input').eq(0).val();
             nota.tipo = row.find("td").eq(7).find('input').eq(1).val();
             nota.clase = row.find("td").eq(14).find('input').eq(0).val();
 
-            notasRequest.push(nota); 
-  
+            notasRequest.push(nota);
+            nota = {};
+
         });
-        var ids =  [1, 2, 3]
-        var info = { request: notasRequest}; 
-        //Send the JSON array to Controller using AJAX.  
+        //Send the JSON array to Controller using AJAX.
         $.ajax({
             type: "POST",
             url: "/Calificaciones/Registrar",
             data: JSON.stringify(notasRequest),
             contentType: "application/json; charset=utf-8",
-            processdata: true,  //True or False      
-            traditional: true,     
-            dataType: "json",  
+            processdata: true,  //True or False
+            traditional: true,
+            dataType: "json",
             success: function (r) {
-                alert(r + " record(s) inserted.");
+                $("#loadMe").modal("hide");
+                toastr.success('Registro exitoso')
+            }, error: function (error) {
+                toastr.error('Registro fallido')
             }
         });
-    }); 
+    });
 </script>
 <script>
 
@@ -265,6 +306,7 @@
                 success: function (partialView) {
                     $('#datosCalificacionesDocente').html(partialView);
                     $('#datosCalificacionesDocente').show();
+                    $('#registrarNotasDocente').attr('disabled', false);
                 },
                 error: function (error) {
                     alert('error; ' + eval(error));
@@ -333,5 +375,7 @@
 
 
     }
+
+
 
 </script>

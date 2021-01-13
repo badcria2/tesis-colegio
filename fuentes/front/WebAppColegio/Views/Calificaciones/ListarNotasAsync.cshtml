@@ -50,13 +50,13 @@
 
                                 @{
                                     foreach (var notasPromedioTemp in curso.promedio)
-                                    { 
-                                        var estiloTipoNota = !registro ? "badge badge-light" : (Decimal.Parse(notasPromedioTemp) < 11 ? "badge badge-danger" : "badge badge-success");
+                                    {
+                                        var estiloTipoNota = !registro ? "badge badge-light" : (Decimal.Parse(notasPromedioTemp.Replace(",", "."), culture) < 11 ? "badge badge-danger" : "badge badge-success");
                                         <td><span class="@estiloTipoNota">@notasPromedioTemp </span></td>
                                     }
                                 }
                                 @{
-                                    var estiloPromedio = !registro ? "badge badge-light" : (Decimal.Parse(curso.promedioGeneral, culture) < 11 ? "badge badge-danger" : "badge badge-success");
+                                    var estiloPromedio = !registro ? "badge badge-light" : (Decimal.Parse(curso.promedioGeneral.Replace(",", "."), culture) < 11 ? "badge badge-danger" : "badge badge-success");
                                     <td style="width:30px; text-align: center;" colspan="1"><span class="@estiloPromedio"> @curso.promedioGeneral </span></td>
                                     promedios = new List<Nota>(); 
                                     registro = false;

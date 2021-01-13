@@ -10,6 +10,7 @@ namespace Educacion_Entidades
         public String clase { get; set; }
         public String usuario { get; set; }
         public String fechaRegistro { get; set; }
+        public String numeroFaltas { get; set; }
         public Char estado { get; set; }
 
     }

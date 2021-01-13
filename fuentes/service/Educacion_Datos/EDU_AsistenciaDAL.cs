@@ -44,7 +44,7 @@ namespace Educacion_Datos
                             clase = dr["codigo_clase"].ToString(),
                             estado = Char.Parse(dr["estado"].ToString()),
                             fechaRegistro = dr["fecha_registro"].ToString(),
-                            usuario = dr["usuario"].ToString(),
+                            usuario = dr["usuario"].ToString()
                         }
                  );
                 }
@@ -56,7 +56,9 @@ namespace Educacion_Datos
                         codigo = dr["codigo_alumno"].ToString(),
                         nombres = dr["nombres"].ToString(),
                         apellidos = dr["apellidos"].ToString(),
-                        asistencia = asistencia.FindAll(x => x.usuario == dr["codigo_alumno"].ToString())
+                        numeroFaltas = dr["faltas"].ToString(),
+                        asistencia = asistencia.Where(m => m.usuario == dr["codigo_alumno"].ToString())
+                             .DefaultIfEmpty(asistenciaDefault()).First() 
                     });
                 }
             }
@@ -68,12 +70,41 @@ namespace Educacion_Datos
             return _AsistenteELs;
         }
 
-        public List<EDU_AsistenciaEL> asistenciaDefault()
+        public EDU_AsistenciaEL asistenciaDefault()
         {
-            var asistencia = new List<EDU_AsistenciaEL>();
-            asistencia.Add(new EDU_AsistenciaEL() { estado = 'F' });
-            return asistencia;
+            
+            return new EDU_AsistenciaEL() { estado = 'N' , numeroFaltas = "0"};
         }
+
+
+        public Boolean InsertAsistencia(Char estado, String codigoClase, String usuario, String fechaRegistro)
+        {
+            SqlCommand cmd = null;
+            Boolean inserto = false;
+            var _AsistenteELs = new List<PER_AsistenteEL>();
+            try
+            {
+                SqlConnection cn = Conexion.Instancia.Conectar();
+                cmd = new SqlCommand("PRD_InsertarAsistencia", cn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@estado", estado);
+                cmd.Parameters.AddWithValue("@clase", codigoClase);
+                cmd.Parameters.AddWithValue("@codigo_usuario", usuario);
+                cmd.Parameters.AddWithValue("@fechaRegistro", fechaRegistro);
+                cn.Open();
+                if (cmd.ExecuteNonQuery() > 0)
+                {
+                    inserto = true;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally { cmd.Connection.Close(); }
+            return inserto;
+        }
+
     }
 
 }

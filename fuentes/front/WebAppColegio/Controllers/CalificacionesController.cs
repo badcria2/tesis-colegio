@@ -35,13 +35,15 @@ namespace WebAppColegio.Controllers
         {
             try
             {
-                ViewBag.ListaSeccion = new SelectList(Combos.lstComboSeccion().Where(x => x.Text != "Todos").ToList(),
-                              "Value",
-                              "Text");
-                ViewBag.ListaGrados = new SelectList(Combos.lstComboGrado().Where(x => x.Text != "Todos").ToList(),
-                              "Value",
-                              "Text");
                 var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
+
+                ViewBag.ListaSeccion = new SelectList(await Combos.LstComboSeccion(usuario.codigoUsuario, apiBaseUrl, "", usuario.perfil),
+                              "Value",
+                              "Text");
+                ViewBag.ListaGrados = new SelectList(await Combos.LstComboGrado(usuario.codigoUsuario, apiBaseUrl, usuario.perfil),
+                              "Value",
+                              "Text");
+
                 if (usuario == null)
                 {
                     ModelState.Clear();
@@ -177,6 +179,12 @@ namespace WebAppColegio.Controllers
         }
 
 
+        [ActionName("ListarClases")]
+        public async Task<JsonResult> ListarClases(String _grado = "")
+        {
+            var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
+            return Json(Combos.LstComboSeccion(usuario.codigoUsuario, apiBaseUrl, _grado, usuario.perfil));
+        }
 
         [ActionName("Registrar")]
         public async Task<JsonResult> Registrar([FromBody] IEnumerable<NotaRequest> data)
@@ -193,13 +201,13 @@ namespace WebAppColegio.Controllers
                 };
                 using (var Response = await client.SendAsync(requestSend).ConfigureAwait(false))
                 {
-                    List<CursoResponse> _cursoResponseLst = new List<CursoResponse>();
+                    var baseResponse = new BaseResponse();
                     if (Response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
                         var resp = await Response.Content.ReadAsStringAsync();
-                        _cursoResponseLst = JsonConvert.DeserializeObject<List<CursoResponse>>(resp);
+                        baseResponse = JsonConvert.DeserializeObject<BaseResponse>(resp);
                     }
-                    return Json(_cursoResponseLst);
+                    return Json(baseResponse);
                 }
 
             }
