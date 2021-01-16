@@ -94,10 +94,10 @@ namespace Educacion_Datos
             return _ForoELs;
         }
 
-        public Boolean InsertForo(String codigoClase, String tema, String descripcion, String temaPadre, String usuario)
+        public int InsertForo(String codigoClase, String tema, String descripcion, String temaPadre, String usuario)
         {
             SqlCommand cmd = null;
-            Boolean inserto = false;
+            int inserto = 0;
             try
             {
                 SqlConnection cn = Conexion.Instancia.Conectar();
@@ -108,11 +108,8 @@ namespace Educacion_Datos
                 cmd.Parameters.AddWithValue("@descripcion", descripcion);
                 cmd.Parameters.AddWithValue("@temaPadre", temaPadre);
                 cmd.Parameters.AddWithValue("@usuario", usuario); 
-                cn.Open(); 
-                if (cmd.ExecuteNonQuery() > 0)
-                {
-                    inserto = true;
-                }
+                cn.Open();
+                inserto = (int)cmd.ExecuteScalar(); 
             }
             catch (Exception e)
             {

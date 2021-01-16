@@ -29,10 +29,11 @@ namespace WebAppColegio.Controllers
             apiBaseUrl = _Configure.GetValue<string>("WebAPIBaseUrl");
             this.session = httpContextAccessor.HttpContext.Session;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(String inserto = "")
         {
             try
             {
+
                 var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
                 ViewBag.nombreCurso = HttpContext.Session.GetString("cursoNombreSession");
                 if (usuario == null)
@@ -145,7 +146,7 @@ namespace WebAppColegio.Controllers
 
         }
 
-        public async Task<IActionResult> Create(String codigoForo, String codigoClase , String inputForo)
+        public async Task<IActionResult> Create(String codigoForo, String codigoClase, String inputForo, String tema)
         {
             try
             {
@@ -161,11 +162,11 @@ namespace WebAppColegio.Controllers
                 {
                     var foroRequest = new ForoRequest()
                     {
-                        codigoClase = codigoClase,
-                        tema = "",
+                        codigoClase = HttpContext.Session.GetString("claseSession"),
+                        tema = tema == null ? "" : tema,
                         descripcion = HttpUtility.HtmlEncode(inputForo),
-                        temaPadre = codigoForo, 
-                        codigoUsuario = usuario.codigoUsuario  
+                        temaPadre = codigoForo == null ? "" : codigoForo,
+                        codigoUsuario = usuario.codigoUsuario
                     };
                     var request = new HttpRequestMessage
                     {
@@ -180,7 +181,9 @@ namespace WebAppColegio.Controllers
                         {
                             var data = await Response.Content.ReadAsStringAsync();
                             response = JsonConvert.DeserializeObject<BaseResponse>(data);
-                            return RedirectToAction("Detalle", "Foro", new { codigoForo  = codigoForo });
+                            if (codigoForo == null)
+                                return RedirectToAction("Index", "Foro");
+                            return RedirectToAction("Detalle", "Foro", new { codigoForo = codigoForo });
                         }
                         else if (Response.StatusCode == System.Net.HttpStatusCode.NoContent)
                         {

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -58,7 +59,7 @@ namespace WebAppColegio.Controllers
         }
 
 
-        public async Task<IActionResult> Detalle(String curso, String clase, String cursoNombre)
+        public async Task<IActionResult> Detalle(String curso, String clase, String cursoNombre, Boolean alerta = false)
         {
             try
             {
@@ -95,6 +96,7 @@ namespace WebAppColegio.Controllers
                             var data = await Response.Content.ReadAsStringAsync();
                             cursoDetalleResponse = JsonConvert.DeserializeObject<CursoDetalleResponse>(data);
                             cursoDetalleResponse.cursoNombre = cursoNombre;
+                            cursoDetalleResponse.alerta = alerta;
                             return View(cursoDetalleResponse);
                         }
                         else if (Response.StatusCode == System.Net.HttpStatusCode.NoContent)
@@ -150,7 +152,7 @@ namespace WebAppColegio.Controllers
                         if (Response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             await CargarDocumentoAzureAsync(usuario, files);
-                            return RedirectToAction("Detalle", "Curso", new { clase = HttpContext.Session.GetString("claseSession"), curso = HttpContext.Session.GetString("cursoSession"), cursoNombre = HttpContext.Session.GetString("cursoNombreSession") });
+                            return RedirectToAction("Detalle", "Curso", new { clase = HttpContext.Session.GetString("claseSession"), curso = HttpContext.Session.GetString("cursoSession"), cursoNombre = HttpContext.Session.GetString("cursoNombreSession"), alerta = true });
 
                         }
                         else
@@ -263,45 +265,31 @@ namespace WebAppColegio.Controllers
             }
         }
 
-        public async Task<ActionResult> ListarCursos(String _codigoUsuario = "", String _grado = "", String _seccion = "")
+
+        public async Task<IActionResult> ActualizarZoom(String enlace = "", String fechaInicio = "", String fechaFin = "", String mesActualizar = "", int semanaActualizar = 0)
         {
-            var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
-            if (usuario == null) //si el usuario se enuentra
-            {
-                ModelState.Clear();
-                ModelState.AddModelError("ErrorLogeo", "Tiempo sesión expirado");
-                return RedirectToAction("Login", "Intranet");
-            }
             using (HttpClient client = new HttpClient())
             {
-                var cursoRequest = new CursoRequest()
+                var tareaRequest = new ClaseRequest()
                 {
-                    periodo = DateTime.Now.Year.ToString(),
-                    perfil = usuario.perfil,
-                    grado = _grado,
-                    seccion = _seccion,
-                    usuario = _codigoUsuario.Equals("") ? usuario.codigoUsuario : _codigoUsuario
+                    codigo = HttpContext.Session.GetString("claseSession"),
+                    enlace = enlace,
+                    fechaFin = fechaFin,
+                    fechaInicio = fechaInicio,
+                    mes = mesActualizar,
+                    semana = semanaActualizar
                 };
                 var request = new HttpRequestMessage
                 {
-                    Method = HttpMethod.Get,
-                    RequestUri = new Uri(apiBaseUrl + "/servicio/obtener-cursos"),
-                    Content = new StringContent(JsonConvert.SerializeObject(cursoRequest), Encoding.UTF8, "application/json")
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri(apiBaseUrl + "/servicio/curso-actualizar"),
+                    Content = new StringContent(JsonConvert.SerializeObject(tareaRequest), Encoding.UTF8, "application/json")
                 };
                 using (var Response = await client.SendAsync(request).ConfigureAwait(false))
                 {
-                    List<CursoResponse> _cursoResponseLst = new List<CursoResponse>();
                     if (Response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
-                        var data = await Response.Content.ReadAsStringAsync();
-                        _cursoResponseLst = JsonConvert.DeserializeObject<List<CursoResponse>>(data);
-                        return PartialView("CursosDetalle", _cursoResponseLst);
-                    }
-                    else if (Response.StatusCode == System.Net.HttpStatusCode.NoContent)
-                    {
-                        ModelState.Clear();
-                        ModelState.AddModelError("Info", "Sin Cursos asociados");
-                        return View(_cursoResponseLst);
+                        return RedirectToAction("Detalle", "Curso", new { clase = HttpContext.Session.GetString("claseSession"), curso = HttpContext.Session.GetString("cursoSession"), cursoNombre = HttpContext.Session.GetString("cursoNombreSession"), alerta = true });
                     }
                     else
                     {
@@ -314,14 +302,82 @@ namespace WebAppColegio.Controllers
             }
         }
 
+        public async Task<ActionResult> ListarCursos(String _codigoUsuario = "", String _grado = "", String _seccion = "")
+        {
+            try
+            {
+                var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
+                if (usuario == null) //si el usuario se enuentra
+                {
+                    ModelState.Clear();
+                    ModelState.AddModelError("ErrorLogeo", "Tiempo sesión expirado");
+                    return RedirectToAction("Login", "Intranet");
+                }
+                using (HttpClient client = new HttpClient())
+                {
+                    var cursoRequest = new CursoRequest()
+                    {
+                        periodo = DateTime.Now.Year.ToString(),
+                        perfil = usuario.perfil,
+                        grado = _grado,
+                        seccion = _seccion,
+                        codigoUsuario = _codigoUsuario.Equals("") ? usuario.codigoUsuario : _codigoUsuario
+                    };
+                    var request = new HttpRequestMessage
+                    {
+                        Method = HttpMethod.Get,
+                        RequestUri = new Uri(apiBaseUrl + "/servicio/obtener-cursos"),
+                        Content = new StringContent(JsonConvert.SerializeObject(cursoRequest), Encoding.UTF8, "application/json")
+                    };
+                    using (var Response = await client.SendAsync(request).ConfigureAwait(false))
+                    {
+                        List<CursoResponse> _cursoResponseLst = new List<CursoResponse>();
+                        if (Response.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            var data = await Response.Content.ReadAsStringAsync();
+                            _cursoResponseLst = JsonConvert.DeserializeObject<List<CursoResponse>>(data);
+                            return PartialView("CursosDetalle", _cursoResponseLst);
+                        }
+                        else if (Response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                        {
+                            ModelState.Clear();
+                            ModelState.AddModelError("Info", "Sin Cursos asociados");
+                            return View(_cursoResponseLst);
+                        }
+                        else
+                        {
+                            ModelState.Clear();
+                            ModelState.AddModelError("ErorData", "A ocurrido un error favor contactar con el administrador");
+                            return RedirectToAction("Login", "Intranet");
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
         [ActionName("ListarSeccion")]
         public async Task<SelectList> ListarSeccion(String _grado = "")
         {
-            var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
-            return new SelectList(await Combos.LstComboSeccion(usuario.codigoUsuario, apiBaseUrl, _grado, usuario.perfil),
-                            "Value",
-                            "Text");
-        }
+            try
+            {
+                var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
+                return new SelectList(await Combos.LstComboSeccion(usuario.codigoUsuario, apiBaseUrl, _grado, usuario.perfil),
+                                "Value",
+                                "Text");
+            }
 
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
+
+
 }

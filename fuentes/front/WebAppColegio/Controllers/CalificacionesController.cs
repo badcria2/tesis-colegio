@@ -156,7 +156,7 @@ namespace WebAppColegio.Controllers
                     perfil = usuario.perfil,
                     grado = _grado,
                     seccion = _seccion,
-                    usuario = usuario.codigoUsuario
+                    codigoUsuario = usuario.codigoUsuario
                 };
                 var request = new HttpRequestMessage
                 {

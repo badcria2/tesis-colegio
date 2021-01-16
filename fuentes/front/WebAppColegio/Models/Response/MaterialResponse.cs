@@ -15,5 +15,7 @@ namespace WebAppColegio.Models.Response
         public Boolean tareaHabilitada { get; set; }
         public String tiempoRestante { get; set; }
         public Tarea tarea { get; set; }
+        public String fechaInicioTarea { get; set; }
+        public String fechaFinTarea { get; set; }
     }
 }

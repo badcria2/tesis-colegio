@@ -89,6 +89,8 @@ namespace Servicio_Datos
                             mes = dr["mes"].ToString(),
                             tareaHabilitada = Boolean.Parse(dr["tarea_habilitada"].ToString()),
                             tiempoRestante = dr["tiempo_restante"].ToString(),
+                            fechaFinTarea = dr["fecha_fin_clase"].ToString(),
+                            fechaInicioTarea =  dr["fecha_inicio_tarea"].ToString(),
                             tarea = new SER_TareaEL() { codigo = "", nombre = "", nroSemana = 0 }
                         });
                     }
@@ -103,7 +105,7 @@ namespace Servicio_Datos
             return _CursoELs;
         }
 
-        public Boolean UpdateClase(String codigoClase, String periodo, String fechaFin , String fechaInicio, String enlace)
+        public Boolean UpdateClase(String codigoClase, String periodo, String fechaFin , String fechaInicio, String enlace, String mes = "", int semana = 0)
         {
             SqlCommand cmd = null;
             Boolean actualizo = false;
@@ -115,8 +117,9 @@ namespace Servicio_Datos
                 cmd.Parameters.AddWithValue("@codigo_clase", codigoClase);
                 cmd.Parameters.AddWithValue("@fechaInicio", fechaInicio);
                 cmd.Parameters.AddWithValue("@fechaFin", fechaFin);
-                cmd.Parameters.AddWithValue("@enlace", enlace);
-                cmd.Parameters.AddWithValue("@periodo", periodo);
+                cmd.Parameters.AddWithValue("@enlace", enlace); 
+                cmd.Parameters.AddWithValue("@mes", mes);
+                cmd.Parameters.AddWithValue("@semana", semana);
                 cn.Open();
                 if (cmd.ExecuteNonQuery() > 0)
                 {

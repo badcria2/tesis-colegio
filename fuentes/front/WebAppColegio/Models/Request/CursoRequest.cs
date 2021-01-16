@@ -7,7 +7,7 @@ namespace WebAppColegio.Models
 {
     public class CursoRequest
     {
-        public String usuario { get; set; }
+        public String codigoUsuario { get; set; }
         public String periodo { get; set; }
         public String perfil { get; set; }
         public String grado { get; set; }

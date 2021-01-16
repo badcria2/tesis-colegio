@@ -15,6 +15,9 @@ namespace Servicio_Entidades
         public String mes { get; set; }
         public SER_TareaEL tarea { get; set; }
 
+        public String fechaInicioTarea { get; set; }
+        public String fechaFinTarea { get; set; }
+
 
     }
 }

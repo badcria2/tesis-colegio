@@ -53,11 +53,11 @@ namespace Servicio_Negocio
                 throw e;
             }
         }
-        public Boolean UpdateClase(String codigoClase, String periodo, String fechaFin, String fechaInicio, String enlace)
+        public Boolean UpdateClase(String codigoClase, String periodo, String fechaFin = "", String fechaInicio = "", String enlace = "", String mes = "", int semana = 0)
         {
             try
             {
-                return SER_CursoDAL.Instancia.UpdateClase(codigoClase, periodo, fechaFin, fechaInicio, enlace);
+                return SER_CursoDAL.Instancia.UpdateClase(codigoClase, periodo, fechaFin, fechaInicio, enlace, mes, semana);
 
             }
             catch (Exception e)
