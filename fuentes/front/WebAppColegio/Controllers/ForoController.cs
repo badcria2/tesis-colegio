@@ -146,7 +146,7 @@ namespace WebAppColegio.Controllers
 
         }
 
-        public async Task<IActionResult> Create(String codigoForo, String codigoClase, String inputForo, String tema)
+        public async Task<IActionResult> Create(String codigoForo, String codigoClase, String contenido, String tema)
         {
             try
             {
@@ -164,9 +164,10 @@ namespace WebAppColegio.Controllers
                     {
                         codigoClase = HttpContext.Session.GetString("claseSession"),
                         tema = tema == null ? "" : tema,
-                        descripcion = HttpUtility.HtmlEncode(inputForo),
+                        descripcion = HttpUtility.HtmlEncode(contenido),
                         temaPadre = codigoForo == null ? "" : codigoForo,
-                        codigoUsuario = usuario.codigoUsuario
+                        codigoUsuario = usuario.codigoUsuario,
+                        codigoForo = codigoForo
                     };
                     var request = new HttpRequestMessage
                     {

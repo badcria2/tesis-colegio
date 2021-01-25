@@ -3,7 +3,7 @@ using Servicio_Entidades;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.IO; 
+using System.IO;
 using System.Web;
 
 namespace Educacion_Datos
@@ -40,7 +40,7 @@ namespace Educacion_Datos
                             clase = dr["codigo_clase"].ToString(),
                             descripcion = dr["descripcion"].ToString(),
                             fechaCreacion = dr["fecha_creacion"].ToString(),
-                            respondio = Int32.Parse(dr["respondido"].ToString()) > 0 ? true: false,
+                            respondio = Int32.Parse(dr["respondido"].ToString()) > 0 ? true : false,
                             cantidadRespuestas = Int32.Parse(dr["cantidad_respuestas"].ToString()),
                             tema = dr["tema"].ToString(),
                             creador = dr["creador"].ToString()
@@ -65,7 +65,7 @@ namespace Educacion_Datos
                 SqlConnection cn = Conexion.Instancia.Conectar();
                 cmd = new SqlCommand("PRD_ObtenerForoDetalle", cn);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@codigo_foro", codigoForo); 
+                cmd.Parameters.AddWithValue("@codigo_foro", codigoForo);
                 cn.Open();
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
@@ -84,7 +84,7 @@ namespace Educacion_Datos
                             creador = dr["creador"].ToString()
                         }
                  );
-                } 
+                }
             }
             catch (Exception e)
             {
@@ -94,7 +94,7 @@ namespace Educacion_Datos
             return _ForoELs;
         }
 
-        public Boolean InsertForo(String codigoClase, String tema, String descripcion, String temaPadre, String usuario)
+        public Boolean InsertForo(String codigoClase, String tema, String descripcion, String temaPadre, String usuario, String codigoForo)
         {
             SqlCommand cmd = null;
             Boolean inserto = false;
@@ -107,8 +107,9 @@ namespace Educacion_Datos
                 cmd.Parameters.AddWithValue("@tema", tema);
                 cmd.Parameters.AddWithValue("@descripcion", descripcion);
                 cmd.Parameters.AddWithValue("@temaPadre", temaPadre);
-                cmd.Parameters.AddWithValue("@usuario", usuario); 
-                cn.Open(); 
+                cmd.Parameters.AddWithValue("@usuario", usuario);
+                cmd.Parameters.AddWithValue("@codigo_foro", codigoForo == null ? "" : codigoForo);
+                cn.Open();
 
                 if (cmd.ExecuteNonQuery() > 0)
                 {

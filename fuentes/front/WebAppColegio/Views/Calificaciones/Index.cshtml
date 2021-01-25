@@ -146,7 +146,7 @@
             <div class="row">
                 <div class="col-sm-10"></div>
                 <div class="col-sm-2">
-                    <button type="button" disabled="true" id="registrarNotasDocente" class="btn btn-info form-control form-control-sm" style="" data-toggle="modal" data-target="#exampleModalCenter">Registrar</button>
+                    <button type="button" disabled="true" id="registrarNotasDocente" class="btn btn-info form-control form-control-sm" style="" data-toggle="modal" data-target="#exampleModalCenter">Registrar notas</button>
                 </div>
             </div>
         }
@@ -253,6 +253,7 @@
             success: function (r) {
                 $("#loadMe").modal("hide");
                 toastr.success('Registro exitoso')
+                datosNotasDocente();
             }, error: function (error) {
                 toastr.error('Registro fallido')
             }

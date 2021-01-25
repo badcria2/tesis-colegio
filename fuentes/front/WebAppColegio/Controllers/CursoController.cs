@@ -170,16 +170,34 @@ namespace WebAppColegio.Controllers
         }
         public async Task CargarDocumentoAzureAsync(AutenticacionResponse usuario, IFormFile archivo)
         {
-            string blobstorageconnection = _Configure.GetValue<string>("blobstorage");
-            string systemFileName = usuario.codigoUsuario + "_" + archivo.FileName.Replace(" ", "-");
-            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(blobstorageconnection);
-            CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
-            CloudBlobContainer container = blobClient.GetContainerReference("alumnocontainer");
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference(systemFileName);
-            await using (var data = archivo.OpenReadStream())
+            try
             {
-                await blockBlob.UploadFromStreamAsync(data);
+                string blobstorageconnection = _Configure.GetValue<string>("blobstorage");
+                string systemFileName = usuario.codigoUsuario + "_" + archivo.FileName.Replace(" ", "-");
+                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(blobstorageconnection);
+                CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
+                var containter = "";
+                if (usuario.perfil.Equals("Docente"))
+                {
+                    containter = "docentecontainer";
+                }
+                else
+                {
+                    containter = "alumnocontainer";
+
+                }
+                CloudBlobContainer container = blobClient.GetContainerReference(containter);
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference(systemFileName);
+                await using (var data = archivo.OpenReadStream())
+                {
+                    await blockBlob.UploadFromStreamAsync(data);
+                }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
         public async Task<IActionResult> Download(string blobName, String container)
         {

@@ -239,7 +239,7 @@
                                                                 {
                                                                     <span class="item_name">
                                                                         <a title="Editar fecha tarea" style="color:#3abaf4;" data-semana="@i" data-mes="@item.mes" data-fechainitarea="@fechaInicioTarea" data-fechafintarea="@fechaFinTarea" class="fas fa-edit" id="modalEditClass" data-toggle="modal" data-target="#modalInterval"></a>
-                                                                        Editar sesión
+                                                                       Editar fecha tarea
                                                                     </span>
                                                                 }
                                                             }
@@ -322,15 +322,18 @@
                                                                 }
                                                                 if (null != material.tiempoRestante)
                                                                 {
-                                                                    var tiempoRestanteday = material.tiempoRestante;
+                                                                    String tiempoRestanteday = material.tiempoRestante;
                                                                     if (material.tiempoRestante.IndexOf("1900") > 0)
                                                                     {
-                                                                        tiempoRestanteday = material.tiempoRestante.Substring(10, 8);
+                                                                        var capturaDias = material.tiempoRestante.Substring(0, 2).Equals("01") ? "0" : material.tiempoRestante.Substring(0, 1);
+                                                                        tiempoRestanteday = capturaDias + " dias" + material.tiempoRestante.Substring(10, material.tiempoRestante.Length - 10 );
                                                                     }
                                                                     <span title="" class="warning_message" style="color: #ffa426;">
                                                                         Tiempo restante: @tiempoRestanteday
                                                                     </span>
                                                                 }
+
+
 
                                                             }
 
@@ -361,7 +364,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #0da8ee; border-color: #0da8ee; ">
-                <h5 class="modal-title  col-11 text-center" id="modalCenterTitleCustom" style="color:#0a0a0a;">Aviso</h5>
+                <h5 class="modal-title  col-11 text-center" id="modalCenterTitleCustom" style="color:#0a0a0a;">Nuevo enlace</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -404,14 +407,10 @@
                     <div class="modal-body">
                         <div class="col-lg-12">
                             <div class="form-group row" id="simple-date4">
-                                <label for="inputEmail3" class="col-sm-3 col-form-label" style="color:#0a0a0a;">Tarea habilitada desde</label>
+                                <label for="inputEmail3" class="col-sm-3 col-form-label" style="color:#0a0a0a;">Fecha fin de tarea</label>
                                 <div class="col-sm-9">
                                     <div class="input-daterange input-group">
                                         <input type="text" class="input-sm form-control" name="fechaInicio" id="fechaInicio" style="height: 40px">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" style="background-color:#0da8ee; border-color:#0da8ee; ">hasta</span>
-                                        </div>
-                                        <input type="text" class="input-sm form-control" name="fechaFin" id="fechaFin" style="height: 40px">
                                     </div>
                                 </div>
                             </div>
@@ -481,17 +480,17 @@
     $(document).on("click", "#modalEditZoom", function () {
         var enlace = $(this).data('enlace');
         $("#enlace").val(enlace);
-        $("#titulo").val('Editar enlace de zoom');
+        $("#modalCenterTitleCustom").val('Editar enlace de zoom');
 
     });
 
     $(document).on("click", "#modalEditClass", function () {
         var mes = $(this).data('mes');
-        var semana = $(this).data('semana'); 
+        var semana = $(this).data('semana');
         $("#mesActualizar").val(mes);
         $("#semanaActualizar").val(semana);
         $("#fechaInicio").val($(this).data('fechainitarea'));
-        $("#fechaFin").val($(this).data('fechafintarea')); 
+       // $("#fechaFin").val($(this).data('fechafintarea'));
 
     });
 </script>

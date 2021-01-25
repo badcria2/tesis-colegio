@@ -40,7 +40,7 @@
                                 <div class="row">
                                     <div class="col-sm-6 col-md-2 ml-auto">
                                         <div id="dataTableHover_filter" class="dataTables_filter">
-                                           <button type="button" id="modalNuevoForo" class="btn-info mb-2 btn-sm pull-right show" style="padding-right: 17px; display: block;" data-toggle="modal" data-target="#exampleModalCenter" aria-modal="true">Crear foro</button>
+                                            <button type="button" id="modalNuevoForo" class="btn-info mb-2 btn-sm pull-right show" style="padding-right: 17px; display: block;" data-toggle="modal" data-target="#exampleModalCenter" aria-modal="true">Crear foro</button>
                                         </div>
                                         <br>
                                     </div>
@@ -69,6 +69,9 @@
                                     <div class="ipsDataItem_main">
                                         <h4 class="ipsDataItem_title ipsType_large ipsType_break">
                                             <a href=@hrefDetalle>@item.tema</a>
+                                            <span class="item_name">
+                                                <a title="Editar foro" style="color:#3abaf4;" data-codigo="@item.codigo" data-titulo="@item.tema" data-descripcion="@item.descripcion" class="fas fa-edit" id="modalEditForo" data-toggle="modal" data-target="#exampleModalCenter"></a>
+                                            </span>
                                         </h4>
                                         <ul class="ipsDataItem_subList ipsList_inline">
                                             <li class="">
@@ -76,9 +79,9 @@
                                             </li>
                                         </ul>
                                         <div class="ipsType_richText ipsDataItem_meta ipsContained">
-                                            <p>
-                                                Por favor responder a la brevedad
-                                            </p>
+                                            @*<p>
+                                                    Por favor responder a la brevedad
+                                                </p>*@
                                         </div>
                                     </div>
                                     <div class="ipsDataItem_stats ipsDataItem_statsLarge">
@@ -108,8 +111,8 @@
                                         </li>
                                         <li class="ipsType_light"> <time datetime=@item.fechaCreacion title=@item.fechaCreacion data-short=@item.fechaCreacion>@item.fechaCreacion</time></li>
                                     </ul>
-                                    @*{<span class="fas fa-edit" data-toggle="modal" id="modalEditForo" 
-                                           data-id="@item.codigo"  data-target="#exampleModalCenter"></span>}*@
+                                    @*{<span class="fas fa-edit" data-toggle="modal" id="modalEditForo"
+                                        data-id="@item.codigo"  data-target="#exampleModalCenter"></span>}*@
                                 </li>
                             </ol>
 
@@ -154,7 +157,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #0da8ee; border-color: #0da8ee; ">
-                <h5 class="modal-title  col-11 text-center" id="modalCenterTitleCustom" style="color:#0a0a0a;">Foro</h5>
+                <h5 class="modal-title  col-11 text-center" id="modalCenterTitleCustom" style="color:#0a0a0a;"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -177,7 +180,7 @@
                                     <div class="form">
                                         <div class="form-group">
                                             <div class="col-sm-12">
-                                                <textarea class="form-control ckeditor" id="inputForo" name="inputForo" rows="6"></textarea>
+                                                <textarea class="form-control ckeditor" id="contenido" name="contenido" rows="6"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -187,6 +190,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <input type="text" class="form-control" hidden="hidden" id="codigoForo" name="codigoForo" style="color:#0a0a0a;" placeholder="">
                     <button type="button" class="btn btn-outline-info" data-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-info">Guardar</button>
                 </div>
@@ -194,6 +198,7 @@
         </div>
     </div>
 </div>
+
 
 <script type="text/javascript">
     var ipsDebug = false;
@@ -233,22 +238,18 @@
 <script>
     $(document).on("click", "#modalNuevoForo", function () {
         CKEDITOR.instances.contenido.setData('');
-        $("#titulo").val('');
+        $("#tema").val('');
         $("#contenido").val('');
         $("#modalCenterTitleCustom").text("Nuevo Foro");
 
     });
     $(document).on("click", "#modalEditForo", function () {
-        var data = $(this).data('id');
+        var data = $(this).data('codigo');
         var titulo = $(this).data('titulo');
-        var contenido = $(this).data('contenido');
-        var fechaFin = $(this).data('fechafindata');
-        var fechaInicio = $(this).data('fechainidata');
-        var imagen = $(this).data('imagen');
-        var imagenuri = $(this).data('imguri');
+        var contenido = $(this).data('descripcion'); 
         CKEDITOR.instances.contenido.setData(contenido);
-        $("#codigoAviso").val(data);
-        $("#titulo").val(titulo);
+        $("#codigoForo").val(data);
+        $("#tema").val(titulo);
         $("#contenido").val(contenido);
         $("#modalCenterTitleCustom").text("Editar foro");
 
@@ -258,6 +259,7 @@
     });
 </script>
 <script type="text/javascript" src="~/estilos/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="~/estilos/js/evento.js"></script>
 <script type="text/javascript" src="~/estilos/js/root_library.js" data-ips=""></script>
 <script type="text/javascript" src="~/estilos/js/root_framework.js" data-ips=""></script>
 <script type="text/javascript" src="~/estilos/js/root_front.js" data-ips=""></script>

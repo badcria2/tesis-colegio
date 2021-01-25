@@ -38,11 +38,11 @@ namespace Educacion_Negocio
             }
         }
 
-        public Boolean InsertForo(String codigoClase, String tema, String descripcion, String temaPadre, String usuario)
+        public Boolean InsertForo(String codigoClase, String tema, String descripcion, String temaPadre, String usuario, String codigoForo)
         {
             try
             {
-                return EDU_ForoDAL.Instancia.InsertForo(codigoClase, tema, descripcion, temaPadre, usuario);
+                return EDU_ForoDAL.Instancia.InsertForo(codigoClase, tema, descripcion, temaPadre, usuario, codigoForo);
             }
             catch (Exception e)
             {

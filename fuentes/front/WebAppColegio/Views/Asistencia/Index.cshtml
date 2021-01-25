@@ -36,7 +36,7 @@
                     <div class="input-group-prepend" style="height: 31px;">
                         <span class="input-group-text" style="height: 31px;"><i class="fas fa-calendar"></i></span>
                     </div>
-                    
+
                     <input type="text" class="input-sm  form-control" style="height: 31px;" value="@DateTime.Now.ToString("dd'/'MM'/'yyyy")" id="fechaRegistro">
                     <input type="text" hidden="hidden" class="input-sm  form-control" style="height: 31px;" value="@usuario.codigoUsuario" id="codigoUsuario">
                 </div>
@@ -111,7 +111,7 @@
                             <th style="width:30px; text-align: center;" colspan="2">Numero Faltas</th>
                             <th style="width:30px; text-align: center;" colspan="4">Asistió</th>
                             <th style="width:30px; text-align: center;" colspan="4">Faltó</th>
-                            <th style="width:30px; text-align: center;" colspan="3">No se presentó </th>
+                            <th style="width:30px; text-align: center;" colspan="3">Tardanza </th>
                         </tr>
                     </thead>
                     <tbody id="datosAsistencia">
@@ -126,7 +126,7 @@
             <div class="row">
                 <div class="col-sm-10"></div>
                 <div class="col-sm-2">
-                    <button type="button" disabled="true" id="registrarAsistencia" class="btn btn-info form-control form-control-sm" style="" data-toggle="modal" data-target="#exampleModalCenter">Registrar</button>
+                    <button type="button" disabled="true" id="registrarAsistencia" class="btn btn-info form-control form-control-sm" style="" data-toggle="modal" data-target="#exampleModalCenter">Registrar asistencia</button>
                 </div>
             </div>
         }
@@ -134,6 +134,19 @@
 
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="loader"></div>
+                <div clas="loader-txt">
+                    <p>Procesando su información <br><br><small>Por favor espere... </small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="~/masterpage/vendor/bootstrap-touchspin/js/jquery.bootstrap-touchspin.js"></script>
 <!-- ClockPicker -->
 <script src="~/masterpage/vendor/clock-picker/clockpicker.js"></script>
@@ -280,7 +293,7 @@
 <script>
     $("body").on("click", "#registrarAsistencia", function () {
         var asistenciaRequest = new Array();
-       
+
         var clase = document.getElementById("claseSelect") == null ? "Todos" : document.getElementById("claseSelect").value;
         var fechaRegistro = $('#fechaRegistro').val() == null || $('#fechaRegistro').val() == "" ? new Date().getFullYear() : $('#fechaRegistro').val();
         var codigoUsuario = $('#codigoUsuario').val();
@@ -299,12 +312,17 @@
                 flagAsistio = 'N';
             }
             asistencia.estado = flagAsistio;
-            asistencia.codigoUsuario = row.find("td").eq(2).find('div').eq(0).find('input').eq(3).val(); 
+            asistencia.codigoUsuario = row.find("td").eq(2).find('div').eq(0).find('input').eq(3).val();
             asistencia.clase = clase;
             asistencia.fechaRegistro = fechaRegistro;
-            asistenciaRequest.push(asistencia);  
+            asistenciaRequest.push(asistencia);
 
         });
+        //$("#loadMe").modal({
+        //    backdrop: "static", //remove ability to close modal with click
+        //    keyboard: false, //remove option to close with keyboard
+        //    show: true //Display loader!
+        //});
         //Send the JSON array to Controller using AJAX.
         $.ajax({
             type: "POST",
@@ -315,15 +333,16 @@
             traditional: true,
             dataType: "json",
             success: function (r) {
+                $("#loadMe").modal("hide");
                 toastr.success('Registro exitoso');
-                
+                datosAsistenciaDocente();
             }, error: function (error) {
                 toastr.error('Registro fallido')
-               
+
             }
         });
 
-        $("#loadMe").modal("hide");
+        //$("#loadMe").modal("hide");
     });
 
 </script> 

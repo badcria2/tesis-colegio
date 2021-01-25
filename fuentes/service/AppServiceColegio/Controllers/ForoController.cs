@@ -56,7 +56,7 @@ namespace AppServiceColegio.Controllers
                 return BadRequest();
             }
 
-            Boolean estado = EDU_ForoBL.Instancia.InsertForo(foroRequest.codigoClase, foroRequest.tema, foroRequest.descripcion, foroRequest.temaPadre, foroRequest.codigoUsuario);
+            Boolean estado = EDU_ForoBL.Instancia.InsertForo(foroRequest.codigoClase, foroRequest.tema, foroRequest.descripcion, foroRequest.temaPadre, foroRequest.codigoUsuario, foroRequest.codigoForo);
 
             if (estado)
             {
