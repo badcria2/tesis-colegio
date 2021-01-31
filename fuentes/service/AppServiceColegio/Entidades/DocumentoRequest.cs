@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 
 namespace AppServiceColegio.Entidades
 {
-    public class DocumentoRequest
+    public class DocumentoRequest : BaseRequest
     {
         public String codigoClase { get; set; }
         public String nombre { get; set; }
         public int semana { get; set; }
         public String mes { get; set; }
-        public String origen { get; set; }
-        public String usuario { get; set; }
+        public String origen { get; set; } 
     }
 }

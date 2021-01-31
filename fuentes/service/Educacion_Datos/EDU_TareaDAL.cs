@@ -22,7 +22,7 @@ namespace Educacion_Datos
             SqlCommand cmd = null;
             List<SER_TareaEL> _TareaELs = new List<SER_TareaEL>();
             try
-            {
+            { 
                 SqlConnection cn = Conexion.Instancia.Conectar();
                 cmd = new SqlCommand("PRD_ObtenerTareas", cn);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -63,12 +63,12 @@ namespace Educacion_Datos
                 cmd.Parameters.AddWithValue("@semana", eDU_MaterialEL.semana);
                 cmd.Parameters.AddWithValue("@mes", eDU_MaterialEL.mes);
                 cmd.Parameters.AddWithValue("@nombre_tarea", eDU_MaterialEL.nombre);
-                cmd.Parameters.AddWithValue("@usuario", eDU_MaterialEL.usuario); 
+                cmd.Parameters.AddWithValue("@usuario", eDU_MaterialEL.usuario);
                 cn.Open();
                 if (cmd.ExecuteNonQuery() > 0)
                 {
                     inserto = true;
-                } 
+                }
             }
             catch (Exception e)
             {
@@ -114,7 +114,7 @@ namespace Educacion_Datos
                 cmd = new SqlCommand("PRD_EliminarDocumento", cn);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@codigo", codigo);
-                cmd.Parameters.AddWithValue("@tipo", tipo); 
+                cmd.Parameters.AddWithValue("@tipo", tipo);
                 cn.Open();
                 if (cmd.ExecuteNonQuery() > 0)
                 {
@@ -128,5 +128,41 @@ namespace Educacion_Datos
             finally { cmd.Connection.Close(); }
             return inserto;
         }
+
+        public List<SER_TareaEL> ObtenerTareasDocente(String codigoClase, int semana, String mes, String periodo)
+        {
+            List<SER_TareaEL> sER_TareaELs = new List<SER_TareaEL>();
+            SqlCommand cmd = null;
+            try
+            {
+                SqlConnection cn = Conexion.Instancia.Conectar();
+                cmd = new SqlCommand("PRD_ObtenerTareasDocente", cn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@codigo_clase", codigoClase);
+                cmd.Parameters.AddWithValue("@semana", semana);
+                cmd.Parameters.AddWithValue("@mes", mes);
+                cmd.Parameters.AddWithValue("@periodo", periodo);
+                cn.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    sER_TareaELs.Add(
+                        new SER_TareaEL()
+                        {
+                            codigo = dr["codigo_tarea"].ToString(),
+                            nombre = dr["nombre_tarea"].ToString(),
+                            alumno = dr["alumno"].ToString()
+                        }
+                 );
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally { cmd.Connection.Close(); }
+            return sER_TareaELs;
+        }
     }
+
 }

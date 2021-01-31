@@ -25,7 +25,7 @@ namespace AppServiceColegio.Controllers
             {
                 return BadRequest();
             }
-            Boolean estado = EDU_TareaBL.Instancia.InsertTarea(materialRequest.codigoClase, materialRequest.nombre, materialRequest.semana, materialRequest.origen, materialRequest.usuario, materialRequest.mes);
+            Boolean estado = EDU_TareaBL.Instancia.InsertTarea(materialRequest.codigoClase, materialRequest.nombre, materialRequest.semana, materialRequest.origen, materialRequest.codigoUsuario, materialRequest.mes);
             if (estado)
             {
                 response.estado = estado;
@@ -63,6 +63,25 @@ namespace AppServiceColegio.Controllers
                 response.codigo = 500;
             }
             return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("api/educacion/obtener-tareas")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetTareas(DocumentoRequest documentoRequest)
+        { 
+            if (null == documentoRequest || documentoRequest.codigoClase == null)
+            {
+                return BadRequest();
+            }
+            return Ok(EDU_TareaBL.Instancia.ObtenerTareasDocente(
+                documentoRequest.codigoClase,
+                documentoRequest.semana,
+                documentoRequest.mes,
+                documentoRequest.periodo == null || documentoRequest.periodo.Equals("") ? DateTime.Now.Year.ToString() : documentoRequest.periodo));
+
         }
     }
 }

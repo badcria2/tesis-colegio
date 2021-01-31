@@ -10,5 +10,7 @@ namespace WebAppColegio.Models.Response
         public String codigo { get; set; }
         public int nroSemana { get; set; }
         public String nombre { get; set; }
+
+        public String alumno { get; set; }
     }
 }

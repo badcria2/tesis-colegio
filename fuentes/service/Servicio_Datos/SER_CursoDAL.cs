@@ -89,7 +89,7 @@ namespace Servicio_Datos
                             mes = dr["mes"].ToString(),
                             tareaHabilitada = Boolean.Parse(dr["tarea_habilitada"].ToString()),
                             tiempoRestante = dr["tiempo_restante"].ToString(),
-                            fechaFinTarea = dr["fecha_fin_clase"].ToString(),
+                            fechaFinTarea = dr["fecha_fin_tarea"].ToString(),
                             fechaInicioTarea =  dr["fecha_inicio_tarea"].ToString(),
                             tarea = new SER_TareaEL() { codigo = "", nombre = "", nroSemana = 0 }
                         });

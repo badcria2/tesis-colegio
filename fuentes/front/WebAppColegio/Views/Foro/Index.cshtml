@@ -2,6 +2,9 @@
 @using Newtonsoft.Json;
 @using Microsoft.AspNetCore.Http;
 @using  WebAppColegio.Models.Response
+
+@using System.Web;
+@using System.IO;
 @inject IHttpContextAccessor HttpContextAccessor;
 
 @{
@@ -69,9 +72,15 @@
                                     <div class="ipsDataItem_main">
                                         <h4 class="ipsDataItem_title ipsType_large ipsType_break">
                                             <a href=@hrefDetalle>@item.tema</a>
-                                            <span class="item_name">
-                                                <a title="Editar foro" style="color:#3abaf4;" data-codigo="@item.codigo" data-titulo="@item.tema" data-descripcion="@item.descripcion" class="fas fa-edit" id="modalEditForo" data-toggle="modal" data-target="#exampleModalCenter"></a>
-                                            </span>
+                                            @if (usuario.perfil.Equals("Docente"))
+                                            {
+                                                StringWriter myWriter = new StringWriter();
+                                                HttpUtility.HtmlDecode(item.descripcion, myWriter);
+                                                string myDecodedString = myWriter.ToString();
+                                                <span class="item_name">
+                                                    <a title="Editar foro" style="color:#3abaf4;" data-codigo="@item.codigo" data-titulo="@item.tema" data-descripcion="@myDecodedString" class="fas fa-edit" id="modalEditForo" data-toggle="modal" data-target="#exampleModalCenter"></a>
+                                                </span>
+                                            }
                                         </h4>
                                         <ul class="ipsDataItem_subList ipsList_inline">
                                             <li class="">
@@ -246,7 +255,7 @@
     $(document).on("click", "#modalEditForo", function () {
         var data = $(this).data('codigo');
         var titulo = $(this).data('titulo');
-        var contenido = $(this).data('descripcion'); 
+        var contenido = $(this).data('descripcion');
         CKEDITOR.instances.contenido.setData(contenido);
         $("#codigoForo").val(data);
         $("#tema").val(titulo);

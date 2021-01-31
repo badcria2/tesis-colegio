@@ -34,7 +34,7 @@ namespace Educacion_Negocio
                 switch (origen)
                 {
                     case "Docente":
-                        return EDU_TareaDAL.Instancia.InsertMaterial(new EDU_MaterialEL() { codigo = codigoClase, nombre = nombre, semana = semana, usuario = usuario , mes= mes});
+                        return EDU_TareaDAL.Instancia.InsertMaterial(new EDU_MaterialEL() { codigo = codigoClase, nombre = nombre, semana = semana, usuario = usuario, mes = mes });
                     case "Alumno":
                         return EDU_TareaDAL.Instancia.InsertTarea(new EDU_MaterialEL() { codigo = codigoClase, nombre = nombre, semana = semana, usuario = usuario, mes = mes });
                     default: return false;
@@ -52,6 +52,19 @@ namespace Educacion_Negocio
             try
             {
                 return EDU_TareaDAL.Instancia.DeleteDocumento(codigo, tipo);
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public List<SER_TareaEL> ObtenerTareasDocente(String codigoClase, int semana, String mes, String periodo)
+        {
+            try
+            {
+                return EDU_TareaDAL.Instancia.ObtenerTareasDocente(codigoClase, semana, mes, periodo);
 
             }
             catch (Exception e)

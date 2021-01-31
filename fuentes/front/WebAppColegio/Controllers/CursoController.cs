@@ -139,7 +139,7 @@ namespace WebAppColegio.Controllers
                         origen = usuario.perfil,
                         semana = semana,
                         mes = mes,
-                        usuario = usuario.codigoUsuario
+                        codigoUsuario = usuario.codigoUsuario
                     };
                     var request = new HttpRequestMessage
                     {
@@ -284,7 +284,7 @@ namespace WebAppColegio.Controllers
         }
 
 
-        public async Task<IActionResult> ActualizarZoom(String enlace = "", String fechaInicio = "", String fechaFin = "", String mesActualizar = "", int semanaActualizar = 0)
+        public async Task<IActionResult> ActualizarZoom(String enlace = "", String fechaInicio = "", String fechafintarea = "", String mesActualizar = "", int semanaActualizar = 0)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -292,7 +292,7 @@ namespace WebAppColegio.Controllers
                 {
                     codigo = HttpContext.Session.GetString("claseSession"),
                     enlace = enlace,
-                    fechaFin = fechaFin,
+                    fechaFin = fechafintarea,
                     fechaInicio = fechaInicio,
                     mes = mesActualizar,
                     semana = semanaActualizar
@@ -395,6 +395,69 @@ namespace WebAppColegio.Controllers
                 throw ex;
             }
         }
+
+
+        [ActionName("listarTareasDocente")]
+        public async Task<ActionResult> listarTareasDocente(String _mes = "", int _semana = 0)
+        {
+            try
+            {
+                var usuario = JsonConvert.DeserializeObject<AutenticacionResponse>(HttpContext.Session.GetString("UsuarioSession"));
+                if (usuario == null) //si el usuario se enuentra
+                {
+                    ModelState.Clear();
+                    ModelState.AddModelError("ErrorLogeo", "Tiempo sesión expirado");
+                    return RedirectToAction("Login", "Intranet");
+                }
+                using (HttpClient client = new HttpClient())
+                {
+                    var cursoRequest = new DocumentoRequest()
+                    {
+                        periodo = DateTime.Now.Year.ToString(),
+                        mes = _mes,
+                        semana = _semana,
+                        codigoClase = HttpContext.Session.GetString("claseSession")
+                    };
+                    var request = new HttpRequestMessage
+                    {
+                        Method = HttpMethod.Get,
+                        RequestUri = new Uri(apiBaseUrl + "/educacion/obtener-tareas"),
+                        Content = new StringContent(JsonConvert.SerializeObject(cursoRequest), Encoding.UTF8, "application/json")
+                    };
+                    using (var Response = await client.SendAsync(request).ConfigureAwait(false))
+                    {
+                        List<Tarea> _cursoResponseLst = new List<Tarea>();
+                        if (Response.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            var data = await Response.Content.ReadAsStringAsync();
+                            _cursoResponseLst = JsonConvert.DeserializeObject<List<Tarea>>(data);
+                            return PartialView("TareasDetalle", _cursoResponseLst);
+                        }
+                        else if (Response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                        {
+                            ModelState.Clear();
+                            ModelState.AddModelError("Info", "Sin Cursos asociados");
+                            return View(_cursoResponseLst);
+                        }
+                        else
+                        {
+                            ModelState.Clear();
+                            ModelState.AddModelError("ErorData", "A ocurrido un error favor contactar con el administrador");
+                            return RedirectToAction("Login", "Intranet");
+                        }
+                    }
+
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        
     }
 
 

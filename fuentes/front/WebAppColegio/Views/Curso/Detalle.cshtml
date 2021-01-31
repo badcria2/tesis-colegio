@@ -326,8 +326,8 @@
                                                                     if (material.tiempoRestante.IndexOf("1900") > 0)
                                                                     {
                                                                         var capturaDias = material.tiempoRestante.Substring(0, 2).Equals("01") ? "0" : material.tiempoRestante.Substring(0, 1);
-                                                                        tiempoRestanteday = capturaDias + " dias" + material.tiempoRestante.Substring(10, material.tiempoRestante.Length - 10 );
-                                                                    }
+                                                                        tiempoRestanteday = capturaDias + " dias" + material.tiempoRestante.Substring(10, material.tiempoRestante.Length - 10);
+                                                                    } 
                                                                     <span title="" class="warning_message" style="color: #ffa426;">
                                                                         Tiempo restante: @tiempoRestanteday
                                                                     </span>
@@ -336,7 +336,7 @@
 
 
                                                             }
-
+                                                            <a title="Tareas" style="color:#3abaf4;" data-semana="@i" data-mestarea="@item.mes" class="fas fa-download" id="modalListTareas" data-toggle="modal" data-target="#exampleModalTareas"></a>
                                                         </span>
 
 
@@ -358,6 +358,68 @@
 
 </div>
 
+
+<div class="modal fade" id="exampleModalTareas" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #0da8ee; border-color: #0da8ee; ">
+                <h5 class="modal-title  col-11 text-center" id="modalCenterTitleCustom" style="color:#0a0a0a;">Lista de tareas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form enctype="multipart/form-data" class="form-horizontal" asp-controller="Curso" asp-action="ActualizarZoom">
+                <div class="modal-body">
+                    <div class="modal-body" id="bodyTareasDocente">
+
+                        
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-info" data-dismiss="modal">Cerrar</button> 
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalInterval" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #0da8ee; border-color: #0da8ee; ">
+                <h5 class="modal-title  col-11 text-center" id="modalCenterTitleCustom" style="color:#0a0a0a;">Editar sesión</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form enctype="multipart/form-data" class="form-horizontal" asp-controller="Curso" asp-action="ActualizarZoom">
+                <div class="modal-body">
+                    <div class="modal-body">
+                        <div class="col-lg-12">
+                            <div class="form-group row" id="simple-date4">
+                                <label for="inputEmail3" class="col-sm-3 col-form-label" style="color:#0a0a0a;">Fecha fin de tarea</label>
+                                <div class="col-sm-9">
+                                    <div class="input-daterange input-group">
+                                        <input type="text" class="input-sm form-control" name="fechafintarea" id="fechafintarea" style="height: 40px">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-info" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-info">Guardar</button>
+                </div>
+
+                <input type="text" class="input-sm form-control" name="mesActualizar" id="mesActualizar" hidden="hidden">
+                <input type="text" class="input-sm form-control" name="semanaActualizar" id="semanaActualizar" hidden="hidden">
+            </form>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -392,42 +454,8 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="modalInterval" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: #0da8ee; border-color: #0da8ee; ">
-                <h5 class="modal-title  col-11 text-center" id="modalCenterTitleCustom" style="color:#0a0a0a;">Editar sesión</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form enctype="multipart/form-data" class="form-horizontal" asp-controller="Curso" asp-action="ActualizarZoom">
-                <div class="modal-body">
-                    <div class="modal-body">
-                        <div class="col-lg-12">
-                            <div class="form-group row" id="simple-date4">
-                                <label for="inputEmail3" class="col-sm-3 col-form-label" style="color:#0a0a0a;">Fecha fin de tarea</label>
-                                <div class="col-sm-9">
-                                    <div class="input-daterange input-group">
-                                        <input type="text" class="input-sm form-control" name="fechaInicio" id="fechaInicio" style="height: 40px">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-info" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-info">Guardar</button>
-                </div>
 
-                <input type="text" class="input-sm form-control" name="mesActualizar" id="mesActualizar" hidden="hidden">
-                <input type="text" class="input-sm form-control" name="semanaActualizar" id="semanaActualizar" hidden="hidden">
-            </form>
-        </div>
-    </div>
-</div>
+
 <link rel="preload" href="/estilos/variables-high_contrast-8391c84da435c9cfceea2b2b3317ff66.js" as="script" type="text/javascript">
 <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/br/dist/webpack-production/moment/locale/es-c-2e9fc8e1c3.js" as="script" type="text/javascript">
 <link rel="preload" href="/estilos/main-clone.js.js" as="script" type="text/javascript">
@@ -484,13 +512,36 @@
 
     });
 
+    $(document).on("click", "#modalListTareas", function () {
+        var mes = $(this).data('mestarea');
+        var semana = $(this).data('semana');
+        datosNotas(mes, semana);
+    });
+
+
+     var datosNotas = function (mes, semana) {
+       
+         $.ajax({
+             url: '@Url.Action("listarTareasDocente", "Curso")?_mes=' + mes + "&_semana=" + semana,
+                type: 'POST',
+                contentType: "application/json",
+                data: { _perido: 0 },
+                success: function (partialView) {
+                    $('#bodyTareasDocente').html(partialView); 
+             },
+             error: function (error) {
+                alert('error; ' + eval(error));
+}
+            });
+    }
+
     $(document).on("click", "#modalEditClass", function () {
         var mes = $(this).data('mes');
         var semana = $(this).data('semana');
         $("#mesActualizar").val(mes);
         $("#semanaActualizar").val(semana);
-        $("#fechaInicio").val($(this).data('fechainitarea'));
-       // $("#fechaFin").val($(this).data('fechafintarea'));
+        //$("#fechaInicio").val($(this).data('fechainitarea'));
+        $("#fechafintarea").val($(this).data('fechafintarea'));
 
     });
 </script>

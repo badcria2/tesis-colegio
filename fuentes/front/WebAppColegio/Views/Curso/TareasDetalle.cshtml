@@ -1,0 +1,41 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<WebAppColegio.Models.Response.Tarea>
+@using  WebAppColegio.Models.Response
+@using System.Globalization;
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="row">
+    <div class="col-lg-12 mb-4">
+        <div class="table-responsive">
+            <table class="table align-items-center table-flush" id="tblNotasDocente">
+                <thead class="thead-light">
+                    <tr>
+                        <th style="width:130px" colspan="2">Alumnos</th>
+                        <th style="width:30px; text-align: center;" colspan="2">Nombre documento</th>
+                    </tr>
+                </thead>
+                <tbody id="datosTarea">
+
+                    @foreach (var tarea in Model)
+                    {
+                        var recursoDescarga = tarea.nombre.Equals("") ? "#" : "/Curso/Download?container=alumnocontainer&blobName=" + tarea.nombre;
+                        <tr>
+                            <td colspan="2">
+                                <span style=" text-align: justify; text-justify: inter-word; font-size: 11px; color:black; ">@tarea.alumno </span>
+                            </td>
+
+                            <td style="text-align: center;" colspan="2"> 
+                                <a style=" text-align: justify; text-justify: inter-word; font-size: 11px;" href="@recursoDescarga" >@tarea.nombre </a>
+                            </td>
+
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
