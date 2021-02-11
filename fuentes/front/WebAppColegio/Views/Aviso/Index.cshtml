@@ -67,14 +67,17 @@
                     <div class="post-img">
                         <img src="@item.uri" alt="">
                     </div>
-                    <p class="post-description">
-                        @{
-                            StringWriter myWriter = new StringWriter();
-                            HttpUtility.HtmlDecode(item.contenido, myWriter);
-                            string myDecodedString = myWriter.ToString();
-                        }
-                        @Html.Raw(myDecodedString)
-                    </p>
+                    <div style="color: #333;">
+                        <p class="post-description">
+                            @{
+                                StringWriter myWriter = new StringWriter();
+                                HttpUtility.HtmlDecode(item.contenido, myWriter);
+                                string myDecodedString = myWriter.ToString();
+                            }
+                            @Html.Raw(myDecodedString)
+                        </p>
+                    </div>
+                    
                 </div>
             }
 
@@ -92,7 +95,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #0da8ee; border-color: #0da8ee; ">
-                <h5 class="modal-title  col-11 text-center" id="modalCenterTitleCustom" style="color:#0a0a0a;" >Aviso</h5>
+                <h5 class="modal-title  col-11 text-center" id="modalCenterTitleCustom" style="color:#0a0a0a;">Aviso</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

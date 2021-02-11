@@ -119,7 +119,7 @@ namespace WebAppColegio.Controllers
             }
             catch (Exception e)
             {
-                return RedirectToAction("Login", "Intranet");
+                    return RedirectToAction("Login", "Intranet");
             }
 
         }

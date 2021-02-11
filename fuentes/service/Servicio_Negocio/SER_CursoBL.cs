@@ -42,7 +42,11 @@ namespace Servicio_Negocio
                     var tareas = EDU_TareaBL.Instancia.GetTareas(codigoClase, periodo, codigoUsuario);
                     foreach (var tarea in tareas)
                     {
-                        _DetCursoEL.material.Find(p => p.nroSemana == tarea.nroSemana).tarea = tarea;
+
+                        if (null != _DetCursoEL.material.Find(p => p.nroSemana == tarea.nroSemana))
+                        {
+                            _DetCursoEL.material.Find(p => p.nroSemana == tarea.nroSemana).tarea = tarea;
+                        }
                     }
                     return _DetCursoEL;
                 }

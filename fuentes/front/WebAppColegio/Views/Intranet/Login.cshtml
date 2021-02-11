@@ -32,14 +32,20 @@
 
         <form class="login-form"   asp-action="login">
             <div class="login-wrap">
-                <p class="login-img"><i class="icon_lock_alt"></i></p>
+                <h1 style="color: #0da8ee; text-align:center;">
+                    Bienvenido
+                </h1> 
+
+                <span>Usuario</span>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="icon_profile"></i></span>
-                    <input type="text" name="usuario" class="form-control" placeholder="Username" autofocus>
+                    <input type="text" name="usuario" class="form-control" placeholder="Usuario" autofocus>
                 </div>
+
+                <span>Contraseña</span>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="icon_key_alt"></i></span>
-                    <input type="password" name="password" class="form-control" placeholder="Password">
+                    <input type="password" name="password" class="form-control" placeholder="Contraseña">
                 </div>
                 <label class="checkbox">
                     <input type="checkbox" value="remember-me"> Recordar
@@ -53,8 +59,8 @@
                     if (item.Value.Errors.Any())
                     {
                         <div class="form-group has-error">
-                            <label class="control-label" style="text-align:center;" for="inputError">@(string.Join("", item.Value.Errors.Select(x => x.ErrorMessage)))</label> 
-                        </div> 
+                            <label class="control-label" style="text-align:center;" for="inputError">@(string.Join("", item.Value.Errors.Select(x => x.ErrorMessage)))</label>
+                        </div>
                     }
                 }
 
